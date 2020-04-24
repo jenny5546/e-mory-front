@@ -5,6 +5,7 @@ import FeedDetail from './components/FeedDetail';
 import FeedEmoji from './components/FeedEmoji';
 import Comment from './components/Comment';
 import FeedListAll from './components/FeedListAll';
+import FeedListSpecific from './components/FeedListSpecific';
 
 export default class extends React.Component {
   state = {
@@ -13,7 +14,7 @@ export default class extends React.Component {
 
   render() {
     const { edit } = this.state;
-    return edit ? <FeedListAll /> : <FeedNew />;
+    return edit ? <FeedListSpecific /> : <FeedNew />;
     // return (
     //   <View style={styles.container}>
     //     <Text>E-mory</Text>
