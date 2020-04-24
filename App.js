@@ -18,7 +18,7 @@ export default function App(){
   const [cover, setCover] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setCover(false), 1000);
+    const timer = setTimeout(() => setCover(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -26,7 +26,7 @@ export default function App(){
     
     <View style={styles.container}>
       <StatusBar/>
-      {cover ? <Cover/> : <Statistics/>}
+      {cover ? <Cover/> : <Login/>}
     </View>
   );
 }
