@@ -1,13 +1,26 @@
 // 회원가입 정보 기입 form
-// LOGIN Component
 import React from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 const { width } = Dimensions.get("window");
 
 export default function Signup() {
+    const _showAlert = () => {
+        Alert.alert(
+          '축하드립니다!',
+          '회원가입이 완료되었습니다',
+          [
+            //누르면 Tutorial로 이동
+            {text: '이모리 시작하기', onPress: () => console.log('Tutorial로 이동해야됨')},
+          ],
+          { cancelable: false }
+        )
+    }
     return (
         <View>
+            <TouchableOpacity style={styles.backBtn}>
+                <Text>BACK</Text>
+            </TouchableOpacity> 
             <View>
                 <Text>이름</Text>
                 <TextInput 
@@ -46,7 +59,7 @@ export default function Signup() {
                 <Text>생년월일</Text>
                 <TextInput 
                     style={styles.input}
-                    placeholder={"YYY/MM/DD"}
+                    placeholder={"YYYY/MM/DD"}
                 />
                 {/* <DateTimePicker value={new Date()}  /> */}
             </View>
@@ -57,8 +70,8 @@ export default function Signup() {
                     placeholder={"예: e-mory1@mory.com"}
                 />
             </View> 
-            <TouchableOpacity style={styles.completeBtn}>
-                <Text>완료</Text>
+            <TouchableOpacity style={styles.completeBtn} onPress={_showAlert}>
+                <Text>가입하기</Text>
             </TouchableOpacity>   
         </View>
     );
@@ -76,6 +89,9 @@ const inputStyle= StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
+    backBtn:{
+        marginBottom: 50,
+    },
     input:{
         ...inputStyle.inputContainer,
         width: width-100,
