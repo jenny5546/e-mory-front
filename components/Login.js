@@ -58,6 +58,14 @@ export default function Login() {
       </View>
     );
 }
+const buttonWrapper = StyleSheet.create({
+    buttonWrap:{
+        width: width-100,
+        borderRadius: 5,
+        marginBottom: 10,
+        padding: 5,
+    }
+})
 const styles = StyleSheet.create({
     title:{
         color: "black",
@@ -80,42 +88,28 @@ const styles = StyleSheet.create({
     loginButtonWrapper:{
         width: width-100,
         borderRadius: 10,
-        // marginBottom: 10,
         padding: 5,
         backgroundColor: '#bbb',
     },
     loginHelpWrapper:{
         padding: 5,
-        fontSize: 10,
         marginBottom: 50,
     },
     signupButtonWrapper:{
-        width: width-100,
-        borderRadius: 5,
-        marginBottom: 10,
-        padding: 5,
+        ...buttonWrapper.buttonWrap,
         borderColor: "#bbb",
         borderWidth: 1,
     },
     kakaoButtonWrapper:{
-        width: width-100,
-        borderRadius: 5,
-        marginBottom: 10,
-        padding: 5,
+        ...buttonWrapper.buttonWrap,
         backgroundColor: '#F5E04C'
     },
     naverButtonWrapper:{
-        width: width-100,
-        borderRadius: 5,
-        marginBottom: 10,
-        padding: 5,
+        ...buttonWrapper.buttonWrap,
         backgroundColor: '#5BB034'
     },
     facebookButtonWrapper:{
-        width: width-100,
-        borderRadius: 5,
-        marginBottom: 10,
-        padding: 5,
+        ...buttonWrapper.buttonWrap,
         backgroundColor: '#3578E8'
     }
 
