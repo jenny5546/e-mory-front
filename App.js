@@ -2,10 +2,15 @@ import React, {useState, useEffect}  from 'react';
 import { StyleSheet, View, Dimensions, StatusBar } from 'react-native';
 // import MainCalendar from './components/Calendar';
 import Cover from './components/CoverPage';
-// import TutorialOne from './components/tutorial/Tutorial_1';
+import TutorialOne from './components/tutorial/Tutorial_1';
+import ProfileSetting from './components/SidebarMenu/ProfileSetting';
+import UserFeedback from './components/SidebarMenu/UserFeedback';
+import ServiceTerm from './components/SidebarMenu/ServiceTerm';
+import AlarmSetting from './components/SidebarMenu/AlarmSetting';
 import Sidebar from './components/Sidebar';
-// import Login from './components/Login';
-// import Signup from './components/Signup';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Statistics from './components/Statistics';
 const { height, width } = Dimensions.get("window");
 
 export default function App(){
@@ -21,7 +26,7 @@ export default function App(){
     
     <View style={styles.container}>
       <StatusBar/>
-      {cover ? <Cover/> : <Sidebar/>}
+      {cover ? <Cover/> : <Statistics/>}
     </View>
   );
 }

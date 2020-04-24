@@ -2,6 +2,7 @@
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 const { width } = Dimensions.get("window");
 
 export default function Signup() {
@@ -19,7 +20,7 @@ export default function Signup() {
     return (
         <View>
             <TouchableOpacity style={styles.backBtn}>
-                <Text>BACK</Text>
+                <AntDesign name="back" size={20}/>
             </TouchableOpacity> 
             <View>
                 <Text>이름</Text>
@@ -71,7 +72,7 @@ export default function Signup() {
                 />
             </View> 
             <TouchableOpacity style={styles.completeBtn} onPress={_showAlert}>
-                <Text>가입하기</Text>
+                <AntDesign name="checkcircleo" size={20}/>
             </TouchableOpacity>   
         </View>
     );
