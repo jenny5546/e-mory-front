@@ -6,7 +6,7 @@ const { height, width } = Dimensions.get("window");
 export default function Cover() {
     return (
       <View style={styles.container}>
-        <Text>This is a Cover Page Will disappear in 3 seconds</Text>
+        <Text>This is a Cover Page that will disappear in 3 seconds</Text>
         <Text>E-mory</Text>
         <Text>Logo</Text>
       </View>
