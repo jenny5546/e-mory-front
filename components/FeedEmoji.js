@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image } from 'rea
 import CloseIcon from './../images/CloseIcon.png';
 import Emoji from './../images/EmojiTemp.png';
 
-export default function FeedNew() {
+export default function FeedEmoji() {
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content"/>

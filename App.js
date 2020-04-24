@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import FeedNew from './components/FeedNew';
 import FeedDetail from './components/FeedDetail';
 import FeedEmoji from './components/FeedEmoji';
+import Comment from './components/Comment';
 
 export default class extends React.Component {
   state = {
@@ -11,7 +12,7 @@ export default class extends React.Component {
 
   render() {
     const { edit } = this.state;
-    return edit ? <FeedEmoji /> : <FeedNew />;
+    return edit ? <Comment /> : <FeedNew />;
     // return (
     //   <View style={styles.container}>
     //     <Text>E-mory</Text>

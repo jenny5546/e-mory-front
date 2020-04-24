@@ -4,7 +4,7 @@ import EditIcon from './../images/EditIcon.png';
 import DeleteIcon from './../images/DeleteIcon.png';
 import Emoji from './../images/EmojiTemp.png';
 
-export default function FeedNew() {
+export default function FeedDetail() {
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content"/>
