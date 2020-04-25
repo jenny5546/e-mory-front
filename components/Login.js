@@ -1,12 +1,17 @@
-// LOGIN Component
-import React from 'react';
+import 'react-native-gesture-handler';
+import React, {useState, useEffect}  from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+// import React from 'react';
 import { StyleSheet, Dimensions, Button, View, Text, TextInput } from 'react-native';
-const { width } = Dimensions.get("window");
+import SignUp from './Signup';
+const { height, width } = Dimensions.get("window");
 
+const Stack = createStackNavigator();
 
-export default function Login() {
+export default function Login({ navigation }) {
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style= {styles.title}>이모리</Text>
                 <Text style= {styles.title}>E-MORY</Text>
@@ -29,7 +34,7 @@ export default function Login() {
             </View>
 
             <View style={styles.signupButtonWrapper}>
-                <Button title={"회원가입"} color="#bbb"/>
+                <Button title={"회원가입"} color="#bbb" onPress={() => navigation.push('SignUp')}/>
             </View>
 
             <View style={styles.kakaoButtonWrapper}>
@@ -56,6 +61,13 @@ const buttonWrapper = StyleSheet.create({
     }
 })
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: width,
+        height: height,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     title:{
         color: "black",
         fontSize: 30,
