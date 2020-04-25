@@ -14,7 +14,7 @@ export default class extends React.Component {
 
   render() {
     const { edit } = this.state;
-    return edit ? <FeedListSpecific /> : <FeedNew />;
+    return edit ? <Comment /> : <FeedNew />;
     // return (
     //   <View style={styles.container}>
     //     <Text>E-mory</Text>
