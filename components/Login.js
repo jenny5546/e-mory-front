@@ -49,7 +49,7 @@ export default function Login() {
 }
 const buttonWrapper = StyleSheet.create({
     buttonWrap:{
-        width: width-100,
+        width: width*0.75,
         borderRadius: 5,
         marginBottom: 10,
         padding: 5,
@@ -70,12 +70,12 @@ const styles = StyleSheet.create({
         borderColor: "#bbb",
         borderWidth: 1,
         fontSize: 18,
-        width: width-100,
+        width: width*0.75,
         borderRadius: 10,
         marginBottom: 10
     },
     loginButtonWrapper:{
-        width: width-100,
+        width: width*0.75,
         borderRadius: 10,
         padding: 5,
         backgroundColor: '#bbb',

@@ -23,7 +23,6 @@ export default function App(){
   }, []);
 
   return (
-    
     <View style={styles.container}>
       <StatusBar/>
       {cover ? <Cover/> : <Login/>}
