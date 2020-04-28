@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Text, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 const { height, width } = Dimensions.get("window");
 
@@ -9,6 +9,15 @@ export default function MainCalendar() {
       <Calendar
         theme={calendarTheme}
         style={styles.calendarStyle}
+        // dayComponent={({date, state}) => {
+        //   return (
+        //     <View>
+        //       <Text style={{paddingBottom:20}}>
+        //         {date.day}
+        //       </Text>
+        //     </View>
+        //   );
+        // }}
       />
   );
 }
@@ -37,7 +46,14 @@ const calendarTheme = {
   textDayHeaderFontWeight: '300',
   textDayFontSize: 16,
   textMonthFontSize: 16,
-  textDayHeaderFontSize: 16
+  textDayHeaderFontSize: 16,
+  'stylesheet.day.basic': {
+    base: {
+      width: 32,
+      height: 100,
+      alignItems: 'center'
+    },
+  }
 }
 
 /* Calendar Style Overriding: 크기, 테두리, 등등 */
@@ -46,6 +62,6 @@ const styles = StyleSheet.create({
     height: height-200,
     width: width-20,
     borderWidth: 1,
-    borderColor: 'gray'
+    borderColor: 'grey',
   },
 });

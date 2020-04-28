@@ -56,7 +56,7 @@ export default function App(){
   const [cover, setCover] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setCover(false), 3000);
+    const timer = setTimeout(() => setCover(false), 300);
     return () => clearTimeout(timer);
   }, []);
 
