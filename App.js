@@ -6,6 +6,9 @@ import { StyleSheet, View, Dimensions, Text, Button, StatusBar } from 'react-nat
 // import MainCalendar from './components/Calendar';
 import Cover from './components/CoverPage';
 import TutorialOne from './components/tutorial/Tutorial_1';
+import TutorialTwo from './components/tutorial/Tutorial_2';
+import TutorialThree from './components/tutorial/Tutorial_3';
+import MainCalendar from './components/Calendar';
 import ProfileSetting from './components/SidebarMenu/ProfileSetting';
 import UserFeedback from './components/SidebarMenu/UserFeedback';
 import ServiceTerm from './components/SidebarMenu/ServiceTerm';
@@ -65,6 +68,10 @@ export default function App(){
         }
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={Signup} />
+        <Stack.Screen name="TutorialOne" component={TutorialOne} />
+        <Stack.Screen name="TutorialTwo" component={TutorialTwo} />
+        <Stack.Screen name="TutorialThree" component={TutorialThree} />
+        <Stack.Screen name="MainCalendar" component={MainCalendar} />
       </Stack.Navigator>
     </NavigationContainer>
   );

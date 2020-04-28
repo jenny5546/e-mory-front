@@ -1,22 +1,18 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect}  from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-// import React from 'react';
-import { StyleSheet, Dimensions, Button, View, Text, TextInput } from 'react-native';
-import SignUp from './Signup';
+import { StyleSheet, Dimensions, Button, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import Logo from './../images/Logo.png';
+import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
-
-const Stack = createStackNavigator();
 
 export default function Login({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Text style= {styles.title}>이모리</Text>
-                <Text style= {styles.title}>E-MORY</Text>
+                <Image style={styles.logo} source={Logo} />
+                <Image style={styles.copy} source={Copy} />
             </View>
-            <TextInput 
+            <TextInput
                 style={styles.input}
                 placeholder={"아이디를 입력해주세요"}
             />
@@ -24,20 +20,23 @@ export default function Login({ navigation }) {
                 style={styles.input}
                 placeholder={"비밀번호를 입력해주세요"}
             />
-
             <View style={styles.loginButtonWrapper}>
-                <Button title={"로그인"} color="#fff"/>
+                <Button title={"로그인"} color="#fff" onPress={() => navigation.push('MainCalendar')}/>
             </View>
 
             <View style={styles.loginHelpWrapper}>
-                <Button title={"아이디 | 비밀번호 찾기"} color="#bbb"/>
+                <TouchableOpacity>
+                    <Text style={styles.loginHelpButton}>아이디 | 비밀번호 찾기</Text>
+                </TouchableOpacity>
             </View>
 
             <View style={styles.signupButtonWrapper}>
-                <Button title={"회원가입"} color="#bbb" onPress={() => navigation.push('SignUp')}/>
+                <TouchableOpacity onPress={() => navigation.push('SignUp')}>
+                    <Text style={styles.signupButton}>회원가입</Text>
+                </TouchableOpacity>
             </View>
 
-            <View style={styles.kakaoButtonWrapper}>
+            {/* <View style={styles.kakaoButtonWrapper}>
                 <Button title={"카카오톡으로 시작하기"} color="#000"/>
             </View>
 
@@ -47,19 +46,31 @@ export default function Login({ navigation }) {
 
             <View style={styles.facebookButtonWrapper}>
                 <Button title={"페이스북으로 시작하기"} color= "white"/>
-            </View>
+            </View> */}
             
         </View>
     );
 }
 const buttonWrapper = StyleSheet.create({
     buttonWrap:{
-        width: width-100,
+        width: width*0.9,
         borderRadius: 5,
         marginBottom: 10,
         padding: 5,
     }
 })
+
+const button = StyleSheet.create({
+    button: {
+        fontSize:14,
+        color: "#bbb",
+        alignItems:'center',
+        justifyContent:'center',
+        textAlign: 'center',
+        padding: 8
+    }
+})
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -67,34 +78,41 @@ const styles = StyleSheet.create({
         height: height,
         alignItems: 'center',
         justifyContent: 'center',
-      },
-    title:{
-        color: "black",
-        fontSize: 30,
-        fontWeight: "900",
-        textAlign: 'center'
     },
     headerContainer: {
-        marginBottom: 30
+        marginBottom: 30,
+        marginTop: height * 0.1,
+        justifyContent: "center"
+    },
+    logo: {
+        height: 45,
+        width: 120,
+        marginBottom: 15,
+        position: "relative",
+        left: "15%"
+    },
+    copy: {
+        height: 17,
+        width: 250,
     },
     input:{
         padding: 12,
         borderColor: "#bbb",
         borderWidth: 1,
-        fontSize: 18,
-        width: width-100,
-        borderRadius: 10,
+        fontSize: 14,
+        width: width*0.9,
+        borderRadius: 5,
         marginBottom: 10
     },
     loginButtonWrapper:{
-        width: width-100,
-        borderRadius: 10,
+        width: width*0.9,
+        borderRadius: 5,
         padding: 5,
         backgroundColor: '#bbb',
     },
     loginHelpWrapper:{
         padding: 5,
-        marginBottom: 50,
+        marginBottom: 10,
     },
     signupButtonWrapper:{
         ...buttonWrapper.buttonWrap,
@@ -112,7 +130,13 @@ const styles = StyleSheet.create({
     facebookButtonWrapper:{
         ...buttonWrapper.buttonWrap,
         backgroundColor: '#3578E8'
+    },
+    loginHelpButton: {
+        ...button.button,
+        fontWeight: '400',
+    },
+    signupButton: {
+        ...button.button,
+        fontWeight: '600',
     }
-
-
 });

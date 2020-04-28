@@ -3,23 +3,22 @@ import React from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
-const { width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
-export default function Signup() {
+export default function Signup({ navigation }) {
     const _showAlert = () => {
         Alert.alert(
-          '축하드립니다!',
-          '회원가입이 완료되었습니다',
-          [
-            //누르면 Tutorial로 이동
-            {text: '이모리 시작하기', onPress: () => console.log('Tutorial로 이동해야됨')},
-          ],
-          { cancelable: false }
+        '축하드립니다!',
+        '회원가입이 완료되었습니다',
+        [
+            {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
+        ],
+        { cancelable: false }
         )
     }
     return (
-        <View>
-            <TouchableOpacity style={styles.backBtn}>
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
                 <AntDesign name="back" size={20}/>
             </TouchableOpacity> 
             <View>
@@ -73,7 +72,7 @@ export default function Signup() {
             </View> 
             <TouchableOpacity style={styles.completeBtn} onPress={_showAlert}>
                 <AntDesign name="checkcircleo" size={20}/>
-            </TouchableOpacity>   
+            </TouchableOpacity>
         </View>
     );
 }
@@ -82,27 +81,34 @@ const inputStyle= StyleSheet.create({
         padding: 10,
         borderColor: "#bbb",
         borderWidth: 1,
-        fontSize: 15,
-        borderRadius: 10,
+        fontSize: 14,
+        borderRadius: 5,
         marginBottom: 10,
         marginTop: 10
     }
 })
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: width,
+        height: height,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     backBtn:{
-        marginBottom: 50,
+        marginBottom: 20,
     },
     input:{
         ...inputStyle.inputContainer,
-        width: width-100,
+        width: width*0.9,
     },
     idContainer:{
         flexDirection: 'row',
     },
     idInput:{
         ...inputStyle.inputContainer,
-        width: width-150,
+        width: width*0.75,
     },
     idBtn:{
         justifyContent: "center",
@@ -113,6 +119,4 @@ const styles = StyleSheet.create({
         marginTop: 30,
         alignSelf: "flex-end"
     }
-
-    
 });
