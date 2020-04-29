@@ -1,9 +1,17 @@
 // Tutorial step 1
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, Agenda, LocaleConfig } from 'react-native-calendars';
 const { height, width } = Dimensions.get("window");
+
+LocaleConfig.locales['kr'] = {
+  monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+  monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+  dayNames: ['월요일','화요일','수요일','목요일','금요일','토요일','일요일'],
+  dayNamesShort: ['월','화','수','목','금','토','일'],
+  today: 'Aujourd\'hui'
+};
+LocaleConfig.defaultLocale = 'kr';
 
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
 export default function firstTutorial({ navigation }) {
@@ -12,30 +20,31 @@ export default function firstTutorial({ navigation }) {
         <Calendar
             theme={calendarTheme}
             style={styles.calendarStyle}
+            onDayPress={(day) => {console.log('selected day', day)}}
+            monthFormat={'M월'}
         />
-        <TouchableOpacity style={styles.completeBtn} onPress={()=> {navigation.push('TutorialTwo')}}>
+        {/* <TouchableOpacity style={styles.completeBtn} onPress={()=> {navigation.push('TutorialTwo')}}>
           <AntDesign name="checkcircleo" size={20}/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
   );
 }
 
 /* Calendar Theme Overriding: 색, 폰트, 글자 크기 */
 const calendarTheme = {
-  backgroundColor: '#ffff',
-  calendarBackground: '#ffff',
-  textSectionTitleColor: '#b6c1cd',
+  // calendarBackground: 'rgba(196, 196, 196, 0.5)',
   selectedDayBackgroundColor: '#00adf5',
   selectedDayTextColor: '#ffffff',
   todayTextColor: '#00adf5',
-  dayTextColor: '#2d4150',
-  textDisabledColor: '#d9e1e8',
-  dotColor: '#00adf5',
-  selectedDotColor: '#ffff',
+  dayTextColor: '#2d4150', //
+  textDisabledColor: '#d9e1e8', //#d9e1e8
+  // dotColor: '#00adf5',
+  // selectedDotColor: '#ffff',
   arrowColor: 'grey',
   disabledArrowColor: '#d9e1e8',
-  monthTextColor: 'grey',
+  monthTextColor: '#626262',
   indicatorColor: 'grey',
+  textSectionTitleColor: '#afafaf',
   // textDayFontFamily: 'monospace',
   // textMonthFontFamily: 'monospace',
   // textDayHeaderFontFamily: 'monospace',
@@ -50,8 +59,7 @@ const calendarTheme = {
 /* Calendar Style Overriding: 크기, 테두리, 등등 */
 const styles = StyleSheet.create({
     container:{
-        position: "absolute",
-        backgroundColor: 'rgba(0,0,200,0.02)',
+        backgroundColor: 'rgba(196, 196, 196, 0);',
         flex: 1,
         width: width,
         height: height,
@@ -59,9 +67,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     calendarStyle: {
-        height: height-200,
-        width: width-20,
-        borderWidth: 2,
-        borderColor: 'skyblue'
+      height: height*1.2,
+      width: width,
+      justifyContent: "center",
+      position: "relative",
+      top: height*-0.2,
     },
 });

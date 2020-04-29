@@ -16,38 +16,34 @@ export default function Login({ navigation }) {
                 style={styles.input}
                 placeholder={"아이디를 입력해주세요"}
             />
-            <TextInput 
+            <TextInput
                 style={styles.input}
                 placeholder={"비밀번호를 입력해주세요"}
             />
             <View style={styles.loginButtonWrapper}>
-                <Button title={"로그인"} color="#fff" onPress={() => navigation.push('MainCalendar')}/>
+                <TouchableOpacity onPress={() => navigation.push('MainCalendar')}>
+                    <Text style={styles.loginButton}>로그인</Text>
+                </TouchableOpacity>
             </View>
-
             <View style={styles.loginHelpWrapper}>
                 <TouchableOpacity>
                     <Text style={styles.loginHelpButton}>아이디 | 비밀번호 찾기</Text>
                 </TouchableOpacity>
             </View>
-
             <View style={styles.signupButtonWrapper}>
                 <TouchableOpacity onPress={() => navigation.push('SignUp')}>
                     <Text style={styles.signupButton}>회원가입</Text>
                 </TouchableOpacity>
             </View>
-
             {/* <View style={styles.kakaoButtonWrapper}>
                 <Button title={"카카오톡으로 시작하기"} color="#000"/>
             </View>
-
             <View style={styles.naverButtonWrapper}>
                 <Button title={"네이버로 시작하기"} color="#fff"/>
             </View>
-
             <View style={styles.facebookButtonWrapper}>
                 <Button title={"페이스북으로 시작하기"} color= "white"/>
             </View> */}
-            
         </View>
     );
 }
@@ -63,7 +59,6 @@ const buttonWrapper = StyleSheet.create({
 const button = StyleSheet.create({
     button: {
         fontSize:14,
-        color: "#bbb",
         alignItems:'center',
         justifyContent:'center',
         textAlign: 'center',
@@ -78,6 +73,7 @@ const styles = StyleSheet.create({
         height: height,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#ffffff',
     },
     headerContainer: {
         marginBottom: 30,
@@ -134,9 +130,17 @@ const styles = StyleSheet.create({
     loginHelpButton: {
         ...button.button,
         fontWeight: '400',
+        color: "#bbb",
     },
     signupButton: {
         ...button.button,
         fontWeight: '600',
+        color: "#bbb",
+    },
+    loginButton: {
+        ...button.button,
+        fontWeight: '600',
+        color: "#fff",
+        backgroundColor: "#bbb",
     }
 });
