@@ -1,5 +1,5 @@
 // 회원가입 정보 기입 form
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import BackButton from './../images/BackIcon.png';
@@ -9,14 +9,15 @@ const { height, width } = Dimensions.get("window");
 
 export default function Signup({ navigation }) {
     const _showAlert = () => {
-        Alert.alert(
-        '축하드립니다!',
-        '회원가입이 완료되었습니다',
-        [
-            {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
-        ],
-        { cancelable: false }
-        )
+        onSignup();
+        // Alert.alert(
+        // '축하드립니다!',
+        // '회원가입이 완료되었습니다',
+        // [
+        //     {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
+        // ],
+        // { cancelable: false }
+        // )
     }
 
     const emailValidation = () => {
@@ -25,6 +26,50 @@ export default function Signup({ navigation }) {
             '발송된 메일을 통해 인증을 완료해주세요'
         )
     }
+
+    const onSignup = e => {
+        fetch(`http://127.0.0.1:8000/signup/`, {
+            method: 'POST',
+            body: JSON.stringify({name:name, email: email, password: password, date: date, nickname:nickname }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+            }).then((res) => {
+                return res.json();
+            }).then((resJSON) => {
+                console.log(resJSON);
+                // const { uid } = resJSON
+                // const crypto = require('crypto');
+                // var cipher = crypto.createCipher('aes128', 'committer')
+                // cipher.update(`${uid}`, 'ascii', 'hex');
+                // var cipherd=cipher.final('hex')
+                // let headers = {
+                //     "Content-Type": "application/json",
+                // };
+                // axios.post(`http://127.0.0.1:8000/account/${cipherd}/`, {
+                //     "email": email
+                // }, {headers: headers}).then((res) => {
+                //     const {error} = res.data
+                //     if (error) {
+                //         alert(error);
+                //     }
+                //     alert('메일이 발송 되었습니다.');
+                //     setLoading(0);
+                // }).catch((err) => {
+                //     console.log(err);
+                // })
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [passwordCheck, setPasswordCheck] = useState(null);
+    const [date, setDate] = useState(null);
+    const [nickname, setNickname] = useState(null);
 
     return (
         <View style={styles.container}>
@@ -38,6 +83,8 @@ export default function Signup({ navigation }) {
                 <TextInput 
                     style={styles.input}
                     placeholder={"이름을 입력해주세요"}
+                    value={name}
+                    onChange={(e)=>{setName(e.nativeEvent.text)}}
                 />
             </View>
             <View>
@@ -46,6 +93,8 @@ export default function Signup({ navigation }) {
                     <TextInput 
                         style={styles.emailInput}
                         placeholder={"예: e-mory1@mory.com"}
+                        value={email}
+                        onChange={(e)=>{setEmail(e.nativeEvent.text)}}
                     />
                     <View style={styles.emailCheckBtn}>
                         <TouchableOpacity onPress={emailValidation}>
@@ -59,6 +108,8 @@ export default function Signup({ navigation }) {
                 <TextInput 
                     style={styles.input}
                     placeholder={"비밀번호를 입력해주세요"}
+                    value={password}
+                    onChange={(e)=>{setPassword(e.nativeEvent.text)}}
                 />
             </View>
             <View>
@@ -66,6 +117,8 @@ export default function Signup({ navigation }) {
                 <TextInput 
                     style={styles.input}
                     placeholder={"비밀번호를 한번 더 입력해주세요"}
+                    value={passwordCheck}
+                    onChange={(e)=>{setPasswordCheck(e.nativeEvent.text)}}
                 />
             </View>
             <View>
@@ -73,6 +126,8 @@ export default function Signup({ navigation }) {
                 <TextInput 
                     style={styles.input}
                     placeholder={"YYYY/MM/DD"}
+                    value={date}
+                    onChange={(e)=>{setDate(e.nativeEvent.text)}}
                 />
             </View>
             <View>
@@ -81,6 +136,8 @@ export default function Signup({ navigation }) {
                     <TextInput 
                         style={styles.nicknameInput}
                         placeholder={"예: emory_mory"}
+                        value={nickname}
+                        onChange={(e)=>{setNickname(e.nativeEvent.text)}}
                     />
                     <View style={styles.nicknameCheckBtn}>
                         <TouchableOpacity>

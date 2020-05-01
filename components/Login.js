@@ -6,6 +6,26 @@ import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
 
 export default function Login({ navigation }) {
+
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+
+    const onLogin = e => {
+        fetch(`http://127.0.0.1:8000/login/`, {
+            method: 'POST',
+            body: JSON.stringify({email: email, password: password}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+            }).then((res) => {
+                console.log('hi')
+                navigation.push('MainCalendar');
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -15,13 +35,17 @@ export default function Login({ navigation }) {
             <TextInput
                 style={styles.input}
                 placeholder={"아이디를 입력해주세요"}
+                value={email}
+                onChange={(e)=>{setEmail(e.nativeEvent.text)}}
             />
             <TextInput
                 style={styles.input}
                 placeholder={"비밀번호를 입력해주세요"}
+                value={password}
+                onChange={(e)=>{setPassword(e.nativeEvent.text)}}
             />
             <View style={styles.loginButtonWrapper}>
-                <TouchableOpacity onPress={() => navigation.push('MainCalendar')}>
+                <TouchableOpacity onPress={onLogin}>
                     <Text style={styles.loginButton}>로그인</Text>
                 </TouchableOpacity>
             </View>
