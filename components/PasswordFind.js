@@ -1,13 +1,12 @@
 // 회원가입 정보 기입 form
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
-// import DateTimePicker from '@react-native-community/datetimepicker';
 import BackButton from './../images/BackIcon.png';
 import { Entypo, AntDesign } from '@expo/vector-icons';
 import CompleteButton from './../images/CompleteButton.png';
 const { height, width } = Dimensions.get("window");
 
-export default function Signup({ navigation }) {
+export default function PasswordFind({ navigation }) {
     const _showAlert = () => {
         Alert.alert(
         '축하드립니다!',
@@ -22,7 +21,7 @@ export default function Signup({ navigation }) {
     const emailValidation = () => {
         Alert.alert(
             '이메일이 발송되었습니다',
-            '발송된 메일을 통해 인증을 완료해주세요'
+            '임시 비밀번호를 확인해주세요'
         )
     }
 
@@ -33,67 +32,19 @@ export default function Signup({ navigation }) {
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
             </View>
-            <View>
-                <Text>이름</Text>
+            <View style={styles.contentWrapper}>
+                <Text style={{textAlign: "center", fontSize: 16, marginBottom: 15,}}>임시 비밀번호 발송</Text>
                 <TextInput 
                     style={styles.input}
-                    placeholder={"이름을 입력해주세요"}
+                    placeholder={"가입했던 이메일 주소를 입력해주세요"}
                 />
-            </View>
-            <View>
-                <Text>이메일</Text>
-                <View style={styles.idContainer}>
-                    <TextInput 
-                        style={styles.emailInput}
-                        placeholder={"예: e-mory1@mory.com"}
-                    />
                     <View style={styles.emailCheckBtn}>
                         <TouchableOpacity onPress={emailValidation}>
-                            <Text style={styles.checkText}>이메일 인증</Text>
+                            <Text style={styles.checkText}>메일 보내기</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
             </View>
-            <View>
-                <Text>비밀번호</Text>
-                <TextInput 
-                    style={styles.input}
-                    placeholder={"비밀번호를 입력해주세요"}
-                />
-            </View>
-            <View>
-                <Text>비밀번호 확인</Text>
-                <TextInput 
-                    style={styles.input}
-                    placeholder={"비밀번호를 한번 더 입력해주세요"}
-                />
-            </View>
-            <View>
-                <Text>생년월일</Text>
-                <TextInput 
-                    style={styles.input}
-                    placeholder={"YYYY/MM/DD"}
-                />
-            </View>
-            <View>
-                <Text>닉네임</Text>
-                <View style={styles.idContainer}>
-                    <TextInput 
-                        style={styles.nicknameInput}
-                        placeholder={"예: emory_mory"}
-                    />
-                    <View style={styles.nicknameCheckBtn}>
-                        <TouchableOpacity>
-                            <Text style={styles.checkText}>중복확인</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.belowBtn} onPress={_showAlert}>
-                    <AntDesign name="checkcircleo" size={20}/>
-                </TouchableOpacity>
-            </View>
+            <View></View>
         </View>
     );
 }
@@ -127,7 +78,7 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         backgroundColor: '#fff',
     },
     header: {
@@ -164,6 +115,8 @@ const styles = StyleSheet.create({
     emailCheckBtn: {
         ...checkButton.checkBtn,
         marginLeft: width*0.02,
+        width: 100,
+        alignSelf: "center",
     },
     nicknameCheckBtn: {
         ...checkButton.checkBtn,
@@ -171,6 +124,7 @@ const styles = StyleSheet.create({
     },
     checkText: {
         color: "#fff",
+        textAlign: "center",
     },
     completeBtn:{
         marginTop: 30,
@@ -179,7 +133,8 @@ const styles = StyleSheet.create({
         height: 25,
         width: 7,
     },
-    buttonContainer: {
-        marginTop: 30,
+    contentWrapper:{
+        position: "relative",
+        top: -50,
     }
 });

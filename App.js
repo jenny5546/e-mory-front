@@ -17,9 +17,11 @@ import Comment from './components/Comment';
 import MyActivity from './components/MyActivity';
 
 import ProfileSetting from './components/SidebarMenu/ProfileSetting';
+import AlarmSetting from './components/SidebarMenu/AlarmSetting';
+import PasswordFind from './components/PasswordFind';
 import UserFeedback from './components/SidebarMenu/UserFeedback';
 import ServiceTerm from './components/SidebarMenu/ServiceTerm';
-import AlarmSetting from './components/SidebarMenu/AlarmSetting';
+
 
 
 import Signup from './components/Signup';
@@ -74,6 +76,7 @@ export default function App(){
         <Stack.Screen name="MyActivity" component={MyActivity} />
         <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
         <Stack.Screen name="AlarmSetting" component={AlarmSetting} />
+        <Stack.Screen name="PasswordFind" component={PasswordFind} />
         {/* <Stack.Screen name="Chart" component={Chart} /> */}
       </Stack.Navigator>
     </NavigationContainer>

@@ -26,7 +26,7 @@ export default function Login({ navigation }) {
                 </TouchableOpacity>
             </View>
             <View style={styles.loginHelpWrapper}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>{navigation.push('PasswordFind')}}>
                     <Text style={styles.loginHelpButton}>아이디 | 비밀번호 찾기</Text>
                 </TouchableOpacity>
             </View>
