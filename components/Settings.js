@@ -1,6 +1,6 @@
 // 개인 정보 ~ 알림 설정 등이 들어갈 사이드 바
 import React, {useState} from 'react';
-import { StyleSheet, Text, TouchableOpacity, Button, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, Button, View, Image, Dimensions, Alert } from 'react-native';
 
 import Filter from './../images/FilterIcon.png';
 import BackButton from './../images/BackIcon.png';
@@ -21,6 +21,19 @@ import Logout from './../images/LogoutIcon.png';
 const { height, width } = Dimensions.get("window");
 
 export default function Settings({navigation}) {
+
+    const _showAlert = () => {
+        Alert.alert(
+            '로그 아웃',
+            '로그 아웃 하시겠습니까?',
+            [
+                {text: '네', onPress: () => {navigation.push('Login')}},
+                {text: "아니요", onPress: () => console.log("No Pressed") }
+            ],
+            { cancelable: false }
+        )
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -29,11 +42,11 @@ export default function Settings({navigation}) {
                 <View></View>
             </View>
             <View style={styles.menuWrapper}>
-                <TouchableOpacity style={styles.sidebarItem}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.push('ProfileSetting')}}>
                     <Image style={styles.menuIcon} source={Profile} />
                     <Text style={styles.itemTitle}>개인정보관리</Text>
-                </TouchableOpacity> 
-                <TouchableOpacity style={styles.sidebarItem}>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.push('AlarmSetting')}}>
                     <Image style={styles.menuIcon} source={Alarm} />
                     <Text style={styles.itemTitle}>알림설정</Text>
                 </TouchableOpacity> 
@@ -53,7 +66,7 @@ export default function Settings({navigation}) {
                     <Image style={styles.menuIcon} source={Info} />
                     <Text style={styles.itemTitle}>앱정보</Text>
                 </TouchableOpacity> 
-                <TouchableOpacity style={styles.sidebarItem}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={_showAlert}>
                     <Image style={styles.menuIcon} source={Logout} />
                     <Text style={styles.itemTitle}>로그아웃</Text>
                 </TouchableOpacity>

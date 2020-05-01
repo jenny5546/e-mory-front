@@ -1,53 +1,69 @@
 //댓글 창 - //////////////////////
 import React from 'react';
-import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image} from 'react-native';
+import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image} from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import ReportIcon from './../images/ReportIcon.png';
 import HeartIcon from './../images/HeartIcon.png';
+const { height, width } = Dimensions.get("window");
 
-export default function Comment() {
+export default function Comment({ navigation }) {
     return (
         <View style={styles.container}>
             <StatusBar barStyle="dark-content"/>
             <View style={styles.header}>
-                <Image style={styles.backButton} source={BackButton}/>
+                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
+                    <Image style={styles.backButton} source={BackButton}/>
+                </TouchableOpacity>
                 <Text style={styles.headerContent}>댓글</Text>
                 <View></View>
             </View>
-            <View style={styles.feed}>
-                <View style={styles.content}>
-                    <Text style={styles.feedWritter}>snowman39</Text>
-                    <Text style={styles.feedContent}>돈을 벌기는 참 힘들다.</Text>
-                </View>
-                <Text style={styles.date}>6시간</Text>
-            </View>
-            <View style={styles.comment}>
-                <View style={styles.commentWrapper}>
+            <ScrollView>
+            <View style={styles.contentWrapper}>
+                <View style={styles.feed}>
                     <View style={styles.content}>
-                        <Text style={styles.feedWritter}>jenny_doobap</Text>
-                        <Text style={styles.feedContent}>배고픈데 밥이나 먹고 할까</Text>
+                        <Text style={styles.feedWritter}>snowman39</Text>
+                        <Text style={styles.feedContent}>돈을 벌기는 참 힘들다.</Text>
                     </View>
-                    <View style={styles.heartView}>
-                        <Image style={styles.heart} source={HeartIcon} />
-                    </View>
-                </View>
-                <View style={styles.content}>
                     <Text style={styles.date}>6시간</Text>
-
-                    <Text style={styles.replyButton}>답글 달기</Text>
-                    <Image style={styles.icon} source={ReportIcon} />
                 </View>
-                <View style={styles.reply}>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>jenny_doobap</Text>
-                        <Text style={styles.feedContent}>@jenny_doobap 밥은 내가 살게</Text>
+                <View style={styles.comment}>
+                    <View style={styles.commentWrapper}>
+                        <View style={styles.content}>
+                            <Text style={styles.feedWritter}>jenny_doobap</Text>
+                            <Text style={styles.feedContent}>배고픈데 밥이나 먹고 할까</Text>
+                        </View>
+                        <View style={styles.heartView}>
+                            <Image style={styles.heart} source={HeartIcon} />
+                        </View>
                     </View>
                     <View style={styles.content}>
-                        <Text style={styles.date}>5시간</Text>
+                        <Text style={styles.date}>6시간</Text>
+
                         <Text style={styles.replyButton}>답글 달기</Text>
                         <Image style={styles.icon} source={ReportIcon} />
                     </View>
+                    <View style={styles.reply}>
+                        <View style={styles.content}>
+                            <Text style={styles.feedWritter}>jenny_doobap</Text>
+                            <Text style={styles.feedContent}>@jenny_doobap 밥은 내가 살게</Text>
+                        </View>
+                        <View style={styles.content}>
+                            <Text style={styles.date}>5시간</Text>
+                            <Text style={styles.replyButton}>답글 달기</Text>
+                            <Image style={styles.icon} source={ReportIcon} />
+                        </View>
+                    </View>
                 </View>
+            </View>
+            </ScrollView>
+            <View style={styles.inputWrapper}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="댓글 달기..."
+                    placeholderTextColor={"#999"}
+                    returnKeyType={"done"}
+                    autoCorrect={false}
+                />
             </View>
         </View>
     );
@@ -131,5 +147,32 @@ const styles = StyleSheet.create({
     reply: {
         padding: 10,
         paddingLeft: 30,
+    },
+    inputWrapper:{
+        position: "absolute",
+        bottom: 0,
+        marginTop: 30,
+        marginBottom: 20,
+        paddingHorizontal: width*0.04,
+        paddingVertical: 10,
+        borderTopColor: "#fafafa",
+        backgroundColor: "#fafafa",
+        borderTopWidth: 2,
+        width: width,
+        height: 80,
+    },
+    input: {
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: "#f9f9f9",
+        padding: 10,
+        backgroundColor: "#fff",
+        // marginTop: 30,
+        // marginBottom: 20,
+        // paddingTop: 10,
+        // paddingHorizontal: width*0.04,
+        // borderTopColor: "#fafafa",
+        // borderTopWidth: 2,
+        // width: width,
     }
 });

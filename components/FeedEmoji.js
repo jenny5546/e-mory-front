@@ -1,90 +1,145 @@
 //피드 작성 중에 이모티콘 선택하는 페이지 ////////////
-import React from 'react';
-import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image } from 'react-native';
-import CloseIcon from './../images/CloseIcon.png';
-import Emoji from './../images/EmojiTemp.png';
+import React, {useState} from 'react';
+import { View, StyleSheet, Dimensions, TextInput, Text, Button, TouchableOpacity, Image } from 'react-native';
+import CloseIcon from './../images/CloseIconGray.png';
+import HappyIcon from './../images/HappyIcon.png';
+import FilledIcon from './../images/FilledIcon.png';
+import PeaceIcon from './../images/PeaceIcon.png';
+import ThankIcon from './../images/ThankIcon.png';
+import LovelyIcon from './../images/LovelyIcon.png';
+import SadIcon from './../images/SadIcon.png';
+import LonelyIcon from './../images/LonelyIcon.png';
+import EmptyIcon from './../images/EmptyIcon.png';
+import TiredIcon from './../images/TiredIcon.png';
+import DepressedIcon from './../images/DepressedIcon.png';
+import WorriedIcon from './../images/WorriedIcon.png';
+import AngryIcon from './../images/AngryIcon.png';
+
+const { height, width } = Dimensions.get("window");
 
 export default function FeedEmoji() {
+
+    const [emoji, setEmoji] = useState(1);
+
     return (
-        <View style={styles.container}>
-            <StatusBar barStyle="light-content"/>
-            <View style={styles.popup}>
-                <Image style={styles.icon} source={CloseIcon} />
-                <View style={styles.emojis}>
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
-                    <Image style={styles.emoji} source={Emoji} />
+        <View style={styles.background}>
+            {emoji===1 &&
+            <View style={styles.container}>
+                <View style={styles.popup}>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={()=>{setEmoji(0)}}>
+                            <Image style={styles.closeBtn} source={CloseIcon}/>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.emojiWrapper}>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={HappyIcon} />
+                            <Text style={styles.emotion}>행복해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={FilledIcon} />
+                            <Text style={styles.emotion}>뿌듯해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={PeaceIcon} />
+                            <Text style={styles.emotion}>평온해요</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.emojiWrapper}>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={ThankIcon} />
+                            <Text style={styles.emotion}>감사해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={LovelyIcon} />
+                            <Text style={styles.emotion}>설레요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={EmptyIcon} />
+                            <Text style={styles.emotion}>공허해요</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.emojiWrapper}>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={SadIcon} />
+                            <Text style={styles.emotion}>슬퍼요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={LonelyIcon} />
+                            <Text style={styles.emotion}>외로워요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={TiredIcon} />
+                            <Text style={styles.emotion}>지쳐요</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.emojiWrapper}>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={DepressedIcon} />
+                            <Text style={styles.emotion}>우울해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={WorriedIcon} />
+                            <Text style={styles.emotion}>걱정돼요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.icon} source={AngryIcon} />
+                            <Text style={styles.emotion}>화나요</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                
-                {/* <TextInput
-                
-                placeholder="오늘의 감정일기 100자"
-                placeholderTextColor={"#999"}
-                returnKeyType={"done"}
-                autoCorrect={false}
-                /> */}
-                <Button
-                // onPress={onPressLearnMore}
-                title="오늘의 감정은?"
-                color="#e5e5e5"
-                backgroundColor="rgb(247, 247, 247)"
-                accessibilityLabel="Learn more about this purple button"
-                />
             </View>
+            }
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    background: {
+        position: "absolute",
+        top: height * -0.1,
+        height: height,
+        width: width*0.95,
+        zIndex: 3,
+    },
     container: {
         flex: 1,
         justifyContent: "flex-start",
-        paddingHorizontal: 10,
-        paddingVertical: 120,
-        backgroundColor: "rgba(153, 153, 153, 0.5);",
+        // paddingHorizontal: 10,
+        paddingTop: 60,
     },
     popup: {
         backgroundColor: "#fff",
         padding: 20,
         borderRadius: 20,
-        height: "100%",
+        height: height,
     },
-    date: {
-        color: "#999999",
-        fontSize: 15,
-    },
-    feedHeader: {
-        flex: 1,
-        flexDirection: "row",
-        // justifyContent: "space-around",
-    },
-    text: {
-        paddingTop: 20,
-        fontSize: 10,
-        color: "#999999",
-        // flexWrap: "wrap",
-    },
-    icon: {
+    closeBtn: {
         height: 20,
         width: 20,
+    },
+    icon: {
+        height: 60,
+        width: 60,
+        marginTop: 30,
+    },
+    header: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
     },
     icons: {
         flex: 1,
         flexDirection: "row",
     },
-    emoji: {
-        height: 50,
-        width: 50,
-    },
-    emojis: {
-        flex: 1,
+    emojiWrapper: {
         flexDirection: "row",
-        flexWrap: "wrap",
+        justifyContent: "space-around",
+        marginBottom: 10,
+    },
+    emotion: {
+        textAlign: "center",
+        fontSize: 14,
+        color: "#999999",
+        marginTop: 5,
     },
 });

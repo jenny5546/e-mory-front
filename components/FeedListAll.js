@@ -1,6 +1,6 @@
 //남의 글 전부 다 실시간으로 보이는 곳 ///////////
 import React, {useState} from 'react';
-import { StyleSheet, Text, TouchableOpacity, Button, View, StatusBar, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, Button, View, StatusBar, Image, Dimensions, Alert } from 'react-native';
 
 import Filter from './../images/FilterIcon.png';
 import Logo from './../images/SmallLogo.png';
@@ -24,6 +24,22 @@ export default function FeedListAll({ navigation }) {
     const onModal = e => {
         i++;
         setFilter(i);
+    }
+
+    const onReport = () => {
+        Alert.alert(
+        '신고',
+        '이 게시물을 신고하시겠습니까?',
+        [
+            {
+            text: "네",
+            onPress: () => console.log("Ok pressed"),
+            style: "cancel"
+            },
+            { text: "아니요", onPress: () => console.log("No Pressed") }
+        ],
+        { cancelable: false }
+        )
     }
 
     return (
@@ -71,9 +87,13 @@ export default function FeedListAll({ navigation }) {
                         <View style={styles.icons}>
                             <Image style={styles.icon} source={HeartIcon} />
                             <Text style={styles.iconNum}>11</Text>
-                            <Image style={styles.icon} source={CommentIcon} />
+                            <TouchableOpacity onPress={()=>{navigation.push('Comment')}}>
+                                <Image style={styles.icon} source={CommentIcon} />
+                            </TouchableOpacity>
                             <Text style={styles.iconNum}>5</Text>
-                            <Image style={styles.icon} source={ReportIcon} />
+                            <TouchableOpacity onPress={onReport}>
+                                <Image style={styles.icon} source={ReportIcon} />
+                            </TouchableOpacity>
                         </View>
                         <Text style={styles.date}>6시간</Text>
                     </View>

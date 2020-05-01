@@ -2,8 +2,8 @@
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
 import BackButton from './../images/BackIcon.png';
+import { Entypo, AntDesign } from '@expo/vector-icons';
 import CompleteButton from './../images/CompleteButton.png';
 const { height, width } = Dimensions.get("window");
 

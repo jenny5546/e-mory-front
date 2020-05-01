@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import BackButton from './../images/BackIcon.png';
 import Alarm from './../images/AlarmIcon.png';
 import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIconFilled.png';
@@ -32,7 +33,9 @@ export default function MainCalendar({ navigation }) {
         <View style={styles.header}>
           <Image style={styles.backButton} source={Menu}/>
           <Image style={styles.logo} source={Logo}/>
-          <Image style={styles.backButton} source={Alarm}/>
+          <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}}>
+            <Image style={styles.backButton} source={Alarm}/>
+          </TouchableOpacity>
         </View>
         {chart &&
           <ChartComponent />
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     calendarStyle: {
-      height: height*0.6,
+      height: height*0.55,
       width: width,
       justifyContent: "center",
       // position: "relative",
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       marginTop: 30,
-      marginBottom: 20,
+      marginBottom: 25,
       paddingHorizontal: width*0.04,
       paddingBottom: 10,
       borderBottomColor: "#fafafa",

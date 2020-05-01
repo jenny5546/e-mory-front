@@ -13,8 +13,9 @@ import MainCalendar from './components/Calendar';
 import FeedListAll from './components/FeedListAll';
 import FeedListSpecific from './components/FeedListSpecific';
 import Sidebar from './components/Settings';
+import Comment from './components/Comment';
+import MyActivity from './components/MyActivity';
 
-import Chart from './components/Chart';
 import ProfileSetting from './components/SidebarMenu/ProfileSetting';
 import UserFeedback from './components/SidebarMenu/UserFeedback';
 import ServiceTerm from './components/SidebarMenu/ServiceTerm';
@@ -69,6 +70,10 @@ export default function App(){
         <Stack.Screen name="FeedListAll" component={FeedListAll} />
         <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} />
         <Stack.Screen name="Settings" component={Sidebar} />
+        <Stack.Screen name="Comment" component={Comment} />
+        <Stack.Screen name="MyActivity" component={MyActivity} />
+        <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+        <Stack.Screen name="AlarmSetting" component={AlarmSetting} />
         {/* <Stack.Screen name="Chart" component={Chart} /> */}
       </Stack.Navigator>
     </NavigationContainer>
