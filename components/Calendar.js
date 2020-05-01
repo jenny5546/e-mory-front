@@ -50,7 +50,7 @@ const calendarTheme = {
   'stylesheet.day.basic': {
     base: {
       width: 32,
-      height: 100,
+      height: 100, //늘리고 싶으면 이거를 늘려보기
       alignItems: 'center'
     },
   }
