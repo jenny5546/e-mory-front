@@ -18,18 +18,18 @@ const { height, width } = Dimensions.get("window");
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
 //modal 구현 애매하게 되어있음
 
-export default function Chart({ navigation }) {
+export default function Chart(props) {
 
-    const [chart, setChart] = useState(1);
+    // const [chart, setChart] = useState(1);
 
     return (
         <View style={styles.background}>
-            {chart===1 &&  
+            {/* {chart===1 &&   */}
             <View style={styles.container}>
                 <View style={styles.popup}>
                     <View style={styles.header}>
                         <Text style={styles.date}>2020년 4월</Text>
-                        <TouchableOpacity onPress={()=>{setChart(0)}}>
+                        <TouchableOpacity onPress={()=> {props.closeChart()} }>
                             <Image style={styles.closeBtn} source={CloseIcon} />
                         </TouchableOpacity>
                     </View>
@@ -73,7 +73,7 @@ export default function Chart({ navigation }) {
                     </View>
                 </View>
             </View>  
-            }
+            {/* } */}
         </View>
     );
 }

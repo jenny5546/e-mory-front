@@ -17,79 +17,115 @@ import AngryIcon from './../images/AngryIcon.png';
 
 const { height, width } = Dimensions.get("window");
 
-export default function FeedEmoji() {
+export default function FeedEmoji(props) {
 
-    const [emoji, setEmoji] = useState(1);
+    const [emoji, setEmoji] = useState(null);
 
     return (
         <View style={styles.background}>
-            {emoji===1 &&
+            {/* {emoji===1 && */}
             <View style={styles.container}>
                 <View style={styles.popup}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={()=>{setEmoji(0)}}>
+                        <TouchableOpacity onPress={()=>{props.closeEmojiModal()}}>
                             <Image style={styles.closeBtn} source={CloseIcon}/>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.emojiWrapper}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> { 
+                            setEmoji('Happy'); 
+                            props.passEmoji('Happy');
+                        }}>
                             <Image style={styles.icon} source={HappyIcon} />
                             <Text style={styles.emotion}>행복해요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Filled');
+                            props.passEmoji('Filled');
+                        }}>
                             <Image style={styles.icon} source={FilledIcon} />
                             <Text style={styles.emotion}>뿌듯해요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Peace');
+                            props.passEmoji('Peace');
+                        }}>
                             <Image style={styles.icon} source={PeaceIcon} />
                             <Text style={styles.emotion}>평온해요</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.emojiWrapper}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Thank');
+                            props.passEmoji('Thank');
+                        }}>
                             <Image style={styles.icon} source={ThankIcon} />
                             <Text style={styles.emotion}>감사해요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Lovely');
+                            props.passEmoji('Lovely');
+                        }}>
                             <Image style={styles.icon} source={LovelyIcon} />
                             <Text style={styles.emotion}>설레요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Empty');
+                            props.passEmoji('Empty');
+                        }}>
                             <Image style={styles.icon} source={EmptyIcon} />
                             <Text style={styles.emotion}>공허해요</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.emojiWrapper}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Sad');
+                            props.passEmoji('Sad');
+                        }}>
                             <Image style={styles.icon} source={SadIcon} />
                             <Text style={styles.emotion}>슬퍼요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Lonely');
+                            props.passEmoji('Lonely');
+                        }}>
                             <Image style={styles.icon} source={LonelyIcon} />
                             <Text style={styles.emotion}>외로워요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Tired');
+                            props.passEmoji('Tired');
+                        }}>
                             <Image style={styles.icon} source={TiredIcon} />
                             <Text style={styles.emotion}>지쳐요</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.emojiWrapper}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Depressed');
+                            props.passEmoji('Depressed');
+                        }}>
                             <Image style={styles.icon} source={DepressedIcon} />
                             <Text style={styles.emotion}>우울해요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Worried');
+                            props.passEmoji('Worried');
+                        }}>
                             <Image style={styles.icon} source={WorriedIcon} />
                             <Text style={styles.emotion}>걱정돼요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {
+                            setEmoji('Angry');
+                            props.passEmoji('Angry');
+                        }}>
                             <Image style={styles.icon} source={AngryIcon} />
                             <Text style={styles.emotion}>화나요</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
-            }
+            {/* } */}
         </View>
     );
 }
