@@ -94,7 +94,7 @@ const calendarTheme = {
   'stylesheet.day.basic': {
     base: {
       width: 32,
-      height: 75,
+      height: height*0.09,
       alignItems: 'center'
     },
   }

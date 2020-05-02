@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect}  from 'react';
-import { StyleSheet, Dimensions, Button, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, Button, View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import Logo from './../images/Logo.png';
 import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
@@ -11,7 +11,8 @@ export default function Login({ navigation }) {
     const [password, setPassword] = useState(null);
 
     const onLogin = e => {
-        fetch(`http://127.0.0.1:8000/login/`, {
+        // navigation.push('MainCalendar'); //for android test(android fetch doesn't work)
+        fetch(`http://127.0.0.1:8000/accounts/login/`, {
             method: 'POST',
             body: JSON.stringify({email: email, password: password}),
             headers: {
@@ -19,8 +20,16 @@ export default function Login({ navigation }) {
                 'Content-type': 'applications/json'
             }
             }).then((res) => {
-                console.log('hi')
-                navigation.push('MainCalendar');
+                return res.json();
+            }).then((resJSON) => {
+                const { uid } = resJSON
+                if(uid > 0) {
+                    navigation.push('MainCalendar');
+                } else {
+                    Alert.alert(
+                        '아이다가 비밀번호와 일치하지 않습니다',
+                    )
+                }
             }).catch((err) => {
                 console.log(err);
             })
