@@ -37,7 +37,9 @@ export default function Settings({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Image style={styles.menuIcon} source={BackButton}/>
+                <TouchableOpacity onPress={() => navigation.goBack()}>            
+                    <Image style={styles.menuIcon} source={BackButton}/>
+                </TouchableOpacity>
                 <Image style={styles.logo} source={Logo}/>
                 <View></View>
             </View>

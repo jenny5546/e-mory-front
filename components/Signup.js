@@ -8,27 +8,66 @@ import CompleteButton from './../images/CompleteButton.png';
 const { height, width } = Dimensions.get("window");
 
 export default function Signup({ navigation }) {
-    const _showAlert = () => {
-        onSignup();
-        // Alert.alert(
-        // '축하드립니다!',
-        // '회원가입이 완료되었습니다',
-        // [
-        //     {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
-        // ],
-        // { cancelable: false }
-        // )
-    }
 
-    const emailValidation = () => {
+    const emailValidation = (e) => {
         Alert.alert(
             '이메일이 발송되었습니다',
             '발송된 메일을 통해 인증을 완료해주세요'
         )
+        setValidEmail(true);
     }
 
+    const nicknameValidation = (e) => {
+        Alert.alert(
+            '사용 가능한 닉네임입니다',
+            '발송된 메일을 통해 인증을 완료해주세요'
+        )
+        setValidNickname(true);
+    }
+
+    // const pwdValidCheck = (pwd) => {
+    //     let regPwd = /^.*(?=^.{8,12}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[~,!,@,#,$,*,(,),=,+,_,.,|]).*$/;
+    //     if(!regPwd.test(pwd)) {
+    //         return false;
+    //     }else{
+    //         return true;
+    //     }
+    // }
+
     const onSignup = e => {
-        fetch(`http://127.0.0.1:8000/signup/`, {
+        if(validEmail === false) {
+            return (
+                Alert.alert(
+                    '이메일 인증',
+                    '이메일 인증을 완료해주세요'
+                )
+            );
+        }
+        if(password !== passwordCheck) {
+            return (
+                Alert.alert(
+                    '입력오류',
+                    '비밀번호가 일치하지 않습니다'
+                )
+            );
+        }
+        // if(pwdValidCheck(password) === false) {
+        //     return (
+        //         Alert.alert(
+        //             '비밀번호',
+        //             '알파벳, 숫자, 특수기호포함 8자 이상'
+        //         )
+        //     );
+        // }
+        if(validNickname === false) {
+            return (
+                Alert.alert(
+                    '닉네임',
+                    '중복되지 않는 닉네임을 사용해주세요'
+                )
+            );
+        }
+        fetch(`http://127.0.0.1:8000/accounts/signup/`, {
             method: 'POST',
             body: JSON.stringify({name:name, email: email, password: password, date: date, nickname:nickname }),
             headers: {
@@ -36,29 +75,17 @@ export default function Signup({ navigation }) {
                 'Content-type': 'applications/json'
             }
             }).then((res) => {
+                Alert.alert(
+                    '축하드립니다!',
+                    '회원가입이 완료되었습니다',
+                    [
+                        {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
+                    ],
+                    { cancelable: false }
+                    )
                 return res.json();
             }).then((resJSON) => {
                 console.log(resJSON);
-                // const { uid } = resJSON
-                // const crypto = require('crypto');
-                // var cipher = crypto.createCipher('aes128', 'committer')
-                // cipher.update(`${uid}`, 'ascii', 'hex');
-                // var cipherd=cipher.final('hex')
-                // let headers = {
-                //     "Content-Type": "application/json",
-                // };
-                // axios.post(`http://127.0.0.1:8000/account/${cipherd}/`, {
-                //     "email": email
-                // }, {headers: headers}).then((res) => {
-                //     const {error} = res.data
-                //     if (error) {
-                //         alert(error);
-                //     }
-                //     alert('메일이 발송 되었습니다.');
-                //     setLoading(0);
-                // }).catch((err) => {
-                //     console.log(err);
-                // })
             }).catch((err) => {
                 console.log(err);
             })
@@ -70,6 +97,8 @@ export default function Signup({ navigation }) {
     const [passwordCheck, setPasswordCheck] = useState(null);
     const [date, setDate] = useState(null);
     const [nickname, setNickname] = useState(null);
+    const [validEmail, setValidEmail] = useState(false);
+    const [validNickname, setValidNickname] = useState(false);
 
     return (
         <View style={styles.container}>
@@ -140,14 +169,14 @@ export default function Signup({ navigation }) {
                         onChange={(e)=>{setNickname(e.nativeEvent.text)}}
                     />
                     <View style={styles.nicknameCheckBtn}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={nicknameValidation}>
                             <Text style={styles.checkText}>중복확인</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.belowBtn} onPress={_showAlert}>
+                <TouchableOpacity style={styles.belowBtn} onPress={onSignup}>
                     <AntDesign name="checkcircleo" size={20}/>
                 </TouchableOpacity>
             </View>
