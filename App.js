@@ -28,23 +28,23 @@ import Signup from './components/Signup';
 import Statistics from './components/Statistics';
 const { height, width } = Dimensions.get("window");
 
-function DetailsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-      <Button
-        title="Go to Details... again"
-        onPress={() => navigation.navigate('Details')}
-      />
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-      <Button
-        title="Go back to first screen in stack"
-        onPress={() => navigation.popToTop()}
-      />
-    </View>
-  );
-}
+// function DetailsScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Details Screen</Text>
+//       <Button
+//         title="Go to Details... again"
+//         onPress={() => navigation.navigate('Details')}
+//       />
+//       <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+//       <Button title="Go back" onPress={() => navigation.goBack()} />
+//       <Button
+//         title="Go back to first screen in stack"
+//         onPress={() => navigation.popToTop()}
+//       />
+//     </View>
+//   );
+// }
 
 const Stack = createStackNavigator();
 
@@ -63,11 +63,11 @@ export default function App(){
         {cover &&
           <Stack.Screen name="Cover" component={Cover} />
         }
-        <Stack.Screen name="Login" component={Login} />
+        {/* <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={Signup} />
         <Stack.Screen name="TutorialOne" component={TutorialOne} />
         <Stack.Screen name="TutorialTwo" component={TutorialTwo} />
-        <Stack.Screen name="TutorialThree" component={TutorialThree} />
+        <Stack.Screen name="TutorialThree" component={TutorialThree} /> */}
         <Stack.Screen name="MainCalendar" component={MainCalendar} />
         <Stack.Screen name="FeedListAll" component={FeedListAll} />
         <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} />

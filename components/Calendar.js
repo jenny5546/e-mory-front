@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import BackButton from './../images/BackIcon.png';
@@ -13,12 +13,27 @@ import ChartComponent from './Chart';
 import FeedNew from './FeedNew';
 const { height, width } = Dimensions.get("window");
 
+// Emoji Icons 
+import HappyIcon from './../images/HappyIcon.png';
+import FilledIcon from './../images/FilledIcon.png';
+import PeaceIcon from './../images/PeaceIcon.png';
+import ThankIcon from './../images/ThankIcon.png';
+import LovelyIcon from './../images/LovelyIcon.png';
+import SadIcon from './../images/SadIcon.png';
+import LonelyIcon from './../images/LonelyIcon.png';
+import EmptyIcon from './../images/EmptyIcon.png';
+import TiredIcon from './../images/TiredIcon.png';
+import DepressedIcon from './../images/DepressedIcon.png';
+import WorriedIcon from './../images/WorriedIcon.png';
+import AngryIcon from './../images/AngryIcon.png';
+
+
 LocaleConfig.locales['kr'] = {
   monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
   monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-  dayNames: ['월요일','화요일','수요일','목요일','금요일','토요일','일요일'],
-  dayNamesShort: ['월','화','수','목','금','토','일'],
-  today: 'Aujourd\'hui'
+  dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
+  dayNamesShort: ['일','월','화','수','목','금','토'],
+  today: '오늘'
 };
 LocaleConfig.defaultLocale = 'kr';
 
@@ -37,20 +52,67 @@ export default function MainCalendar({ navigation }) {
   const [newFeedModal, openNewFeedModal] = useState(false);
   const [pressedDate, setPressedDate]= useState(null);
 
-  // feeds는 back에서 GET한 것들로, setFeeds
+  // feeds는 back에서 GET한 것들로, setFeedList
   const [feedList, setFeedList] = useState([]);
+  const [list, setList] = useState([]);
 
-  function parseDate(string){
-    let stringArray = string.split("-"); 
-    let year = stringArray[0];
-    let month = stringArray[1];
-    let day = stringArray[2];
-    return year+'년 '+month + '월 '+ day + '일';
+  // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
+
+  const emojiColor= (emoji) =>{
+    switch(emoji){
+      case 'Happy':
+        return '#F7E98A';
+      case 'Filled':
+        return '#E7B88C';
+      case 'Peace':
+        return '#F3C94F';
+      case 'Thank':
+        return '#8DCA9A';
+      case 'Lovely':
+        return '#E9B1BF';
+      case 'Empty':
+        return '#C4C4C5';
+      case 'Sad':
+        return '#BBEBDE';
+      case 'Lonely':
+        return '#93BFE5';
+      case 'Tired':
+        return '#6B93C8';
+      case 'Depressed':
+        return '#9177C0';
+      case 'Worried':
+        return '#9E9BE5';
+      case 'Angry':
+        return '#D05C58';
+    }
+  }
+  const logFeeds = () =>{
+    var result = {};
+    for (var i=0; i<feedList.length; i++){
+      // result[feedList[i].date]=feedList[i].emoji;
+      result[feedList[i].date]= {
+        marked: true, 
+        customStyles: {
+          container: {
+            backgroundColor: emojiColor(feedList[i].emoji),
+            height: 32
+          },
+        }
+      };
+    }
+    // console.log(result);
+    return result;
   }
 
+  // useEffect(() => {
+  //   console.log(logFeeds());
+  // });
+
+  
   return (
       <View style={styles.container}>
         <View style={styles.header}>
+          {/* <Text>{list}</Text> */}
           <Image style={styles.backButton} source={Menu}/>
           <Image style={styles.logo} source={Logo}/>
           <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}}>
@@ -66,8 +128,22 @@ export default function MainCalendar({ navigation }) {
           <FeedNew 
             closeNewFeed={() => openNewFeedModal(false)} 
             pressedDate={pressedDate}
-            // selectEmoji={()=> setSelectedEmoji()}
+            submitNewFeed={(title,content,emoji)=> {
+              const newFeed= new Feed(emoji, title, content, pressedDate);
+              /* 이 부분에 Post를 넣읍시다
 
+              */
+
+              setFeedList([
+                ...feedList,
+                newFeed,
+              ]);
+              setList([
+                ...list,
+                pressedDate
+              ])
+
+            }}
           />
         }
         <Calendar
@@ -75,10 +151,49 @@ export default function MainCalendar({ navigation }) {
             style={styles.calendarStyle}
             onDayPress={(day)=>{
               openNewFeedModal(true);
-              setPressedDate(parseDate(day.dateString));
-
+              setPressedDate(day.dateString);
             }}
+            // markedDates = {logFeeds()}
             monthFormat={'M월'}
+            markingType = {'custom'}
+            markedDates={
+              logFeeds()
+            }
+            // Override day Component + Styling
+            // dayComponent={({date, state, marking, onPress}) => {
+            //   if (marking.selected) {
+            //     <TouchableOpacity>
+            //       <Text 
+            //         style={{
+            //           width: 32, 
+            //           height: height*0.09, 
+            //           alignItems: 'center', 
+            //           textAlign: 'center',
+            //           fontSize: 13,
+            //           color: state === 'disabled' ? 'gray' : 'blue'
+            //         }}>
+            //         {date.day}
+            //       </Text>
+            //       <Text>Hi</Text>
+            //     </TouchableOpacity>
+            //   }
+            //   return (
+            //     <TouchableOpacity style={styles.dayContainer} onPress={()=>{ onPress(date); openNewFeedModal(true); setPressedDate(date.dateString);}} >
+            //       <Text 
+            //         style={{
+            //           width: 32, 
+            //           height: height*0.09, 
+            //           alignItems: 'center', 
+            //           textAlign: 'center',
+            //           fontSize: 13,
+            //           color: state === 'disabled' ? 'gray' : 'black'
+            //         }}>
+            //         {date.day}
+            //       </Text>
+                
+            //     </TouchableOpacity>
+            //   );
+            // }}
         />
         <View style={styles.navigationbar}>
           <TouchableOpacity>
@@ -101,12 +216,12 @@ export default function MainCalendar({ navigation }) {
 /* Calendar Theme Overriding: 색, 폰트, 글자 크기 */
 const calendarTheme = {
   // calendarBackground: 'rgba(196, 196, 196, 0.5)',
-  selectedDayBackgroundColor: '#00adf5',
-  selectedDayTextColor: '#ffffff',
-  todayTextColor: '#00adf5',
-  dayTextColor: '#2d4150', //
-  textDisabledColor: '#d9e1e8', //#d9e1e8
-  // dotColor: '#00adf5',
+  // selectedDayBackgroundColor: '#00adf5',
+  // selectedDayTextColor: '#ffffff',
+  // todayTextColor: '#00adf5',
+  // dayTextColor: '#2d4150', //
+  // textDisabledColor: '#d9e1e8', //#d9e1e8
+  dotColor: 'pink',
   // selectedDotColor: '#ffff',
   arrowColor: 'grey',
   disabledArrowColor: '#d9e1e8',
@@ -122,7 +237,7 @@ const calendarTheme = {
   textDayFontSize: 16,
   textMonthFontSize: 16,
   textDayHeaderFontSize: 16,
-  'stylesheet.day.basic': {
+  'stylesheet.day.single': {
     base: {
       width: 32,
       height: height*0.09,
@@ -189,5 +304,16 @@ const styles = StyleSheet.create({
     icon: {
       height: 20,
       width: 20,
+    },
+    dayContainer: {
+      flexDirection: 'column'
+    },
+    emojiIcon: {
+      width: 20,
+      height: 20,
+      position:'absolute',
+      bottom:10,
+      left: 10,
     }
+
 });
