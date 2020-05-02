@@ -94,7 +94,7 @@ const calendarTheme = {
   'stylesheet.day.basic': {
     base: {
       width: 32,
-      height: 80,
+      height: 75,
       alignItems: 'center'
     },
   }
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       marginTop: 30,
-      marginBottom: 5,
+      // marginBottom: 5,
       paddingHorizontal: width*0.04,
       paddingBottom: 10,
       borderBottomColor: "#fafafa",
