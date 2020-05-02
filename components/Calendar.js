@@ -7,7 +7,7 @@ import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIconFilled.png';
 import Chart from './../images/ChartIcon.png';
 import Menu from './../images/MenuIcon.png';
-import Feed from './../images/FeedIcon.png';
+import FeedIcon from './../images/FeedIcon.png';
 import Setting from './../images/SettingIcon.png';
 import ChartComponent from './Chart';
 import FeedNew from './FeedNew';
@@ -22,11 +22,31 @@ LocaleConfig.locales['kr'] = {
 };
 LocaleConfig.defaultLocale = 'kr';
 
+class Feed {
+  constructor(emoji, title, content, date) {
+    this.emoji = emoji;
+    this.title = title;
+    this.content = content;
+    this.date = date;
+  }
+}
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
 export default function MainCalendar({ navigation }) {
 
-  const [chart, setChart] = useState(null);
-  const [newFeed, setNewFeed] = useState(null);
+  const [chart, openChartModal] = useState(false);
+  const [newFeedModal, openNewFeedModal] = useState(false);
+  const [pressedDate, setPressedDate]= useState(null);
+
+  // feeds는 back에서 GET한 것들로, setFeeds
+  const [feedList, setFeedList] = useState([]);
+
+  function parseDate(string){
+    let stringArray = string.split("-"); 
+    let year = stringArray[0];
+    let month = stringArray[1];
+    let day = stringArray[2];
+    return year+'년 '+month + '월 '+ day + '일';
+  }
 
   return (
       <View style={styles.container}>
@@ -38,26 +58,37 @@ export default function MainCalendar({ navigation }) {
           </TouchableOpacity>
         </View>
         {chart &&
-          <ChartComponent />
+          <ChartComponent 
+            closeChart={() => openChartModal(false)}
+          />
         }
-        {newFeed &&
-          <FeedNew />
+        {newFeedModal &&
+          <FeedNew 
+            closeNewFeed={() => openNewFeedModal(false)} 
+            pressedDate={pressedDate}
+            // selectEmoji={()=> setSelectedEmoji()}
+
+          />
         }
         <Calendar
             theme={calendarTheme}
             style={styles.calendarStyle}
-            onDayPress={()=>{setNewFeed(1)}}
+            onDayPress={(day)=>{
+              openNewFeedModal(true);
+              setPressedDate(parseDate(day.dateString));
+
+            }}
             monthFormat={'M월'}
         />
         <View style={styles.navigationbar}>
           <TouchableOpacity>
             <Image style={styles.icon} source={Home} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{setChart(1)}}>
+          <TouchableOpacity onPress={()=>{openChartModal(true)}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
-            <Image style={styles.icon} source={Feed} />
+            <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
             <Image style={styles.icon} source={Setting} />
