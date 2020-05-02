@@ -5,31 +5,28 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, Dimensions, Text, Button, StatusBar } from 'react-native';
 // import MainCalendar from './components/Calendar';
 import Cover from './components/CoverPage';
+import Login from './components/Login';
 import TutorialOne from './components/tutorial/Tutorial_1';
 import TutorialTwo from './components/tutorial/Tutorial_2';
 import TutorialThree from './components/tutorial/Tutorial_3';
 import MainCalendar from './components/Calendar';
+import FeedListAll from './components/FeedListAll';
+import FeedListSpecific from './components/FeedListSpecific';
+import Sidebar from './components/Settings';
+import Comment from './components/Comment';
+import MyActivity from './components/MyActivity';
+
 import ProfileSetting from './components/SidebarMenu/ProfileSetting';
+import AlarmSetting from './components/SidebarMenu/AlarmSetting';
+import PasswordFind from './components/PasswordFind';
 import UserFeedback from './components/SidebarMenu/UserFeedback';
 import ServiceTerm from './components/SidebarMenu/ServiceTerm';
-import AlarmSetting from './components/SidebarMenu/AlarmSetting';
-import Sidebar from './components/Sidebar';
-import Login from './components/Login';
+
+
+
 import Signup from './components/Signup';
 import Statistics from './components/Statistics';
 const { height, width } = Dimensions.get("window");
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.push('Details')}
-      />
-    </View>
-  );
-}
 
 function DetailsScreen({ navigation }) {
   return (
@@ -72,6 +69,15 @@ export default function App(){
         <Stack.Screen name="TutorialTwo" component={TutorialTwo} />
         <Stack.Screen name="TutorialThree" component={TutorialThree} />
         <Stack.Screen name="MainCalendar" component={MainCalendar} />
+        <Stack.Screen name="FeedListAll" component={FeedListAll} />
+        <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} />
+        <Stack.Screen name="Settings" component={Sidebar} />
+        <Stack.Screen name="Comment" component={Comment} />
+        <Stack.Screen name="MyActivity" component={MyActivity} />
+        <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
+        <Stack.Screen name="AlarmSetting" component={AlarmSetting} />
+        <Stack.Screen name="PasswordFind" component={PasswordFind} />
+        {/* <Stack.Screen name="Chart" component={Chart} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

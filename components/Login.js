@@ -6,6 +6,26 @@ import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
 
 export default function Login({ navigation }) {
+
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+
+    const onLogin = e => {
+        fetch(`http://127.0.0.1:8000/login/`, {
+            method: 'POST',
+            body: JSON.stringify({email: email, password: password}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+            }).then((res) => {
+                console.log('hi')
+                navigation.push('MainCalendar');
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -15,39 +35,39 @@ export default function Login({ navigation }) {
             <TextInput
                 style={styles.input}
                 placeholder={"아이디를 입력해주세요"}
+                value={email}
+                onChange={(e)=>{setEmail(e.nativeEvent.text)}}
             />
-            <TextInput 
+            <TextInput
                 style={styles.input}
                 placeholder={"비밀번호를 입력해주세요"}
+                value={password}
+                onChange={(e)=>{setPassword(e.nativeEvent.text)}}
             />
             <View style={styles.loginButtonWrapper}>
-                <Button title={"로그인"} color="#fff" onPress={() => navigation.push('MainCalendar')}/>
+                <TouchableOpacity onPress={onLogin}>
+                    <Text style={styles.loginButton}>로그인</Text>
+                </TouchableOpacity>
             </View>
-
             <View style={styles.loginHelpWrapper}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>{navigation.push('PasswordFind')}}>
                     <Text style={styles.loginHelpButton}>아이디 | 비밀번호 찾기</Text>
                 </TouchableOpacity>
             </View>
-
             <View style={styles.signupButtonWrapper}>
                 <TouchableOpacity onPress={() => navigation.push('SignUp')}>
                     <Text style={styles.signupButton}>회원가입</Text>
                 </TouchableOpacity>
             </View>
-
             {/* <View style={styles.kakaoButtonWrapper}>
                 <Button title={"카카오톡으로 시작하기"} color="#000"/>
             </View>
-
             <View style={styles.naverButtonWrapper}>
                 <Button title={"네이버로 시작하기"} color="#fff"/>
             </View>
-
             <View style={styles.facebookButtonWrapper}>
                 <Button title={"페이스북으로 시작하기"} color= "white"/>
             </View> */}
-            
         </View>
     );
 }
@@ -63,7 +83,6 @@ const buttonWrapper = StyleSheet.create({
 const button = StyleSheet.create({
     button: {
         fontSize:14,
-        color: "#bbb",
         alignItems:'center',
         justifyContent:'center',
         textAlign: 'center',
@@ -78,6 +97,7 @@ const styles = StyleSheet.create({
         height: height,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#ffffff',
     },
     headerContainer: {
         marginBottom: 30,
@@ -134,9 +154,17 @@ const styles = StyleSheet.create({
     loginHelpButton: {
         ...button.button,
         fontWeight: '400',
+        color: "#bbb",
     },
     signupButton: {
         ...button.button,
         fontWeight: '600',
+        color: "#bbb",
+    },
+    loginButton: {
+        ...button.button,
+        fontWeight: '600',
+        color: "#fff",
+        backgroundColor: "#bbb",
     }
 });
