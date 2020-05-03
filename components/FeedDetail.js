@@ -152,18 +152,15 @@ export default function FeedDetail(props) {
                     <Text style={styles.title}>{props.matchingFeed.title}</Text>
                     <Text style={styles.content}>{props.matchingFeed.content}</Text>
                     
-                    {/* 완료 버튼 수정 부탁합니다  */}
-                    {/* <TouchableOpacity 
-                        style={styles.submitButton}
-                        onPress={()=>{
-                            props.closeNewFeed(); 
-                            // + 실제 post해서 main calendar 에 넘겨줄 수 있게 해주자.
-                            props.submitNewFeed(title,content,emoji,privacy);
-                        }}
-                    >
-                         <AntDesign name="checkcircleo" size={20}/> 
-                        
-                    </TouchableOpacity> */}
+                    <View style={styles.btnContainer}>
+                        <TouchableOpacity >
+                            <Image style={styles.editBtn} source={EditIcon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.deleteBtn} source={DeleteIcon} />
+                        </TouchableOpacity>
+                    </View>
+                    
                     {/* {emojiModal===true && */}
                         {/* <FeedEmoji 
                             closeEmojiModal={() => openEmojiModal(false)}
@@ -209,14 +206,21 @@ const styles = StyleSheet.create({
     title: {
         paddingTop: 20,
         fontSize: 15,
-        marginTop: 20
+        marginTop: 20,
+        fontWeight: '500'
         // flexWrap: "wrap",
     },
     content: {
         paddingTop: 20,
         fontSize: 14,
-        marginTop: 20
+        marginTop: 20,
+        color: "#999999",
         // flexWrap: "wrap",
+    },
+    btnContainer:{
+        justifyContent:"flex-end",
+        flexDirection: 'row',
+        marginTop: 'auto'
     },
     closeBtn: {
         height: 20,
@@ -227,9 +231,14 @@ const styles = StyleSheet.create({
         height: 20,
         width: 20,
         marginTop: 1,
+        marginRight: 20,
+    },
+    deleteBtn:{
+        height: 20,
+        width: 20,
+        marginTop: 1,
         marginRight: 10,
-        position: "relative",
-        bottom: 1,
+        alignSelf: 'flex-end'
     },
     emojiContainer: {
         marginTop: 20,

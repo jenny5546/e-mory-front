@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
 import CloseIcon from './../images/CloseIconGray.png';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import HappyIcon from './../images/HappyIcon.png';
 import FilledIcon from './../images/FilledIcon.png';
 import PeaceIcon from './../images/PeaceIcon.png';
@@ -20,7 +21,67 @@ const { height, width } = Dimensions.get("window");
 
 export default function Chart(props) {
 
-    // const [chart, setChart] = useState(1);
+    LocaleConfig.locales['kr'] = {
+        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+        dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
+        dayNamesShort: ['일','월','화','수','목','금','토'],
+        today: '오늘'
+    };
+    LocaleConfig.defaultLocale = 'kr';
+
+    //현재 달을 갖고오기
+    const _getCurrMonth = () =>{
+
+        var result = '';
+        var year = new Date().getFullYear();
+        var month = new Date().getMonth() + 1;
+        String(month).length ===1 ? 
+            result = String(year)+'-0'+String(month) :  result = String(year)+'-'+String(month);
+        return result;
+    }
+
+    const [month, setMonth] = useState(_getCurrMonth());
+    const [countHappy, setCountHappy] = useState(0);
+    const [countFilled, setCountFilled] = useState(0);
+    const [countPeace, setCountPeace] = useState(0);
+    const [countThank, setCountThank] = useState(0);
+    const [countLovely, setCountLovely] = useState(0);
+    const [countEmpty, setCountEmpty] = useState(0);
+    const [countSad, setCountSad] = useState(0);
+    const [countLonely, setCountLonely] = useState(0);
+    const [countTired, setCountTired] = useState(0);
+    const [countDepressed, setCountDepressed] = useState(0);
+    const [countWorried, setCountWorried] = useState(0);
+    const [countAngry, setCountAngry] = useState(0);
+
+    const countEmojis = (currMonthArray, emoji) =>{
+        const count = currMonthArray.filter(feed => feed.emoji === emoji).length;
+        return count;
+    }
+
+    // 달이 바뀔 때마다, 새로운 데이터를 로딩해 온다. 
+    useEffect(() => {
+        var currMonthFeeds = props.allFeeds.filter(feed => {
+            return String(feed.date).substr(0,7) === month;
+        });
+        console.log(currMonthFeeds);
+        setCountHappy(countEmojis(currMonthFeeds,'Happy'));
+        setCountFilled(countEmojis(currMonthFeeds,'Filled'));
+        setCountPeace(countEmojis(currMonthFeeds,'Peace'));
+        setCountThank(countEmojis(currMonthFeeds,'Thank'));
+        setCountLovely(countEmojis(currMonthFeeds,'Lovely'));
+        setCountEmpty(countEmojis(currMonthFeeds,'Empty'));
+        setCountSad(countEmojis(currMonthFeeds,'Sad'));
+        setCountLonely(countEmojis(currMonthFeeds,'Lonely'));
+        setCountTired(countEmojis(currMonthFeeds,'Tired'));
+        setCountDepressed(countEmojis(currMonthFeeds,'Depressed'));
+        setCountWorried(countEmojis(currMonthFeeds,'Worried'));
+        setCountAngry(countEmojis(currMonthFeeds,'Angry'));
+
+    },[month]);
+
+    console.log(countHappy);
 
     return (
         <View style={styles.background}>
@@ -28,48 +89,72 @@ export default function Chart(props) {
             <View style={styles.container}>
                 <View style={styles.popup}>
                     <View style={styles.header}>
-                        <Text style={styles.date}>2020년 4월</Text>
                         <TouchableOpacity onPress={()=> {props.closeChart()} }>
                             <Image style={styles.closeBtn} source={CloseIcon} />
                         </TouchableOpacity>
                     </View>
-                    <View>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={HappyIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={FilledIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={PeaceIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={ThankIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={LovelyIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={EmptyIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={SadIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={LonelyIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={TiredIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={DepressedIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={WorriedIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Image style={styles.icon} source={AngryIcon} />
-                        </TouchableOpacity>
+                    <View style={styles.body}>
+                        <View style={styles.monthPicker}>
+                            <Calendar
+                                dayComponent={() => {
+                                    return (<></>)
+                                }}
+                                hideDayNames={true}
+                                style={styles.calendarStyle} 
+                                onMonthChange={(month) => setMonth(month.dateString.substr(0,7))} 
+                            />
+                        </View>
+                        <View style={styles.monthStatistics}>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={HappyIcon} />
+                                <Text style={{marginTop: 20}}>{countHappy}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={FilledIcon} />
+                                <Text style={{marginTop: 20}}>{countFilled}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={PeaceIcon} />
+                                <Text style={{marginTop: 20}}>{countPeace}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={ThankIcon} />
+                                <Text style={{marginTop: 20}}>{countThank}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={LovelyIcon} />
+                                <Text style={{marginTop: 20}}>{countLovely}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={EmptyIcon} />
+                                <Text style={{marginTop: 20}}>{countEmpty}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={SadIcon} />
+                                <Text style={{marginTop: 20}}>{countSad}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={LonelyIcon} />
+                                <Text style={{marginTop: 20}}>{countLonely}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={TiredIcon} />
+                                <Text style={{marginTop: 20}}>{countTired}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={DepressedIcon} />
+                                <Text style={{marginTop: 20}}>{countDepressed}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={WorriedIcon} />
+                                <Text style={{marginTop: 20}}>{countWorried}</Text>
+                            </View>
+                            <View style={styles.emojiRow}>
+                                <Image style={styles.icon} source={AngryIcon} />
+                                <Text style={{marginTop: 20}}>{countAngry}</Text>
+                            </View>
+                        </View>
+                        
                     </View>
                 </View>
             </View>  
@@ -98,11 +183,11 @@ const styles = StyleSheet.create({
         padding: 20,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        height: "100%",
+        height: height,
     },
     header: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
     },
     date: {
         color: "#999999",
@@ -114,12 +199,19 @@ const styles = StyleSheet.create({
         marginTop: 11,
     },
     closeBtn: {
-        height: 17,
-        width: 17,
+        height: 22,
+        width: 22,
         marginTop: 1,
     },
     input: {
         paddingTop: 20,
         fontSize: 10,
     },
+    calendarStyle :{
+        height: 0.07* height
+    },
+    emojiRow:{
+        flexDirection: 'row'
+    }
 });
+

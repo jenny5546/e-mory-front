@@ -76,9 +76,18 @@ export default function MainCalendar({ navigation }) {
     }
   }
 
+  //현재 달을 갖고오기
+  // const _getCurrMonth = () =>{
+  //   var month = new Date().getMonth() + 1;
+  //   if (String(month).length==1){
+  //     return '0'+String(month);
+  //   }
+  //   return String(month);  
+  // }
+  // console.log(_getCurrMonth())
+
 
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
-
   const emojiColor= (emoji) =>{
     switch(emoji){
       case 'Happy':
@@ -187,6 +196,7 @@ export default function MainCalendar({ navigation }) {
         {chart &&
           <ChartComponent 
             closeChart={() => openChartModal(false)}
+            allFeeds = {feedList}
           />
         }
         {newFeedModal &&
@@ -251,20 +261,23 @@ export default function MainCalendar({ navigation }) {
             // Override day Component + Styling
             // dayComponent={({date, state, marking, onPress}) => {
             //   if (marking.selected) {
-            //     <TouchableOpacity>
-            //       <Text 
-            //         style={{
-            //           width: 32, 
-            //           height: height*0.09, 
-            //           alignItems: 'center', 
-            //           textAlign: 'center',
-            //           fontSize: 13,
-            //           color: state === 'disabled' ? 'gray' : 'blue'
-            //         }}>
-            //         {date.day}
-            //       </Text>
-            //       <Text>Hi</Text>
-            //     </TouchableOpacity>
+            //        return(
+            //        <TouchableOpacity>
+                //       <Text 
+                //         style={{
+                //           width: 32, 
+                //           height: height*0.09, 
+                //           alignItems: 'center', 
+                //           textAlign: 'center',
+                //           fontSize: 13,
+                //           color: state === 'disabled' ? 'gray' : 'blue'
+                //         }}>
+                //         {date.day}
+                //       </Text>
+                //       <Text>Hi</Text>
+                //     </TouchableOpacity>
+            //        )
+            //     
             //   }
             //   return (
             //     <TouchableOpacity style={styles.dayContainer} onPress={()=>{ onPress(date); openNewFeedModal(true); setPressedDate(date.dateString);}} >
@@ -284,7 +297,7 @@ export default function MainCalendar({ navigation }) {
             //   );
             // }}
         />
-        : <ActivityIndicator />}
+        : <ActivityIndicator style={styles.loadingbar}/>}
         <View style={styles.navigationbar}>
           <TouchableOpacity>
             <Image style={styles.icon} source={Home} />
@@ -404,6 +417,11 @@ const styles = StyleSheet.create({
       position:'absolute',
       bottom:10,
       left: 10,
+    },
+    loadingbar:{
+      position: 'absolute',
+      top: height*0.5,
+      left: width*0.5
     }
 
 });
