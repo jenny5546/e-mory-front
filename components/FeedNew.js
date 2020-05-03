@@ -35,7 +35,7 @@ export default function FeedNew(props) {
         let month = stringArray[1];
         let day = stringArray[2];
         return year+'년 '+month + '월 '+ day + '일';
-      }
+    }
 
     const renderEmoji=(emoji) =>{
         switch(emoji) {
