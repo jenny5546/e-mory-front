@@ -63,11 +63,11 @@ export default function App(){
         {cover &&
           <Stack.Screen name="Cover" component={Cover} />
         }
-        {/* <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={Signup} />
         <Stack.Screen name="TutorialOne" component={TutorialOne} />
         <Stack.Screen name="TutorialTwo" component={TutorialTwo} />
-        <Stack.Screen name="TutorialThree" component={TutorialThree} /> */}
+        <Stack.Screen name="TutorialThree" component={TutorialThree} />
         <Stack.Screen name="MainCalendar" component={MainCalendar} />
         <Stack.Screen name="FeedListAll" component={FeedListAll} />
         <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} />

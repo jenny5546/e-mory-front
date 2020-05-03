@@ -1,82 +1,263 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image, Dimensions, TouchableOpacity } from 'react-native';
 import EditIcon from './../images/EditIcon.png';
 import DeleteIcon from './../images/DeleteIcon.png';
+import CloseIcon from './../images/CloseIconGray.png';
 import Emoji from './../images/EmojiTemp.png';
+const { height, width } = Dimensions.get("window");
+// Emoji Icons 
+import HappyIcon from './../images/HappyIcon.png';
+import FilledIcon from './../images/FilledIcon.png';
+import PeaceIcon from './../images/PeaceIcon.png';
+import ThankIcon from './../images/ThankIcon.png';
+import LovelyIcon from './../images/LovelyIcon.png';
+import SadIcon from './../images/SadIcon.png';
+import LonelyIcon from './../images/LonelyIcon.png';
+import EmptyIcon from './../images/EmptyIcon.png';
+import TiredIcon from './../images/TiredIcon.png';
+import DepressedIcon from './../images/DepressedIcon.png';
+import WorriedIcon from './../images/WorriedIcon.png';
+import AngryIcon from './../images/AngryIcon.png';
 
-export default function FeedDetail() {
+export default function FeedDetail(props) {
+    const parseDate=(string)=>{
+        let stringArray = string.split("-"); 
+        let year = stringArray[0];
+        let month = stringArray[1];
+        let day = stringArray[2];
+        return year+'년 '+month + '월 '+ day + '일';
+    }
+    const renderEmoji=(emoji) =>{
+        switch(emoji) {
+            case 'Happy':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={HappyIcon}/>
+                    <Text style={styles.emojiText}>행복해요</Text>
+                </>
+                )
+            case 'Filled':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={FilledIcon}/>
+                    <Text style={styles.emojiText}>뿌듯해요</Text>
+                </>
+                )
+            case 'Peace':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={PeaceIcon}/>
+                    <Text style={styles.emojiText}>평온해요</Text>
+                </>
+                )
+            case 'Thank':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={ThankIcon}/>
+                    <Text style={styles.emojiText}>감사해요</Text>
+                </>
+                )
+            case 'Lovely':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={LovelyIcon}/>
+                        <Text style={styles.emojiText}>설레요</Text>
+                    </>
+                )
+            case 'Sad':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={SadIcon}/>
+                        <Text style={styles.emojiText}>슬퍼요</Text>
+                    </>
+                )
+            case 'Lonely':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={LonelyIcon}/>
+                        <Text style={styles.emojiText}>외로워요</Text>
+                    </>
+                )
+            case 'Empty':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={EmptyIcon}/>
+                        <Text style={styles.emojiText}>공허해요</Text>
+                    </>
+                )
+            case 'Tired':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={TiredIcon}/>
+                        <Text style={styles.emojiText}>지쳐요</Text>
+                    </>
+                )
+            case 'Depressed':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={DepressedIcon}/>
+                        <Text style={styles.emojiText}>우울해요</Text>
+                    </>
+                )
+            case 'Worried':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={WorriedIcon}/>
+                        <Text style={styles.emojiText}>걱정돼요</Text>
+                    </>
+                )
+            case 'Angry':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={AngryIcon}/>
+                        <Text style={styles.emojiText}>화나요</Text>
+                    </>
+                )
+            default:
+                return <View></View>
+        }
+    }
+
+    // console.log(props.matchingFeed.content);
     return (
-        <View style={styles.container}>
-            <StatusBar barStyle="light-content"/>
-            <View style={styles.popup}>
-                <View style={styles.feedHeader}>
-                    <Text style={styles.date}>2020년 4월 9일</Text>
-                    <View style={styles.icons}>
-                        <Image style={styles.icon} source={EditIcon} />
-                        <Image style={styles.icon} source={DeleteIcon} />
+        <View style={styles.background}>
+            {/* {feed===1 && */}
+            <View style={styles.container}>
+                <View style={styles.popup}>
+                    <View style={styles.header}>
+                        <Text style={styles.date}>{parseDate(props.pressedDate)}</Text>
+                        <View style={{flexDirection: "row", marginBottom: 10}}>
+                            {/* <TouchableOpacity >
+                                <Image style={styles.editBtn} source={EditIcon} />
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <Image style={styles.closeBtn} source={DeleteIcon} />
+                            </TouchableOpacity> */}
+                            <TouchableOpacity onPress={()=>{props.closeFeedDetail()}}>
+                                <Image style={styles.closeBtn} source={CloseIcon} />
+                                {/* <Image style={styles.closeBtn} source={CloseIcon} /> */}
+                            </TouchableOpacity>
+                        </View>
+
                     </View>
+                    {/* <Button
+                    // onPress={onPressLearnMore}
+                    // onPress={()=>{openEmojiModal(true)}}
+                    title="오늘의 감정은?"
+                    color="#e5e5e5"
+                    backgroundColor="rgb(247, 247, 247)"
+                    accessibilityLabel="Learn more about this purple button"
+                    /> */}
+                    <View style={styles.emojiContainer}>{renderEmoji(props.matchingFeed.emoji)}</View>
+                    <Text style={styles.title}>{props.matchingFeed.title}</Text>
+                    <Text style={styles.content}>{props.matchingFeed.content}</Text>
+                    
+                    <View style={styles.btnContainer}>
+                        <TouchableOpacity >
+                            <Image style={styles.editBtn} source={EditIcon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image style={styles.deleteBtn} source={DeleteIcon} />
+                        </TouchableOpacity>
+                    </View>
+                    
+                    {/* {emojiModal===true && */}
+                        {/* <FeedEmoji 
+                            closeEmojiModal={() => openEmojiModal(false)}
+                            passEmoji={(evt) => {setEmoji(evt); openEmojiModal(false)}}
+                        /> */}
+                    {/* } */}
                 </View>
-                
-                <Text style={styles.text}>오늘은 기분이 좋다!</Text>
-                <Image style={styles.emoji} source={Emoji} />
-                {/* <TextInput
-                
-                placeholder="오늘의 감정일기 100자"
-                placeholderTextColor={"#999"}
-                returnKeyType={"done"}
-                autoCorrect={false}
-                /> */}
-                <Button
-                // onPress={onPressLearnMore}
-                title="오늘의 감정은?"
-                color="#e5e5e5"
-                backgroundColor="rgb(247, 247, 247)"
-                accessibilityLabel="Learn more about this purple button"
-                />
             </View>
+            {/* } */}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    background: {
+        position: "absolute",
+        height: height,
+        zIndex: 2,
+    },
     container: {
         flex: 1,
-        justifyContent: "flex-start",
+        flexDirection: 'column',
+        justifyContent: "center",
+        width: width,
         paddingHorizontal: 10,
-        paddingVertical: 120,
+        paddingTop: 60,
         backgroundColor: "rgba(153, 153, 153, 0.5);",
     },
     popup: {
         backgroundColor: "#fff",
         padding: 20,
         borderRadius: 20,
-        height: "100%",
+        height: "80%",
+    },
+    header: {
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
     date: {
         color: "#999999",
         fontSize: 15,
     },
-    feedHeader: {
-        flex: 1,
-        flexDirection: "row",
-        // justifyContent: "space-around",
-    },
-    text: {
+    title: {
         paddingTop: 20,
-        fontSize: 10,
+        fontSize: 15,
+        marginTop: 20,
+        fontWeight: '500'
+        // flexWrap: "wrap",
+    },
+    content: {
+        paddingTop: 20,
+        fontSize: 14,
+        marginTop: 20,
         color: "#999999",
         // flexWrap: "wrap",
     },
-    icon: {
+    btnContainer:{
+        justifyContent:"flex-end",
+        flexDirection: 'row',
+        marginTop: 'auto'
+    },
+    closeBtn: {
         height: 20,
         width: 20,
+        marginTop: 1,
     },
-    icons: {
-        flex: 1,
-        flexDirection: "row",
+    editBtn: {
+        height: 20,
+        width: 20,
+        marginTop: 1,
+        marginRight: 20,
     },
-    emoji: {
-        height: 50,
-        width: 50,
+    deleteBtn:{
+        height: 20,
+        width: 20,
+        marginTop: 1,
+        marginRight: 10,
+        alignSelf: 'flex-end'
     },
+    emojiContainer: {
+        marginTop: 20,
+        alignItems: "center",
+    },
+    emojiIcon: {
+        height: 60,
+        width: 60,
+    },
+    emojiText:{
+        marginTop: 10,
+        fontSize: 14,
+        color: "#999999",
+    },
+
+    // 완료 버튼 수정 부탁합니다 
+    submitButton:{
+        position: 'absolute',
+        bottom: 25,
+        left: width*0.43
+    }
 });

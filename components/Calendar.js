@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import BackButton from './../images/BackIcon.png';
 import Alarm from './../images/AlarmIcon.png';
@@ -11,7 +11,9 @@ import FeedIcon from './../images/FeedIcon.png';
 import Setting from './../images/SettingIcon.png';
 import ChartComponent from './Chart';
 import FeedNew from './FeedNew';
+import FeedDetail from './FeedDetail';
 const { height, width } = Dimensions.get("window");
+import {AsyncStorage} from 'react-native';
 
 // Emoji Icons 
 import HappyIcon from './../images/HappyIcon.png';
@@ -38,11 +40,13 @@ LocaleConfig.locales['kr'] = {
 LocaleConfig.defaultLocale = 'kr';
 
 class Feed {
-  constructor(emoji, title, content, date) {
+  constructor(emoji, title, content, date, privacy) {
     this.emoji = emoji;
     this.title = title;
     this.content = content;
     this.date = date;
+    // this.author = author;
+    this.privacy = privacy;
   }
 }
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
@@ -50,14 +54,40 @@ export default function MainCalendar({ navigation }) {
 
   const [chart, openChartModal] = useState(false);
   const [newFeedModal, openNewFeedModal] = useState(false);
+  const [feedDetailModal, openFeedDetailModal] = useState(false);
   const [pressedDate, setPressedDate]= useState(null);
+  const [uid, setUid] = useState('');
+  const [loaded, setLoaded] = useState(false);
 
   // feeds는 back에서 GET한 것들로, setFeedList
   const [feedList, setFeedList] = useState([]);
-  const [list, setList] = useState([]);
+  // const [date, setDate] = useState([]);
+  
+
+  const _storeUid = async () =>{
+    try {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        setUid(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log(error)
+    }
+  }
+
+  //현재 달을 갖고오기
+  // const _getCurrMonth = () =>{
+  //   var month = new Date().getMonth() + 1;
+  //   if (String(month).length==1){
+  //     return '0'+String(month);
+  //   }
+  //   return String(month);  
+  // }
+  // console.log(_getCurrMonth())
+
 
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
-
   const emojiColor= (emoji) =>{
     switch(emoji){
       case 'Happy':
@@ -84,9 +114,13 @@ export default function MainCalendar({ navigation }) {
         return '#9E9BE5';
       case 'Angry':
         return '#D05C58';
+      default:
+        return '#FFFFFF';
     }
   }
-  const logFeeds = () =>{
+
+  // calendar에 mark하기 위해서 일기 쓴 날짜를 object: customStyle로 만드는 method
+  const markedFeeds = () =>{
     var result = {};
     for (var i=0; i<feedList.length; i++){
       // result[feedList[i].date]=feedList[i].emoji;
@@ -100,13 +134,53 @@ export default function MainCalendar({ navigation }) {
         }
       };
     }
-    // console.log(result);
+    
     return result;
   }
 
-  // useEffect(() => {
-  //   console.log(logFeeds());
-  // });
+  // 일기를 썼는지 안 썼는지 track하기 위한 함수 
+  const trackDates = () =>{
+    var result = [];
+    for (var i=0; i<feedList.length; i++){
+      result.push(feedList[i].date)
+    }
+    return result;
+  }
+
+  // console.log(feedList);
+  const findFeed = (pickedDate) =>{
+    const feed = feedList.find(obj => obj.date == pickedDate);
+    // console.log(feed)
+    return feed;
+    
+  }
+
+  setTimeout(() => {setLoaded(true)}, 1000)
+
+  useEffect(() => {
+    // console.log(feedList);
+    _storeUid();
+    if (uid){
+      fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
+        method: 'GET',
+        headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }}).then((res) => {
+            return res.text();
+        }).then(feed_list=> {
+          feed_list= JSON.parse(feed_list);
+
+          setFeedList(
+            feed_list.map((feed) => 
+              new Feed(feed.fields.emoji, feed.fields.title, feed.fields.content, feed.fields.date, feed.fields.privacy)),
+          )
+
+        }).catch((err) => {
+          console.log(err);
+        });
+    }  
+  },[loaded]);
 
   
   return (
@@ -122,60 +196,88 @@ export default function MainCalendar({ navigation }) {
         {chart &&
           <ChartComponent 
             closeChart={() => openChartModal(false)}
+            allFeeds = {feedList}
           />
         }
         {newFeedModal &&
           <FeedNew 
             closeNewFeed={() => openNewFeedModal(false)} 
             pressedDate={pressedDate}
-            submitNewFeed={(title,content,emoji)=> {
-              const newFeed= new Feed(emoji, title, content, pressedDate);
-              /* 이 부분에 Post를 넣읍시다
+            submitNewFeed={async (title,content,emoji,privacy)=> {
 
-              */
+              const newFeed= new Feed(emoji, title, content, pressedDate, privacy);
+              console.log(newFeed);
+              
+              /* 이 부분에 Post를 넣읍시다*/
+              fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
+                method: 'POST',
+                body: JSON.stringify(newFeed),
+                headers: {
+                    // 'Accept': 'application/json',
+                    'Content-type': 'applications/json'
+                }
+              }).then((res) => {
+                    return res.json();
+              }).then((resJSON) => {
+                  // const { title, content, emoji, date } = resJSON
+                  console.log('Post Success');
+                  // console.log(title);
+                  // console.log(content);
+                  // console.log(emoji);
+                  // console.log(date);
+              }).catch((err) => {
+                  console.log(err);
+              });
 
               setFeedList([
                 ...feedList,
                 newFeed,
               ]);
-              setList([
-                ...list,
-                pressedDate
-              ])
 
             }}
           />
         }
+        {feedDetailModal &&
+          <FeedDetail 
+            closeFeedDetail={() => openFeedDetailModal(false)} 
+            pressedDate={pressedDate}
+            matchingFeed = {findFeed(pressedDate)}
+          />
+        }
+        {loaded ? 
         <Calendar
             theme={calendarTheme}
             style={styles.calendarStyle}
             onDayPress={(day)=>{
-              openNewFeedModal(true);
+              (trackDates()).includes(day.dateString)? openFeedDetailModal(true):openNewFeedModal(true);
               setPressedDate(day.dateString);
             }}
             // markedDates = {logFeeds()}
             monthFormat={'M월'}
             markingType = {'custom'}
             markedDates={
-              logFeeds()
+              markedFeeds()
             }
             // Override day Component + Styling
             // dayComponent={({date, state, marking, onPress}) => {
             //   if (marking.selected) {
-            //     <TouchableOpacity>
-            //       <Text 
-            //         style={{
-            //           width: 32, 
-            //           height: height*0.09, 
-            //           alignItems: 'center', 
-            //           textAlign: 'center',
-            //           fontSize: 13,
-            //           color: state === 'disabled' ? 'gray' : 'blue'
-            //         }}>
-            //         {date.day}
-            //       </Text>
-            //       <Text>Hi</Text>
-            //     </TouchableOpacity>
+            //        return(
+            //        <TouchableOpacity>
+                //       <Text 
+                //         style={{
+                //           width: 32, 
+                //           height: height*0.09, 
+                //           alignItems: 'center', 
+                //           textAlign: 'center',
+                //           fontSize: 13,
+                //           color: state === 'disabled' ? 'gray' : 'blue'
+                //         }}>
+                //         {date.day}
+                //       </Text>
+                //       <Text>Hi</Text>
+                //     </TouchableOpacity>
+            //        )
+            //     
             //   }
             //   return (
             //     <TouchableOpacity style={styles.dayContainer} onPress={()=>{ onPress(date); openNewFeedModal(true); setPressedDate(date.dateString);}} >
@@ -195,6 +297,7 @@ export default function MainCalendar({ navigation }) {
             //   );
             // }}
         />
+        : <ActivityIndicator style={styles.loadingbar}/>}
         <View style={styles.navigationbar}>
           <TouchableOpacity>
             <Image style={styles.icon} source={Home} />
@@ -314,6 +417,11 @@ const styles = StyleSheet.create({
       position:'absolute',
       bottom:10,
       left: 10,
+    },
+    loadingbar:{
+      position: 'absolute',
+      top: height*0.5,
+      left: width*0.5
     }
 
 });
