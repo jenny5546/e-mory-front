@@ -4,11 +4,24 @@ import { StyleSheet, Dimensions, Button, View, Text, TextInput, Image, Touchable
 import Logo from './../images/Logo.png';
 import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
+import {AsyncStorage} from 'react-native';
 
 export default function Login({ navigation }) {
 
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    
+    const _storeData = async (uid) => {
+        // let user_object = {
+        //     'uid': uid
+        // };
+        try {
+          await AsyncStorage.setItem('user', String(uid));
+        } catch (error) {
+          // Error saving data
+          console.log(error);
+        }
+    };
 
     const onLogin = e => {
         // navigation.push('MainCalendar'); //for android test(android fetch doesn't work)
@@ -23,7 +36,9 @@ export default function Login({ navigation }) {
                 return res.json();
             }).then((resJSON) => {
                 const { uid } = resJSON
+
                 if(uid > 0) {
+                    _storeData(uid);
                     navigation.push('MainCalendar');
                 } else {
                     Alert.alert(
@@ -34,6 +49,9 @@ export default function Login({ navigation }) {
                 console.log(err);
             })
     }
+    // console.log(_retrieveData());
+    // _retrieveData()
+
 
     return (
         <View style={styles.container}>

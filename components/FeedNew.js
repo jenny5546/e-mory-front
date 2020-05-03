@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, Dimensions, TextInput, Text, Button, TouchableOpacity, Image } from 'react-native';
 import CloseIcon from './../images/CloseIconGray.png';
-import Lock from './../images/LockIconGray.png';
+import LockDisabled from './../images/LockIconGray.png';
+import LockEnabled from './../images/LockIcon.png';
 import FeedEmoji from './FeedEmoji';
 // import { AntDesign } from '@expo/vector-icons';
 // Emoji Icons 
@@ -26,6 +27,7 @@ export default function FeedNew(props) {
     const [emoji, setEmoji] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [privacy, setPrivate] = useState(false);
 
     const parseDate=(string)=>{
         let stringArray = string.split("-"); 
@@ -134,7 +136,12 @@ export default function FeedNew(props) {
                     <View style={styles.header}>
                         <Text style={styles.date}>{parseDate(props.pressedDate)}</Text>
                         <View style={{flexDirection: "row", marginBottom: 10}}>
-                            <Image style={styles.lockBtn} source={Lock} />
+                            <TouchableOpacity onPress={()=>{setPrivate(!privacy)}}>
+                                {privacy ? 
+                                    <Image style={styles.lockBtn} source={LockEnabled} />:
+                                    <Image style={styles.lockBtn} source={LockDisabled} />
+                                }
+                            </TouchableOpacity>
                             <TouchableOpacity onPress={()=>{props.closeNewFeed()}}>
                                     <Image style={styles.closeBtn} source={CloseIcon} />
                             </TouchableOpacity>
@@ -174,7 +181,7 @@ export default function FeedNew(props) {
                         onPress={()=>{
                             props.closeNewFeed(); 
                             // + 실제 post해서 main calendar 에 넘겨줄 수 있게 해주자.
-                            props.submitNewFeed(title,content,emoji);
+                            props.submitNewFeed(title,content,emoji,privacy);
                         }}
                     >
                         {/* <AntDesign name="checkcircleo" size={20}/> */}

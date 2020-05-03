@@ -12,6 +12,7 @@ import Setting from './../images/SettingIcon.png';
 import ChartComponent from './Chart';
 import FeedNew from './FeedNew';
 const { height, width } = Dimensions.get("window");
+import {AsyncStorage} from 'react-native';
 
 // Emoji Icons 
 import HappyIcon from './../images/HappyIcon.png';
@@ -38,11 +39,13 @@ LocaleConfig.locales['kr'] = {
 LocaleConfig.defaultLocale = 'kr';
 
 class Feed {
-  constructor(emoji, title, content, date) {
+  constructor(emoji, title, content, date, author, privacy) {
     this.emoji = emoji;
     this.title = title;
     this.content = content;
     this.date = date;
+    this.author = author;
+    this.privacy = privacy;
   }
 }
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
@@ -51,11 +54,25 @@ export default function MainCalendar({ navigation }) {
   const [chart, openChartModal] = useState(false);
   const [newFeedModal, openNewFeedModal] = useState(false);
   const [pressedDate, setPressedDate]= useState(null);
+  const [uid, setUid] = useState('');
 
   // feeds는 back에서 GET한 것들로, setFeedList
   const [feedList, setFeedList] = useState([]);
   const [list, setList] = useState([]);
 
+  const  _storeUid = async () =>{
+    try {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        // console.log(value);
+        setUid(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log(error)
+    }
+  }
+  _storeUid();
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
 
   const emojiColor= (emoji) =>{
@@ -84,6 +101,8 @@ export default function MainCalendar({ navigation }) {
         return '#9E9BE5';
       case 'Angry':
         return '#D05C58';
+      default:
+        return '#FFFFFF';
     }
   }
   const logFeeds = () =>{
@@ -104,9 +123,9 @@ export default function MainCalendar({ navigation }) {
     return result;
   }
 
-  // useEffect(() => {
-  //   console.log(logFeeds());
-  // });
+  useEffect(() => {
+    console.log(feedList);
+  });
 
   
   return (
@@ -128,11 +147,31 @@ export default function MainCalendar({ navigation }) {
           <FeedNew 
             closeNewFeed={() => openNewFeedModal(false)} 
             pressedDate={pressedDate}
-            submitNewFeed={(title,content,emoji)=> {
-              const newFeed= new Feed(emoji, title, content, pressedDate);
-              /* 이 부분에 Post를 넣읍시다
+            submitNewFeed={async (title,content,emoji,privacy)=> {
 
-              */
+              const newFeed= new Feed(emoji, title, content, pressedDate, uid, privacy);
+              console.log(newFeed);
+              
+              /* 이 부분에 Post를 넣읍시다*/
+              fetch(`http://127.0.0.1:8000/`, {
+              method: 'POST',
+              body: JSON.stringify(newFeed),
+              headers: {
+                  // 'Accept': 'application/json',
+                  'Content-type': 'applications/json'
+              }
+              }).then((res) => {
+                  return res.text();
+              }).then((resJSON) => {
+                  const { title, content, emoji, date } = resJSON
+                  console.log('success post');
+                  console.log(title);
+                  console.log(content);
+                  console.log(emoji);
+                  console.log(date);
+              }).catch((err) => {
+                  console.log(err);
+              });
 
               setFeedList([
                 ...feedList,
