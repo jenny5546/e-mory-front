@@ -14,7 +14,10 @@ import TiredIcon from './../images/TiredIcon.png';
 import DepressedIcon from './../images/DepressedIcon.png';
 import WorriedIcon from './../images/WorriedIcon.png';
 import AngryIcon from './../images/AngryIcon.png';
+import styled from 'styled-components/native';
+
 const { height, width } = Dimensions.get("window");
+
 
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
 //modal 구현 애매하게 되어있음
@@ -55,17 +58,58 @@ export default function Chart(props) {
     const [countWorried, setCountWorried] = useState(0);
     const [countAngry, setCountAngry] = useState(0);
 
+    const emojiColor= (emoji) =>{
+        switch(emoji){
+          case 'Happy':
+            return '#F7E98A';
+          case 'Filled':
+            return '#E7B88C';
+          case 'Peace':
+            return '#F3C94F';
+          case 'Thank':
+            return '#8DCA9A';
+          case 'Lovely':
+            return '#E9B1BF';
+          case 'Empty':
+            return '#C4C4C5';
+          case 'Sad':
+            return '#BBEBDE';
+          case 'Lonely':
+            return '#93BFE5';
+          case 'Tired':
+            return '#6B93C8';
+          case 'Depressed':
+            return '#9177C0';
+          case 'Worried':
+            return '#9E9BE5';
+          case 'Angry':
+            return '#D05C58';
+          default:
+            return '#FFFFFF';
+        }
+    }
+
     const countEmojis = (currMonthArray, emoji) =>{
         const count = currMonthArray.filter(feed => feed.emoji === emoji).length;
         return count;
     }
+
+    const ChartBar = styled.View`
+        borderBottomWidth: 5px;
+        height: ${height * 0.05}px;
+        marginLeft: 20px;
+        marginRight: 10px;
+        width: ${props =>props.count*width*0.03}px;
+        borderBottomColor: ${props => emojiColor(props.emoji)}
+    `;
+
 
     // 달이 바뀔 때마다, 새로운 데이터를 로딩해 온다. 
     useEffect(() => {
         var currMonthFeeds = props.allFeeds.filter(feed => {
             return String(feed.date).substr(0,7) === month;
         });
-        console.log(currMonthFeeds);
+        // console.log(currMonthFeeds);
         setCountHappy(countEmojis(currMonthFeeds,'Happy'));
         setCountFilled(countEmojis(currMonthFeeds,'Filled'));
         setCountPeace(countEmojis(currMonthFeeds,'Peace'));
@@ -81,7 +125,9 @@ export default function Chart(props) {
 
     },[month]);
 
-    console.log(countHappy);
+    
+
+    // console.log(countHappy);
 
     return (
         <View style={styles.background}>
@@ -107,50 +153,62 @@ export default function Chart(props) {
                         <View style={styles.monthStatistics}>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={HappyIcon} />
+                                <ChartBar count={countHappy} emoji='Happy'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countHappy}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={FilledIcon} />
+                                <ChartBar count={countFilled} emoji='Filled'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countFilled}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={PeaceIcon} />
+                                <ChartBar count={countPeace} emoji='Peace'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countPeace}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={ThankIcon} />
+                                <ChartBar count={countThank} emoji='Thank'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countThank}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={LovelyIcon} />
+                                <ChartBar count={countLovely} emoji='Lovely'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countLovely}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={EmptyIcon} />
+                                <ChartBar count={countEmpty} emoji='Empty'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countEmpty}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={SadIcon} />
+                                <ChartBar count={countSad} emoji='Sad'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countSad}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={LonelyIcon} />
+                                <ChartBar count={countLonely} emoji='Lonely'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countLonely}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={TiredIcon} />
+                                <ChartBar count={countTired} emoji='Tired'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countTired}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={DepressedIcon} />
+                                <ChartBar count={countDepressed} emoji='Depressed'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countDepressed}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={WorriedIcon} />
+                                <ChartBar count={countWorried} emoji='Worried'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countWorried}</Text>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={AngryIcon} />
+                                <ChartBar count={countAngry} emoji='Angry'></ChartBar>
                                 <Text style={{marginTop: 20}}>{countAngry}</Text>
                             </View>
                         </View>
@@ -212,6 +270,11 @@ const styles = StyleSheet.create({
     },
     emojiRow:{
         flexDirection: 'row'
-    }
+    },
+    // chartBar : {
+    //     borderBottomColor: 'black',
+    //     borderBottomWidth: 1,
+    //     width: width*0.5,
+    // }
 });
 
