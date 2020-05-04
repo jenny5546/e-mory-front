@@ -19,6 +19,8 @@ import DepressedIcon from './../images/DepressedIcon.png';
 import WorriedIcon from './../images/WorriedIcon.png';
 import AngryIcon from './../images/AngryIcon.png';
 
+
+
 const { height, width } = Dimensions.get("window");
 
 export default function FeedNew(props) {

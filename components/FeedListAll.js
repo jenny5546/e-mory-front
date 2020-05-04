@@ -1,6 +1,6 @@
 //남의 글 전부 다 실시간으로 보이는 곳 ///////////
 import React, {useState} from 'react';
-import { StyleSheet, Text, TouchableOpacity, Button, View, StatusBar, Image, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, Button, View, StatusBar, Image, Dimensions, Alert, FlatList } from 'react-native';
 
 import Filter from './../images/FilterIcon.png';
 import Logo from './../images/SmallLogo.png';
@@ -18,12 +18,12 @@ const { height, width } = Dimensions.get("window");
 
 export default function FeedListAll({ navigation }) {
 
-    const [filter, setFilter] = useState(0);
+    const [filterModal, setfilterModal] = useState(0);
     let i = 0;
 
     const onModal = e => {
         i++;
-        setFilter(i);
+        setfilterModal(i);
     }
 
     const onReport = () => {
@@ -51,7 +51,7 @@ export default function FeedListAll({ navigation }) {
                     <TouchableOpacity onPress={onModal}>
                         <Image style={styles.backButton} source={Filter}/>
                     </TouchableOpacity>
-                    {filter%2 === 1 &&
+                    {filterModal%2 === 1 &&
                     <View style={styles.filterWrapper}>
                         <Text style={styles.option}>전체</Text>
                         <TouchableOpacity onPress={navigation.push('FeedListSpecific')}>
@@ -75,6 +75,7 @@ export default function FeedListAll({ navigation }) {
                 </View>
             </View>
             <View style={styles.feedWrapper}>
+                
                 <View style={styles.feed}>
                     <View>
                         <Image style={styles.emoticon} source={PeaceIcon} />
@@ -98,26 +99,10 @@ export default function FeedListAll({ navigation }) {
                         <Text style={styles.date}>6시간</Text>
                     </View>
                 </View>
-                <View style={styles.feed}>
-                    <View>
-                        <Image style={styles.emoticon} source={EmptyIcon} />
-                    </View>
-                    <View>
-                        <View style={styles.content}>
-                            <Text style={styles.feedWritter}>jenny_doobap</Text>
-                            <Text style={styles.feedContent}>배가 참 고프다.</Text>
-                        </View>
-                        <View style={styles.icons}>
-                            <Image style={styles.icon} source={HeartIcon} />
-                            <Text style={styles.iconNum}>2</Text>
-                            <Image style={styles.icon} source={CommentIcon} />
-                            <Text style={styles.iconNum}>1</Text>
-                            <Image style={styles.icon} source={ReportIcon} />
-                        </View>
-                        <Text style={styles.date}>7시간</Text>
-                    </View>
-                </View>
+
             </View>
+
+
             <View style={styles.navigationbar}>
                 <TouchableOpacity  onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.icon} source={Home} />

@@ -16,18 +16,18 @@ const { height, width } = Dimensions.get("window");
 import {AsyncStorage} from 'react-native';
 
 // Emoji Icons 
-import HappyIcon from './../images/HappyIcon.png';
-import FilledIcon from './../images/FilledIcon.png';
-import PeaceIcon from './../images/PeaceIcon.png';
-import ThankIcon from './../images/ThankIcon.png';
-import LovelyIcon from './../images/LovelyIcon.png';
-import SadIcon from './../images/SadIcon.png';
-import LonelyIcon from './../images/LonelyIcon.png';
-import EmptyIcon from './../images/EmptyIcon.png';
-import TiredIcon from './../images/TiredIcon.png';
-import DepressedIcon from './../images/DepressedIcon.png';
-import WorriedIcon from './../images/WorriedIcon.png';
-import AngryIcon from './../images/AngryIcon.png';
+// import HappyIcon from './../images/HappyIcon.png';
+// import FilledIcon from './../images/FilledIcon.png';
+// import PeaceIcon from './../images/PeaceIcon.png';
+// import ThankIcon from './../images/ThankIcon.png';
+// import LovelyIcon from './../images/LovelyIcon.png';
+// import SadIcon from './../images/SadIcon.png';
+// import LonelyIcon from './../images/LonelyIcon.png';
+// import EmptyIcon from './../images/EmptyIcon.png';
+// import TiredIcon from './../images/TiredIcon.png';
+// import DepressedIcon from './../images/DepressedIcon.png';
+// import WorriedIcon from './../images/WorriedIcon.png';
+// import AngryIcon from './../images/AngryIcon.png';
 
 
 LocaleConfig.locales['kr'] = {
@@ -47,6 +47,8 @@ class Feed {
     this.date = date;
     // this.author = author;
     this.privacy = privacy;
+
+    // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
   }
 }
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
@@ -75,17 +77,6 @@ export default function MainCalendar({ navigation }) {
       console.log(error)
     }
   }
-
-  //현재 달을 갖고오기
-  // const _getCurrMonth = () =>{
-  //   var month = new Date().getMonth() + 1;
-  //   if (String(month).length==1){
-  //     return '0'+String(month);
-  //   }
-  //   return String(month);  
-  // }
-  // console.log(_getCurrMonth())
-
 
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
   const emojiColor= (emoji) =>{
@@ -170,7 +161,7 @@ export default function MainCalendar({ navigation }) {
             return res.text();
         }).then(feed_list=> {
           feed_list= JSON.parse(feed_list);
-
+          // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
           setFeedList(
             feed_list.map((feed) => 
               new Feed(feed.fields.emoji, feed.fields.title, feed.fields.content, feed.fields.date, feed.fields.privacy)),
@@ -242,6 +233,8 @@ export default function MainCalendar({ navigation }) {
             closeFeedDetail={() => openFeedDetailModal(false)} 
             pressedDate={pressedDate}
             matchingFeed = {findFeed(pressedDate)}
+            uid = {uid}
+            loadAgain = {()=> setLoaded(false)}
           />
         }
         {loaded ? 
