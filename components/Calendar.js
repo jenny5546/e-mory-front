@@ -206,7 +206,7 @@ export default function MainCalendar({ navigation }) {
             submitNewFeed={async (title,content,emoji,privacy)=> {
 
               const newFeed= new Feed(emoji, title, content, pressedDate, privacy);
-              console.log(newFeed);
+              // console.log(newFeed);
               
               /* 이 부분에 Post를 넣읍시다*/
               fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
