@@ -1,7 +1,9 @@
 //남의 글 전부 다 실시간으로 보이는 곳 ///////////
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator, Image, Dimensions, Alert } from 'react-native';
 // import ListView from "deprecated-react-native-listview";
+import {AsyncStorage} from 'react-native';
+
 import Filter from './../images/FilterIcon.png';
 import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIcon.png';
@@ -27,24 +29,41 @@ import TiredIcon from './../images/TiredIcon.png';
 import DepressedIcon from './../images/DepressedIcon.png';
 import WorriedIcon from './../images/WorriedIcon.png';
 import AngryIcon from './../images/AngryIcon.png';
+import { reset } from 'expo/build/AR';
 
 const { height, width } = Dimensions.get("window");
 
-export default function FeedListAll({ navigation }) {
+export default function FeedListAll({ route, navigation }) {
 
-    const [filterModal, setfilterModal] = useState(0);
+    // const { uid } = route.params;
+    // const [filterModal, setfilterModal] = useState(0);
+    const [openFilter, setOpenFilter] = useState(false);
     const [data, setData] =useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [firstLoaded, setFirstLoaded] = useState(false);
-    // const [isLoading, setIsLoading] = useState(false)
-    let i = 0;
+    const [emojiOption, setEmojiOption] = useState('All');
 
-    console.log(data);
+    const [uid, setUid] = useState('');
+    // const [likeFeedID, setlikeFeedID] = useState(0);
 
-    const onModal = e => {
-        i++;
-        setfilterModal(i);
+    const _storeUid = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('user');
+          if (value !== null) {
+            setUid(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+    const parseDate=(string)=>{
+        let stringArray = string.split("-"); 
+        let year = stringArray[0];
+        let month = stringArray[1];
+        let day = stringArray[2];
+        return year+'년 '+month + '월 '+ day + '일';
     }
 
     const onReport = () => {
@@ -61,6 +80,13 @@ export default function FeedListAll({ navigation }) {
         ],
         { cancelable: false }
         )
+    }
+
+    const _reset = () =>{
+        setData([]);
+        setPage(1);
+        setFirstLoaded(false);
+        setTotalPage(0);
     }
 
     
@@ -155,47 +181,84 @@ export default function FeedListAll({ navigation }) {
                 return <View></View>
         }
     }
+    console.log(data);
 
     const _loadFeed = () => {
-        // console.log('load!')
-        if (totalPage !== page){
-            fetch(`http://127.0.0.1:8000/feeds/all/${page}/`, {
-        method: 'GET',
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }}).then((res) => {
-            return res.json();
-        }).then((resJSON)=> {
-            const { total_pages, load_feed } = resJSON
-            setTotalPage(total_pages);
-            // console.log(total_pages);
-            setData(data.concat(JSON.parse(load_feed)));
-            setPage(page+1);
-            // isLoading(false);
-            
+        // console.log(emojiOption);
+        if (totalPage===0 || totalPage > page-1){
+            fetch(`http://127.0.0.1:8000/feeds/${emojiOption}/${page}/`, {
+            method: 'GET',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }}).then((res) => {
+                return res.json();
+            }).then((resJSON)=> {
+                const { total_pages, load_feed } = resJSON
+                setTotalPage(total_pages);
+                console.log(load_feed);
+                setData(data.concat(load_feed));
+                setPage(page+1);
+                setEmojiOption(emojiOption);
+                // isLoading(false);
+                
 
-        }).catch((err) => {
-          console.log(err);
-        });
+            }).catch((err) => {
+            console.log(err);
+            });
 
         }
         
     }
-    // console.log(data);
+    // // console.log(data);
 
-    const _loadMoreFeed = () =>{
-        _loadFeed();
-        // _loadFeed()
-    }
+    // const _loadMoreFeed = () =>{
+    //     _loadFeed();
+    //     // _loadFeed()
+    // }
     if (!firstLoaded) {
         setFirstLoaded(true);
-        _loadMoreFeed();
+        _loadFeed();
     }
+    useEffect(()=>{
+        _storeUid();
+    },[])
+
+    // console.log(uid);
+
+    // useEffect(()=>{
+    //    _loadFeed();
+    // },[uid])
+    
+    // console.log('uid')
+    // console.log(uid);
+
+    const _likeFeed = (id) => {
+
+        fetch(`http://127.0.0.1:8000/feeds/like/${id}/${uid}/`, {
+            method: 'GET',
+            // body: JSON.stringify(newFeed),
+            headers: {
+                // 'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+        }).then((res) => {
+            return res.text();
+        }).then((resJSON) => {
+            // const { title, content, emoji, date } = resJSON
+            console.log('Liked Success!');
+            // console.log(title);
+            // console.log(content);
+            // console.log(emoji);
+            // console.log(date);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+    console.log(data);
 
 
-
-    const Feed=({title, content, emoji, date})=>{
+    const Feed=({id, title, content, emoji, date})=>{
         return (
             <View style={styles.feed}>
                 <View>
@@ -204,17 +267,21 @@ export default function FeedListAll({ navigation }) {
                 </View>
                 <View>
                     <View style={styles.content}>
-                        <Text style={styles.feedDate}>날짜: {date}</Text>
+                        {/* <Text style={styles.feedDate}>Feed id: {id}</Text> */}
+                        <Text style={styles.feedDate}>{parseDate(date)}의 기록</Text>
                         <Text style={styles.feedContent}>제목: {title}</Text>
                         <Text style={styles.feedContent}>내용: {content}</Text>
                     </View>
                     <View style={styles.icons}>
-                        <Image style={styles.icon} source={HeartIcon} />
-                        <Text style={styles.iconNum}>11</Text>
-                        <TouchableOpacity onPress={()=>{navigation.push('Comment')}}>
+                        <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
+                            <Image style={styles.icon} source={HeartIcon} />
+                        </TouchableOpacity>
+                        {/* <Text style={styles.iconNum}>{likes.length}</Text> */}
+                        {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
-                        <Text style={styles.iconNum}>5</Text>
+                        {/* <Text style={styles.iconNum}>{comments.length}</Text> */}
                         <TouchableOpacity onPress={onReport}>
                             <Image style={styles.icon} source={ReportIcon} />
                         </TouchableOpacity>
@@ -231,28 +298,111 @@ export default function FeedListAll({ navigation }) {
                 <Image style={styles.backButton} source={Menu}/>
                 <Image style={styles.logo} source={Logo}/>
                 <View>
-                    <TouchableOpacity onPress={onModal}>
+                    <TouchableOpacity onPress={()=>setOpenFilter(!openFilter)}>
                         <Image style={styles.backButton} source={Filter}/>
                     </TouchableOpacity>
-                    {filterModal%2 === 1 &&
+                    {openFilter &&
+
                     <View style={styles.filterWrapper}>
-                        <Text style={styles.option}>전체</Text>
-                        <TouchableOpacity onPress={navigation.push('FeedListSpecific')}>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('All');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>전체</Text>
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Happy');
+                                _reset();
+                                _loadFeed();
+                        }}>
                             <Text style={styles.option}>행복해요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Filled');
+                                _reset();
+                                _loadFeed();
+                        }}>
                             <Text style={styles.option}>뿌듯해요</Text>
                         </TouchableOpacity>
-                        <Text style={styles.option}>평온해요</Text>
-                        <Text style={styles.option}>감사해요</Text>
-                        <Text style={styles.option}>설레요</Text>
-                        <Text style={styles.option}>슬퍼요</Text>
-                        <Text style={styles.option}>외로워요</Text>
-                        <Text style={styles.option}>공허해요</Text>
-                        <Text style={styles.option}>지쳐요</Text>
-                        <Text style={styles.option}>우울해요</Text>
-                        <Text style={styles.option}>걱정돼요</Text>
-                        <Text style={styles.option}>화나요</Text>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Peace');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>평온해요</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Thank');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>감사해요</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Lovely');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>설레요</Text>
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Sad');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>슬퍼요</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Lonely');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>외로워요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Empty');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>공허해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Tired');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>지쳐요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Depressed');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>우울해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Worried');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>걱정돼요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Angry');
+                                _reset();
+                                _loadFeed();
+                        }}>
+                            <Text style={styles.option}>화나요</Text>
+                        </TouchableOpacity>
                     </View>
                     }
                 </View>
@@ -264,7 +414,7 @@ export default function FeedListAll({ navigation }) {
                         let paddingToBottom = 0;
                         paddingToBottom += e.nativeEvent.layoutMeasurement.height;
                         if(e.nativeEvent.contentOffset.y >= e.nativeEvent.contentSize.height - paddingToBottom) {
-                          _loadMoreFeed();
+                          _loadFeed();
                         }
                     }}
                     scrollEventThrottle = {1}
@@ -272,10 +422,13 @@ export default function FeedListAll({ navigation }) {
                     {/* <Text style={{fontSize: 50}}>Hoi</Text> */}
                     {data.map((item)=>(
                         <Feed
-                            title={item.fields.title}
-                            content={item.fields.content}
-                            date={item.fields.date}
-                            emoji={item.fields.emoji}
+                            title={item.title}
+                            content={item.content}
+                            date={item.date}
+                            emoji={item.emoji}
+                            id = {item.id}
+                            // likes = {item.liked_users}
+                            // comments = {item.commented_users}
                         />
 
                     ))}

@@ -142,7 +142,7 @@ export default function MainCalendar({ navigation }) {
   // console.log(feedList);
   const findFeed = (pickedDate) =>{
     const feed = feedList.find(obj => obj.date == pickedDate);
-    // console.log(feed)
+    console.log(feed)
     return feed;
     
   }
@@ -163,6 +163,7 @@ export default function MainCalendar({ navigation }) {
         }).then(feed_list=> {
           feed_list= JSON.parse(feed_list);
           // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
+          console.log(feed_list);
           setFeedList(
             feed_list.map((feed) => 
               new Feed(feed.fields.emoji, feed.fields.title, feed.fields.content, feed.fields.date, feed.fields.privacy)),
@@ -211,12 +212,7 @@ export default function MainCalendar({ navigation }) {
               }).then((res) => {
                     return res.json();
               }).then((resJSON) => {
-                  // const { title, content, emoji, date } = resJSON
                   console.log('Post Success');
-                  // console.log(title);
-                  // console.log(content);
-                  // console.log(emoji);
-                  // console.log(date);
               }).catch((err) => {
                   console.log(err);
               });

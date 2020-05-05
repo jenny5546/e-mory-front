@@ -142,8 +142,8 @@ export default function FeedDetail(props) {
     }
 
     const _delete = () =>{
-        fetch(`http://127.0.0.1:8000/feeds/${props.uid}/${props.matchingFeed.date}/`, {
-        method: 'DELETE',
+        fetch(`http://127.0.0.1:8000/feeds/delete/${props.uid}/${props.matchingFeed.date}/`, {
+        method: 'POST',
         headers:{
             // 'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -162,7 +162,7 @@ export default function FeedDetail(props) {
     const _edit = () => {
 
         const editedFeed= new Feed(editedEmoji, editedTitle, editedContent, props.pressedDate, editedPrivacy);
-        fetch(`http://127.0.0.1:8000/feeds/${props.uid}/${props.matchingFeed.date}/`, {
+        fetch(`http://127.0.0.1:8000/feeds/edit/${props.uid}/${props.matchingFeed.date}/`, {
         method: 'POST',
         body: JSON.stringify(editedFeed),
         headers:{
