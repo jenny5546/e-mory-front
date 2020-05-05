@@ -258,7 +258,7 @@ export default function FeedListAll({ route, navigation }) {
     console.log(data);
 
 
-    const Feed=({id, title, content, emoji, date})=>{
+    const Feed=({id, title, content, emoji, date, likes, comments})=>{
         return (
             <View style={styles.feed}>
                 <View>
@@ -276,12 +276,12 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
                             <Image style={styles.icon} source={HeartIcon} />
                         </TouchableOpacity>
-                        {/* <Text style={styles.iconNum}>{likes.length}</Text> */}
+                        <Text style={styles.iconNum}>{likes.length}</Text>
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
                         <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
-                        {/* <Text style={styles.iconNum}>{comments.length}</Text> */}
+                        <Text style={styles.iconNum}>{comments.length}</Text>
                         <TouchableOpacity onPress={onReport}>
                             <Image style={styles.icon} source={ReportIcon} />
                         </TouchableOpacity>
@@ -427,8 +427,8 @@ export default function FeedListAll({ route, navigation }) {
                             date={item.date}
                             emoji={item.emoji}
                             id = {item.id}
-                            // likes = {item.liked_users}
-                            // comments = {item.commented_users}
+                            likes = {item.liked_users}
+                            comments = {item.commented_users}
                         />
 
                     ))}

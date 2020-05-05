@@ -10,35 +10,52 @@ export default function Comment({ route, navigation }) {
     const {feed_id} = route.params;
     console.log(feed_id.id)
     const {uid} = route.params;
-    console.log(uid.uid)
+    // console.log(uid.uid)
     const [content, setContent] = useState('');
     // const [commentMode, setCommentMode] = useState(false);
 
-    // useEffect(()=>{
-    //     if (commentMode){
-    //         fetch(`http://127.0.0.1:8000/feeds/create_comment/${feed_id.id}/${uid.uid.uid}/`, {
-    //         method: 'POST',
-    //         body: JSON.stringify(content),
-    //         headers: {
-    //             // 'Accept': 'application/json',
-    //             'Content-type': 'applications/json'
-    //         }
-    //         }).then((res) => {
-    //                 return res.json();
-    //         }).then((resJSON) => {
-    //             // const { title, content, emoji, date } = resJSON
-    //             console.log('Comment Success');
-    //             setCommentMode(false);
-    //             // console.log(title);
-    //             // console.log(content);
-    //             // console.log(emoji);
-    //             // console.log(date);
-    //         }).catch((err) => {
-    //             console.log(err);
-    //         });
-    //     }
-        
-    // },[commentMode])
+    const _createComment= () =>{
+        fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
+            method: 'POST',
+            body: JSON.stringify(content),
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+        }).then((res) => {
+                    return res.text();
+        }).then((resJSON) => {
+            // const { title, content, emoji, date } = resJSON
+            // console.log(content);
+            console.log('Comment Success');
+            // setCommentMode(false);
+            // console.log(title);
+            // console.log(content);
+            // console.log(emoji);
+            // console.log(date);
+        }).catch((err) => {
+                console.log(err);
+        });
+    }
+
+    useEffect(() =>{
+        fetch(`http://127.0.0.1:8000/feeds/load/${feed_id.id}/`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+        }).then((res) => {
+            return res.json();
+        }).then((resJSON) => {
+            console.log('get')
+            const { load_comment } = resJSON
+            console.log(JSON.parse(load_comment));
+
+        }).catch((err) => {
+                console.log(err);
+        });
+    })
 
 
     return (
@@ -101,29 +118,7 @@ export default function Comment({ route, navigation }) {
                 />
                 <TouchableOpacity 
                 style={styles.submitButton}
-                onPress={()=>{
-                    fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
-                    method: 'POST',
-                    body: JSON.stringify(content),
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-type': 'applications/json'
-                    }
-                    }).then((res) => {
-                            return res.text();
-                    }).then((resJSON) => {
-                        // const { title, content, emoji, date } = resJSON
-                        // console.log(content);
-                        console.log('Comment Success');
-                        // setCommentMode(false);
-                        // console.log(title);
-                        // console.log(content);
-                        // console.log(emoji);
-                        // console.log(date);
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-                }}
+                onPress={()=>_createComment()}
                 >
                 {/* <AntDesign name="checkcircleo" size={20}/> */}
                 <Text stlye={styles.emojiText}>댓글 작성하기</Text>
