@@ -1,7 +1,7 @@
 //남의 글 전부 다 실시간으로 보이는 곳 ///////////
 import React, {useState} from 'react';
-import { StyleSheet, Text, TouchableOpacity, Button, View, StatusBar, ScrollView, Image, Dimensions, Alert, FlatList } from 'react-native';
-
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator, Image, Dimensions, Alert } from 'react-native';
+// import ListView from "deprecated-react-native-listview";
 import Filter from './../images/FilterIcon.png';
 import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIcon.png';
@@ -36,8 +36,11 @@ export default function FeedListAll({ navigation }) {
     const [data, setData] =useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
     // const [dataNum, seDataNum]= useState(3);
     let i = 0;
+
+    
 
     const onModal = e => {
         i++;
@@ -154,6 +157,7 @@ export default function FeedListAll({ navigation }) {
     }
 
     const _loadFeed = () => {
+        console.log('load!')
         if (totalPage !== page){
             fetch(`http://127.0.0.1:8000/feeds/all/${page}/`, {
         method: 'GET',
@@ -166,9 +170,10 @@ export default function FeedListAll({ navigation }) {
             const { total_pages, load_feed } = resJSON
             setTotalPage(total_pages);
             console.log(total_pages);
-
             setData(data.concat(JSON.parse(load_feed)));
             setPage(page+1);
+            // isLoading(false);
+            
 
         }).catch((err) => {
           console.log(err);
@@ -177,12 +182,17 @@ export default function FeedListAll({ navigation }) {
         }
         
     }
+    // console.log(data);
 
     const _loadMoreFeed = () =>{
-
         _loadFeed();
         // _loadFeed()
     }
+    if (!isLoading) {
+        setIsLoading(true);
+        _loadMoreFeed();
+    }
+
 
 
     const Feed=({title, content, emoji, date})=>{
@@ -273,7 +283,7 @@ export default function FeedListAll({ navigation }) {
                     </View>
                 </View> */}
                 
-                <FlatList
+                {/* <FlatList
                     data={data}
                     renderItem={({ item }) => (
                         <Feed
@@ -284,9 +294,37 @@ export default function FeedListAll({ navigation }) {
                         />
                     )}
                     keyExtractor={(item) => item.id}
-                    onEndReached={_loadMoreFeed()}
-                    onEndReachedThreshold={0.5}
-                /> 
+                    // onMomentumScrollEnd={_loadMoreFeed()}
+                    // // scrollToOffset={0}
+                    // onEndReachedThreshold={0.1}
+                /> */}
+                {/* Scroll 로 바꾸기,, 지금까지는 실패.. */}
+
+                <ScrollView
+                    onScroll={(e) => {
+                        let paddingToBottom = 0;
+                        paddingToBottom += e.nativeEvent.layoutMeasurement.height;
+                        if(e.nativeEvent.contentOffset.y >= e.nativeEvent.contentSize.height - paddingToBottom) {
+                          _loadMoreFeed();
+                        }
+                    }}
+                    scrollEventThrottle = {1}
+                >
+                    {/* <Text style={{fontSize: 50}}>Hoi</Text> */}
+                    {data.map((item)=>(
+                        <Feed
+                            title={item.fields.title}
+                            content={item.fields.content}
+                            date={item.fields.date}
+                            emoji={item.fields.emoji}
+                        />
+
+                    ))}
+                    
+                </ScrollView>
+                {/* <TouchableOpacity style= {{position: 'absolute'}} onPress={()=>_loadMoreFeed()}>
+                    <Text>Load More</Text>
+                </TouchableOpacity> */}
                 
                 
 
@@ -359,6 +397,7 @@ const styles = StyleSheet.create({
     },
     feedWrapper: {
         height: height - 180,
+        // height: height,
         justifyContent: "flex-start",
         alignItems: "flex-start",
     },
