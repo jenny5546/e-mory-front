@@ -27,25 +27,28 @@ import TiredIcon from './../images/TiredIcon.png';
 import DepressedIcon from './../images/DepressedIcon.png';
 import WorriedIcon from './../images/WorriedIcon.png';
 import AngryIcon from './../images/AngryIcon.png';
+import { reset } from 'expo/build/AR';
 
 const { height, width } = Dimensions.get("window");
 
 export default function FeedListAll({ navigation }) {
 
-    const [filterModal, setfilterModal] = useState(0);
+    // const [filterModal, setfilterModal] = useState(0);
+    const [openFilter, setOpenFilter] = useState(false);
     const [data, setData] =useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [firstLoaded, setFirstLoaded] = useState(false);
+    const [emojiOption, setEmojiOption] = useState('All');
     // const [isLoading, setIsLoading] = useState(false)
-    let i = 0;
+    // let i = 0;
 
-    console.log(data);
+    // console.log(data);
 
-    const onModal = e => {
-        i++;
-        setfilterModal(i);
-    }
+    // const onModal = e => {
+    //     i++;
+    //     setfilterModal(i);
+    // }
 
     const onReport = () => {
         Alert.alert(
@@ -61,6 +64,13 @@ export default function FeedListAll({ navigation }) {
         ],
         { cancelable: false }
         )
+    }
+
+    const _reset = () =>{
+        setData([]);
+        setPage(1);
+        setFirstLoaded(false);
+        setTotalPage(0);
     }
 
     
@@ -157,9 +167,9 @@ export default function FeedListAll({ navigation }) {
     }
 
     const _loadFeed = () => {
-        // console.log('load!')
+        // console.log(emojiOption);
         if (totalPage !== page){
-            fetch(`http://127.0.0.1:8000/feeds/all/${page}/`, {
+            fetch(`http://127.0.0.1:8000/feeds/${emojiOption}/${page}/`, {
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -172,6 +182,7 @@ export default function FeedListAll({ navigation }) {
             // console.log(total_pages);
             setData(data.concat(JSON.parse(load_feed)));
             setPage(page+1);
+            setEmojiOption(emojiOption);
             // isLoading(false);
             
 
@@ -182,7 +193,7 @@ export default function FeedListAll({ navigation }) {
         }
         
     }
-    // console.log(data);
+    console.log(data);
 
     const _loadMoreFeed = () =>{
         _loadFeed();
@@ -211,7 +222,11 @@ export default function FeedListAll({ navigation }) {
                     <View style={styles.icons}>
                         <Image style={styles.icon} source={HeartIcon} />
                         <Text style={styles.iconNum}>11</Text>
-                        <TouchableOpacity onPress={()=>{navigation.push('Comment')}}>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Lovely');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>5</Text>
@@ -231,28 +246,111 @@ export default function FeedListAll({ navigation }) {
                 <Image style={styles.backButton} source={Menu}/>
                 <Image style={styles.logo} source={Logo}/>
                 <View>
-                    <TouchableOpacity onPress={onModal}>
+                    <TouchableOpacity onPress={()=>setOpenFilter(!openFilter)}>
                         <Image style={styles.backButton} source={Filter}/>
                     </TouchableOpacity>
-                    {filterModal%2 === 1 &&
+                    {openFilter &&
+
                     <View style={styles.filterWrapper}>
-                        <Text style={styles.option}>전체</Text>
-                        <TouchableOpacity onPress={navigation.push('FeedListSpecific')}>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('All');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>전체</Text>
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Happy');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
                             <Text style={styles.option}>행복해요</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Filled');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
                             <Text style={styles.option}>뿌듯해요</Text>
                         </TouchableOpacity>
-                        <Text style={styles.option}>평온해요</Text>
-                        <Text style={styles.option}>감사해요</Text>
-                        <Text style={styles.option}>설레요</Text>
-                        <Text style={styles.option}>슬퍼요</Text>
-                        <Text style={styles.option}>외로워요</Text>
-                        <Text style={styles.option}>공허해요</Text>
-                        <Text style={styles.option}>지쳐요</Text>
-                        <Text style={styles.option}>우울해요</Text>
-                        <Text style={styles.option}>걱정돼요</Text>
-                        <Text style={styles.option}>화나요</Text>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Peace');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>평온해요</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Thank');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>감사해요</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Lovely');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>설레요</Text>
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Sad');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>슬퍼요</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Lonely');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>외로워요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Empty');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>공허해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Tired');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>지쳐요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Depressed');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>우울해요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Worried');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>걱정돼요</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {()=> {
+                                setEmojiOption('Angry');
+                                _reset();
+                                _loadMoreFeed();
+                        }}>
+                            <Text style={styles.option}>화나요</Text>
+                        </TouchableOpacity>
                     </View>
                     }
                 </View>
@@ -267,7 +365,7 @@ export default function FeedListAll({ navigation }) {
                           _loadMoreFeed();
                         }
                     }}
-                    scrollEventThrottle = {1}
+                    scrollEventThrottle = {0}
                 >
                     {/* <Text style={{fontSize: 50}}>Hoi</Text> */}
                     {data.map((item)=>(

@@ -9,6 +9,15 @@ const { height, width } = Dimensions.get("window");
 
 export default function Signup({ navigation }) {
 
+    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [passwordCheck, setPasswordCheck] = useState(null);
+    const [date, setDate] = useState(null);
+    const [nickname, setNickname] = useState(null);
+    const [validEmail, setValidEmail] = useState(false);
+    const [validNickname, setValidNickname] = useState(false);
+
     const emailValidation = (e) => {
         Alert.alert(
             '이메일이 발송되었습니다',
@@ -91,14 +100,6 @@ export default function Signup({ navigation }) {
             })
     }
 
-    const [name, setName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
-    const [passwordCheck, setPasswordCheck] = useState(null);
-    const [date, setDate] = useState(null);
-    const [nickname, setNickname] = useState(null);
-    const [validEmail, setValidEmail] = useState(false);
-    const [validNickname, setValidNickname] = useState(false);
 
     return (
         <View style={styles.container}>

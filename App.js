@@ -70,7 +70,7 @@ export default function App(){
         <Stack.Screen name="TutorialThree" component={TutorialThree} />
         <Stack.Screen name="MainCalendar" component={MainCalendar} />
         <Stack.Screen name="FeedListAll" component={FeedListAll} />
-        <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} />
+        {/* <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} /> */}
         <Stack.Screen name="Settings" component={Sidebar} />
         <Stack.Screen name="Comment" component={Comment} />
         <Stack.Screen name="MyActivity" component={MyActivity} />
