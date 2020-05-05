@@ -163,6 +163,7 @@ export default function MainCalendar({ navigation }) {
         }).then(feed_list=> {
           feed_list= JSON.parse(feed_list);
           // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
+          console.log(feed_list);
           setFeedList(
             feed_list.map((feed) => 
               new Feed(feed.fields.emoji, feed.fields.title, feed.fields.content, feed.fields.date, feed.fields.privacy)),
@@ -299,7 +300,7 @@ export default function MainCalendar({ navigation }) {
           <TouchableOpacity onPress={()=>{openChartModal(true)}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{uid: {uid}})}}>
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>

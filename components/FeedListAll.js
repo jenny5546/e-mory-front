@@ -1,7 +1,9 @@
 //남의 글 전부 다 실시간으로 보이는 곳 ///////////
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator, Image, Dimensions, Alert } from 'react-native';
 // import ListView from "deprecated-react-native-listview";
+import {AsyncStorage} from 'react-native';
+
 import Filter from './../images/FilterIcon.png';
 import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIcon.png';
@@ -31,8 +33,9 @@ import { reset } from 'expo/build/AR';
 
 const { height, width } = Dimensions.get("window");
 
-export default function FeedListAll({ navigation }) {
+export default function FeedListAll({ route, navigation }) {
 
+    // const { uid } = route.params;
     // const [filterModal, setfilterModal] = useState(0);
     const [openFilter, setOpenFilter] = useState(false);
     const [data, setData] =useState([]);
@@ -40,15 +43,28 @@ export default function FeedListAll({ navigation }) {
     const [totalPage, setTotalPage] = useState(0);
     const [firstLoaded, setFirstLoaded] = useState(false);
     const [emojiOption, setEmojiOption] = useState('All');
-    // const [isLoading, setIsLoading] = useState(false)
-    // let i = 0;
 
-    // console.log(data);
+    const [uid, setUid] = useState('');
+    // const [likeFeedID, setlikeFeedID] = useState(0);
 
-    // const onModal = e => {
-    //     i++;
-    //     setfilterModal(i);
-    // }
+    const _storeUid = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('user');
+          if (value !== null) {
+            setUid(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+    const parseDate=(string)=>{
+        let stringArray = string.split("-"); 
+        let year = stringArray[0];
+        let month = stringArray[1];
+        let day = stringArray[2];
+        return year+'년 '+month + '월 '+ day + '일';
+    }
 
     const onReport = () => {
         Alert.alert(
@@ -165,6 +181,7 @@ export default function FeedListAll({ navigation }) {
                 return <View></View>
         }
     }
+    console.log(data);
 
     const _loadFeed = () => {
         // console.log(emojiOption);
@@ -179,8 +196,8 @@ export default function FeedListAll({ navigation }) {
         }).then((resJSON)=> {
             const { total_pages, load_feed } = resJSON
             setTotalPage(total_pages);
-            // console.log(total_pages);
-            setData(data.concat(JSON.parse(load_feed)));
+            console.log(load_feed);
+            setData(data.concat(load_feed));
             setPage(page+1);
             setEmojiOption(emojiOption);
             // isLoading(false);
@@ -193,7 +210,7 @@ export default function FeedListAll({ navigation }) {
         }
         
     }
-    console.log(data);
+    // console.log(data);
 
     const _loadMoreFeed = () =>{
         _loadFeed();
@@ -203,10 +220,38 @@ export default function FeedListAll({ navigation }) {
         setFirstLoaded(true);
         _loadMoreFeed();
     }
+    useEffect(()=>{
+        _storeUid();
+    },[])
+    
+    // console.log('uid')
+    // console.log(uid);
+
+    const _likeFeed = (id) => {
+
+        fetch(`http://127.0.0.1:8000/feeds/like/${id}/${uid}/`, {
+            method: 'GET',
+            // body: JSON.stringify(newFeed),
+            headers: {
+                // 'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+        }).then((res) => {
+            return res.text();
+        }).then((resJSON) => {
+            // const { title, content, emoji, date } = resJSON
+            console.log('Liked Success!');
+            // console.log(title);
+            // console.log(content);
+            // console.log(emoji);
+            // console.log(date);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
 
 
-
-    const Feed=({title, content, emoji, date})=>{
+    const Feed=({id, title, content, emoji, date, likes, comments})=>{
         return (
             <View style={styles.feed}>
                 <View>
@@ -215,21 +260,21 @@ export default function FeedListAll({ navigation }) {
                 </View>
                 <View>
                     <View style={styles.content}>
-                        <Text style={styles.feedDate}>날짜: {date}</Text>
+                        {/* <Text style={styles.feedDate}>Feed id: {id}</Text> */}
+                        <Text style={styles.feedDate}>{parseDate(date)}의 기록</Text>
                         <Text style={styles.feedContent}>제목: {title}</Text>
                         <Text style={styles.feedContent}>내용: {content}</Text>
                     </View>
                     <View style={styles.icons}>
-                        <Image style={styles.icon} source={HeartIcon} />
-                        <Text style={styles.iconNum}>11</Text>
-                        <TouchableOpacity onPress = {()=> {
-                                setEmojiOption('Lovely');
-                                _reset();
-                                _loadMoreFeed();
-                        }}>
+                        <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
+                            <Image style={styles.icon} source={HeartIcon} />
+                        </TouchableOpacity>
+                        <Text style={styles.iconNum}>{likes.length}</Text>
+                        {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
-                        <Text style={styles.iconNum}>5</Text>
+                        <Text style={styles.iconNum}>{comments.length}</Text>
                         <TouchableOpacity onPress={onReport}>
                             <Image style={styles.icon} source={ReportIcon} />
                         </TouchableOpacity>
@@ -365,15 +410,18 @@ export default function FeedListAll({ navigation }) {
                           _loadMoreFeed();
                         }
                     }}
-                    scrollEventThrottle = {0}
+                    scrollEventThrottle = {1}
                 >
                     {/* <Text style={{fontSize: 50}}>Hoi</Text> */}
                     {data.map((item)=>(
                         <Feed
-                            title={item.fields.title}
-                            content={item.fields.content}
-                            date={item.fields.date}
-                            emoji={item.fields.emoji}
+                            title={item.title}
+                            content={item.content}
+                            date={item.date}
+                            emoji={item.emoji}
+                            id = {item.id}
+                            likes = {item.liked_users}
+                            comments = {item.commented_users}
                         />
 
                     ))}
