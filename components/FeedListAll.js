@@ -41,7 +41,7 @@ export default function FeedListAll({ route, navigation }) {
     const [data, setData] =useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
-    // const [firstLoaded, setFirstLoaded] = useState(false);
+    const [firstLoaded, setFirstLoaded] = useState(false);
     const [emojiOption, setEmojiOption] = useState('All');
 
     const [uid, setUid] = useState('');
@@ -185,27 +185,27 @@ export default function FeedListAll({ route, navigation }) {
 
     const _loadFeed = () => {
         // console.log(emojiOption);
-        if (totalPage !== page){
+        if (totalPage===0 || totalPage > page-1){
             fetch(`http://127.0.0.1:8000/feeds/${emojiOption}/${page}/`, {
-        method: 'GET',
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }}).then((res) => {
-            return res.json();
-        }).then((resJSON)=> {
-            const { total_pages, load_feed } = resJSON
-            setTotalPage(total_pages);
-            console.log(load_feed);
-            setData(data.concat(load_feed));
-            setPage(page+1);
-            setEmojiOption(emojiOption);
-            // isLoading(false);
-            
+            method: 'GET',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }}).then((res) => {
+                return res.json();
+            }).then((resJSON)=> {
+                const { total_pages, load_feed } = resJSON
+                setTotalPage(total_pages);
+                console.log(load_feed);
+                setData(data.concat(load_feed));
+                setPage(page+1);
+                setEmojiOption(emojiOption);
+                // isLoading(false);
+                
 
-        }).catch((err) => {
-          console.log(err);
-        });
+            }).catch((err) => {
+            console.log(err);
+            });
 
         }
         
@@ -216,19 +216,19 @@ export default function FeedListAll({ route, navigation }) {
     //     _loadFeed();
     //     // _loadFeed()
     // }
-    // if (!firstLoaded) {
-    //     setFirstLoaded(true);
-    //     _loadMoreFeed();
-    // }
+    if (!firstLoaded) {
+        setFirstLoaded(true);
+        _loadFeed();
+    }
     useEffect(()=>{
         _storeUid();
     },[])
 
     // console.log(uid);
 
-    useEffect(()=>{
-       _loadFeed();
-    },[uid])
+    // useEffect(()=>{
+    //    _loadFeed();
+    // },[uid])
     
     // console.log('uid')
     // console.log(uid);
@@ -255,9 +255,10 @@ export default function FeedListAll({ route, navigation }) {
             console.log(err);
         });
     }
+    console.log(data);
 
 
-    const Feed=({id, title, content, emoji, date, likes, comments})=>{
+    const Feed=({id, title, content, emoji, date})=>{
         return (
             <View style={styles.feed}>
                 <View>
@@ -275,12 +276,12 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
                             <Image style={styles.icon} source={HeartIcon} />
                         </TouchableOpacity>
-                        <Text style={styles.iconNum}>{likes.length}</Text>
+                        {/* <Text style={styles.iconNum}>{likes.length}</Text> */}
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
                         <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
-                        <Text style={styles.iconNum}>{comments.length}</Text>
+                        {/* <Text style={styles.iconNum}>{comments.length}</Text> */}
                         <TouchableOpacity onPress={onReport}>
                             <Image style={styles.icon} source={ReportIcon} />
                         </TouchableOpacity>
@@ -426,8 +427,8 @@ export default function FeedListAll({ route, navigation }) {
                             date={item.date}
                             emoji={item.emoji}
                             id = {item.id}
-                            likes = {item.liked_users}
-                            comments = {item.commented_users}
+                            // likes = {item.liked_users}
+                            // comments = {item.commented_users}
                         />
 
                     ))}

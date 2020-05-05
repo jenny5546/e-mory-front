@@ -8,9 +8,9 @@ const { height, width } = Dimensions.get("window");
 
 export default function Comment({ route, navigation }) {
     const {feed_id} = route.params;
-    // console.log(feed_id.id)
+    console.log(feed_id.id)
     const {uid} = route.params;
-    // console.log(uid)
+    console.log(uid.uid)
     const [content, setContent] = useState('');
     // const [commentMode, setCommentMode] = useState(false);
 
@@ -102,7 +102,7 @@ export default function Comment({ route, navigation }) {
                 <TouchableOpacity 
                 style={styles.submitButton}
                 onPress={()=>{
-                    fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid.uid}/`, {
+                    fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
                     method: 'POST',
                     body: JSON.stringify(content),
                     headers: {
