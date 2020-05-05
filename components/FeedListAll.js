@@ -36,11 +36,11 @@ export default function FeedListAll({ navigation }) {
     const [data, setData] =useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-    // const [dataNum, seDataNum]= useState(3);
+    const [firstLoaded, setFirstLoaded] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false)
     let i = 0;
 
-    
+    console.log(data);
 
     const onModal = e => {
         i++;
@@ -157,7 +157,7 @@ export default function FeedListAll({ navigation }) {
     }
 
     const _loadFeed = () => {
-        console.log('load!')
+        // console.log('load!')
         if (totalPage !== page){
             fetch(`http://127.0.0.1:8000/feeds/all/${page}/`, {
         method: 'GET',
@@ -169,7 +169,7 @@ export default function FeedListAll({ navigation }) {
         }).then((resJSON)=> {
             const { total_pages, load_feed } = resJSON
             setTotalPage(total_pages);
-            console.log(total_pages);
+            // console.log(total_pages);
             setData(data.concat(JSON.parse(load_feed)));
             setPage(page+1);
             // isLoading(false);
@@ -188,8 +188,8 @@ export default function FeedListAll({ navigation }) {
         _loadFeed();
         // _loadFeed()
     }
-    if (!isLoading) {
-        setIsLoading(true);
+    if (!firstLoaded) {
+        setFirstLoaded(true);
         _loadMoreFeed();
     }
 
@@ -204,9 +204,9 @@ export default function FeedListAll({ navigation }) {
                 </View>
                 <View>
                     <View style={styles.content}>
-                        <Text style={styles.feedWritter}>{date}</Text>
-                        <Text style={styles.feedContent}>{title}</Text>
-                        <Text style={styles.feedContent}>{content}</Text>
+                        <Text style={styles.feedDate}>날짜: {date}</Text>
+                        <Text style={styles.feedContent}>제목: {title}</Text>
+                        <Text style={styles.feedContent}>내용: {content}</Text>
                     </View>
                     <View style={styles.icons}>
                         <Image style={styles.icon} source={HeartIcon} />
@@ -259,47 +259,6 @@ export default function FeedListAll({ navigation }) {
             </View>
             <View style={styles.feedWrapper}>
                 
-                {/* <View style={styles.feed}>
-                    <View>
-                        <Image style={styles.emoticon} source={PeaceIcon} />
-                    </View>
-                    <View>
-                        <View style={styles.content}>
-                            <Text style={styles.feedWritter}>snowman39</Text>
-                            <Text style={styles.feedContent}>돈을 벌기는 참 힘들다.</Text>
-                        </View>
-                        <View style={styles.icons}>
-                            <Image style={styles.icon} source={HeartIcon} />
-                            <Text style={styles.iconNum}>11</Text>
-                            <TouchableOpacity onPress={()=>{navigation.push('Comment')}}>
-                                <Image style={styles.icon} source={CommentIcon} />
-                            </TouchableOpacity>
-                            <Text style={styles.iconNum}>5</Text>
-                            <TouchableOpacity onPress={onReport}>
-                                <Image style={styles.icon} source={ReportIcon} />
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={styles.date}>6시간</Text>
-                    </View>
-                </View> */}
-                
-                {/* <FlatList
-                    data={data}
-                    renderItem={({ item }) => (
-                        <Feed
-                        title={item.fields.title}
-                        content={item.fields.content}
-                        date={item.fields.date}
-                        emoji={item.fields.emoji}
-                        />
-                    )}
-                    keyExtractor={(item) => item.id}
-                    // onMomentumScrollEnd={_loadMoreFeed()}
-                    // // scrollToOffset={0}
-                    // onEndReachedThreshold={0.1}
-                /> */}
-                {/* Scroll 로 바꾸기,, 지금까지는 실패.. */}
-
                 <ScrollView
                     onScroll={(e) => {
                         let paddingToBottom = 0;
@@ -402,17 +361,18 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
     feed: {
-        flexDirection: "row",
+        // flexDirection: "",
+        alignItems: 'center',
         paddingLeft: 25,
         height: height*0.33,
         width: width,
         borderBottomWidth: 1,
-        borderBottomColor: "#fafafa",
-        paddingRight: 30,
+        borderBottomColor: "#aaaaaa",
+        padding: 30,
     },
     content: {
         // flex: 4,
-        flexDirection: "row",
+        flexDirection: "column",
     },
     date: {
         color: "#aaaaaa",
@@ -420,7 +380,7 @@ const styles = StyleSheet.create({
         marginTop: 6,
         marginBottom: 20,
     },
-    feedWritter: {
+    feedDate: {
         fontSize: 14,
         fontWeight: "500",
         marginRight: 5,

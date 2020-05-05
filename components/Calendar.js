@@ -78,6 +78,7 @@ export default function MainCalendar({ navigation }) {
     }
   }
 
+
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
   const emojiColor= (emoji) =>{
     switch(emoji){
