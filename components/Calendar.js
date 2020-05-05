@@ -142,7 +142,7 @@ export default function MainCalendar({ navigation }) {
   // console.log(feedList);
   const findFeed = (pickedDate) =>{
     const feed = feedList.find(obj => obj.date == pickedDate);
-    // console.log(feed)
+    console.log(feed)
     return feed;
     
   }
@@ -212,12 +212,7 @@ export default function MainCalendar({ navigation }) {
               }).then((res) => {
                     return res.json();
               }).then((resJSON) => {
-                  // const { title, content, emoji, date } = resJSON
                   console.log('Post Success');
-                  // console.log(title);
-                  // console.log(content);
-                  // console.log(emoji);
-                  // console.log(date);
               }).catch((err) => {
                   console.log(err);
               });
@@ -300,7 +295,7 @@ export default function MainCalendar({ navigation }) {
           <TouchableOpacity onPress={()=>{openChartModal(true)}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{uid: {uid}})}}>
+          <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>

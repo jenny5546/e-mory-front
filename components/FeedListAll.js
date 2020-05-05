@@ -41,7 +41,7 @@ export default function FeedListAll({ route, navigation }) {
     const [data, setData] =useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
-    const [firstLoaded, setFirstLoaded] = useState(false);
+    // const [firstLoaded, setFirstLoaded] = useState(false);
     const [emojiOption, setEmojiOption] = useState('All');
 
     const [uid, setUid] = useState('');
@@ -210,19 +210,25 @@ export default function FeedListAll({ route, navigation }) {
         }
         
     }
-    // console.log(data);
+    // // console.log(data);
 
-    const _loadMoreFeed = () =>{
-        _loadFeed();
-        // _loadFeed()
-    }
-    if (!firstLoaded) {
-        setFirstLoaded(true);
-        _loadMoreFeed();
-    }
+    // const _loadMoreFeed = () =>{
+    //     _loadFeed();
+    //     // _loadFeed()
+    // }
+    // if (!firstLoaded) {
+    //     setFirstLoaded(true);
+    //     _loadMoreFeed();
+    // }
     useEffect(()=>{
         _storeUid();
     },[])
+
+    // console.log(uid);
+
+    useEffect(()=>{
+       _loadFeed();
+    },[uid])
     
     // console.log('uid')
     // console.log(uid);
@@ -301,7 +307,7 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('All');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>전체</Text>
                         </TouchableOpacity>
@@ -309,7 +315,7 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Happy');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>행복해요</Text>
                         </TouchableOpacity>
@@ -317,7 +323,7 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Filled');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>뿌듯해요</Text>
                         </TouchableOpacity>
@@ -325,7 +331,7 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Peace');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>평온해요</Text>
                         </TouchableOpacity>
@@ -333,7 +339,7 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Thank');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>감사해요</Text>
                         </TouchableOpacity>
@@ -341,7 +347,7 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Lovely');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>설레요</Text>
                         </TouchableOpacity>
@@ -349,7 +355,7 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Sad');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>슬퍼요</Text>
                         </TouchableOpacity>
@@ -357,42 +363,42 @@ export default function FeedListAll({ route, navigation }) {
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Lonely');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>외로워요</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Empty');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>공허해요</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Tired');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>지쳐요</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Depressed');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>우울해요</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Worried');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>걱정돼요</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('Angry');
                                 _reset();
-                                _loadMoreFeed();
+                                _loadFeed();
                         }}>
                             <Text style={styles.option}>화나요</Text>
                         </TouchableOpacity>
@@ -407,7 +413,7 @@ export default function FeedListAll({ route, navigation }) {
                         let paddingToBottom = 0;
                         paddingToBottom += e.nativeEvent.layoutMeasurement.height;
                         if(e.nativeEvent.contentOffset.y >= e.nativeEvent.contentSize.height - paddingToBottom) {
-                          _loadMoreFeed();
+                          _loadFeed();
                         }
                     }}
                     scrollEventThrottle = {1}
