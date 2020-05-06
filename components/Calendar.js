@@ -16,18 +16,18 @@ const { height, width } = Dimensions.get("window");
 import {AsyncStorage} from 'react-native';
 
 // Emoji Icons 
-// import HappyIcon from './../images/HappyIcon.png';
-// import FilledIcon from './../images/FilledIcon.png';
-// import PeaceIcon from './../images/PeaceIcon.png';
-// import ThankIcon from './../images/ThankIcon.png';
-// import LovelyIcon from './../images/LovelyIcon.png';
-// import SadIcon from './../images/SadIcon.png';
-// import LonelyIcon from './../images/LonelyIcon.png';
-// import EmptyIcon from './../images/EmptyIcon.png';
-// import TiredIcon from './../images/TiredIcon.png';
-// import DepressedIcon from './../images/DepressedIcon.png';
-// import WorriedIcon from './../images/WorriedIcon.png';
-// import AngryIcon from './../images/AngryIcon.png';
+import Happy from './../images/HappyIcon.png';
+import Filled from './../images/FilledIcon.png';
+import Peace from './../images/PeaceIcon.png';
+import Thank from './../images/ThankIcon.png';
+import Lovely from './../images/LovelyIcon.png';
+import Sad from './../images/SadIcon.png';
+import Lonely from './../images/LonelyIcon.png';
+import Empty from './../images/EmptyIcon.png';
+import Tired from './../images/TiredIcon.png';
+import Depressed from './../images/DepressedIcon.png';
+import Worried from './../images/WorriedIcon.png';
+import Angry from './../images/AngryIcon.png';
 
 
 LocaleConfig.locales['kr'] = {
@@ -118,12 +118,12 @@ export default function MainCalendar({ navigation }) {
       // result[feedList[i].date]=feedList[i].emoji;
       result[feedList[i].date]= {
         marked: true, 
-        customStyles: {
-          container: {
-            backgroundColor: emojiColor(feedList[i].emoji),
-            height: 32
-          },
-        }
+        // customStyles: {
+        //   container: {
+        //     backgroundColor: emojiColor(feedList[i].emoji),
+        //     height: 32
+        //   },
+        // }
       };
     }
     
@@ -142,9 +142,15 @@ export default function MainCalendar({ navigation }) {
   // console.log(feedList);
   const findFeed = (pickedDate) =>{
     const feed = feedList.find(obj => obj.date == pickedDate);
-    console.log(feed)
+    // console.log(feed)
     return feed;
     
+  }
+
+  const _getEmoji = (date) =>{
+    const feed = feedList.find(obj => obj.date == date);
+    // console.log(feed.emoji)
+    return feed.emoji;
   }
 
   setTimeout(() => {setLoaded(true)}, 1000)
@@ -163,7 +169,7 @@ export default function MainCalendar({ navigation }) {
         }).then(feed_list=> {
           feed_list= JSON.parse(feed_list);
           // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
-          console.log(feed_list);
+          // console.log(feed_list);
           setFeedList(
             feed_list.map((feed) => 
               new Feed(feed.fields.emoji, feed.fields.title, feed.fields.content, feed.fields.date, feed.fields.privacy)),
@@ -249,43 +255,78 @@ export default function MainCalendar({ navigation }) {
               markedFeeds()
             }
             // Override day Component + Styling
-            // dayComponent={({date, state, marking, onPress}) => {
-            //   if (marking.selected) {
-            //        return(
-            //        <TouchableOpacity>
-                //       <Text 
-                //         style={{
-                //           width: 32, 
-                //           height: height*0.09, 
-                //           alignItems: 'center', 
-                //           textAlign: 'center',
-                //           fontSize: 13,
-                //           color: state === 'disabled' ? 'gray' : 'blue'
-                //         }}>
-                //         {date.day}
-                //       </Text>
-                //       <Text>Hi</Text>
-                //     </TouchableOpacity>
-            //        )
-            //     
-            //   }
-            //   return (
-            //     <TouchableOpacity style={styles.dayContainer} onPress={()=>{ onPress(date); openNewFeedModal(true); setPressedDate(date.dateString);}} >
-            //       <Text 
-            //         style={{
-            //           width: 32, 
-            //           height: height*0.09, 
-            //           alignItems: 'center', 
-            //           textAlign: 'center',
-            //           fontSize: 13,
-            //           color: state === 'disabled' ? 'gray' : 'black'
-            //         }}>
-            //         {date.day}
-            //       </Text>
+            dayComponent={({date, state, marking, onPress}) => {
+              if (marking.marked) {
+                   return(
+                   <TouchableOpacity style={styles.dayContainer} onPress={()=> onPress(date)}>
+                      {/* <Text 
+                        style={{
+                          width: 32, 
+                          height: height*0.09, 
+                          alignItems: 'center', 
+                          textAlign: 'center',
+                          fontSize: 13,
+                          color: state === 'disabled' ? 'gray' : 'black'
+                        }}>
+                        {date.day}
+                      </Text> */}
+                      {/* Source 안에서 Render 하면 bug 때문에 dynamic loading 못함, 그래서 노가다로 처리했음. */}
+                      {_getEmoji(date.dateString) === 'Happy' ?
+                        <Image style={styles.emojiIcon} source={Happy} />
+                        :
+                        _getEmoji(date.dateString) === 'Filled' ?
+                        <Image style={styles.emojiIcon} source={Filled} />
+                        :
+                        _getEmoji(date.dateString) === 'Peace' ?
+                        <Image style={styles.emojiIcon} source={Peace} />
+                        :
+                        _getEmoji(date.dateString) === 'Thank' ?
+                        <Image style={styles.emojiIcon} source={Thank} />
+                        :
+                        _getEmoji(date.dateString) === 'Lovely' ?
+                        <Image style={styles.emojiIcon} source={Lovely} />
+                        :
+                        _getEmoji(date.dateString) === 'Sad' ?
+                        <Image style={styles.emojiIcon} source={Sad} />
+                        :
+                        _getEmoji(date.dateString) === 'Lonely' ?
+                        <Image style={styles.emojiIcon} source={Lonely} />
+                        :
+                        _getEmoji(date.dateString) === 'Empty' ?
+                        <Image style={styles.emojiIcon} source={Empty} />
+                        :
+                        _getEmoji(date.dateString) === 'Tired' ?
+                        <Image style={styles.emojiIcon} source={Tired} />
+                        :
+                        _getEmoji(date.dateString) === 'Depresssed' ?
+                        <Image style={styles.emojiIcon} source={Depressed} />
+                        :
+                        _getEmoji(date.dateString) === 'Worried' ?
+                        <Image style={styles.emojiIcon} source={Worried} />
+                        :
+                        <Image style={styles.emojiIcon} source={Angry} />
+                      }
+
+                    </TouchableOpacity>
+                   )
+              }
+              return (
+                <TouchableOpacity style={styles.dayContainer} onPress={()=> onPress(date)} >
+                  <Text 
+                    style={{
+                      width: 32, 
+                      height: height*0.09, 
+                      alignItems: 'center', 
+                      textAlign: 'center',
+                      fontSize: 13,
+                      color: state === 'disabled' ? 'gray' : 'black'
+                    }}>
+                    {date.day}
+                  </Text>
                 
-            //     </TouchableOpacity>
-            //   );
-            // }}
+                </TouchableOpacity>
+              );
+            }}
         />
         : <ActivityIndicator style={styles.loadingbar}/>}
         <View style={styles.navigationbar}>
@@ -412,6 +453,12 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: height*0.5,
       left: width*0.5
+    },
+    emojiIcon:{
+      height: 35,
+      width: 35,
+      // position: 'absolute',
+      // marginTop: 5
     }
 
 });
