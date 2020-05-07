@@ -7,8 +7,25 @@ import BackButton from './../../images/BackIcon.png';
 import CompleteButton from './../../images/CompleteButton.png';
 const { height, width } = Dimensions.get("window");
 
+class Profile {
+    constructor(name, email, password, birthday, nickname) {
+      this.name = name;
+      this.email = email;
+      this.password = password;
+      this.birthday = birthday;
+      this.nickname = nickname;
+    }
+  }
+
 export default function ProfileSetting({route, navigation}) {
     const {uid} = route.params;
+    const [name, setName] =useState('');
+    const [email, setEmail] =useState('');
+    const [password, setPassword] =useState('********');
+    const [birthday, setBirthday] = useState('');
+    const [nickname, setNickname] = useState('');
+
+
 
     // console.log('profile settings');
     // console.log(uid.uid);
@@ -24,7 +41,6 @@ export default function ProfileSetting({route, navigation}) {
         )
     }
     useEffect(() => {
-
           fetch(`http://127.0.0.1:8000/feeds/profile/${uid.uid}/`, {
             method: 'GET',
             headers:{
@@ -32,15 +48,39 @@ export default function ProfileSetting({route, navigation}) {
                 'Content-Type': 'application/json'
             }}).then((res) => {
                 return res.json();
-            }).then(profile=> {
+            }).then(context=> {
 
             //   profile= JSON.parse(profile);
-              console.log(profile)
+              setBirthday(context.birthday);
+              setEmail(context.email);
+              setName(context.name);
+              setNickname(context.nickname);
+              setPassword(context.password);
+              console.log(context);
     
             }).catch((err) => {
               console.log(err);
             });  
     },[]);
+
+    const _editProfile = () => {
+
+        const editedProfile = new Profile(name, email, password, birthday, nickname);
+
+        fetch(`http://127.0.0.1:8000/feeds/profile/${uid.uid}/`, {
+            method: 'POST',
+            body: JSON.stringify(editedProfile),
+            headers:{
+                // 'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }}).then((res) => {
+                return res.text();
+            }).then(resjson=> {
+              console.log('edited done');
+            }).catch((err) => {
+              console.log(err);
+        });  
+    }
 
     return (
         <View style={styles.container}>
@@ -54,6 +94,8 @@ export default function ProfileSetting({route, navigation}) {
                 <TextInput 
                     style={styles.input}
                     placeholder={"이름을 입력해주세요"}
+                    value = {name}
+                    onChangeText={text => setName(text)}
                 />
             </View>
             <View>
@@ -61,7 +103,9 @@ export default function ProfileSetting({route, navigation}) {
                 <View style={styles.idContainer}>
                     <TextInput 
                         style={styles.emailInput}
-                        placeholder={"예: e-mory1@mory.com"}
+                        // placeholder={"예: e-mory1@mory.com"}
+                        value = {email}
+                        onChangeText={text => setEmail(text)}
                     />
                     <View style={styles.emailCheckBtn}>
                         <TouchableOpacity>
@@ -75,6 +119,8 @@ export default function ProfileSetting({route, navigation}) {
                 <TextInput 
                     style={styles.input}
                     placeholder={"비밀번호를 입력해주세요"}
+                    value = {password}
+                    onChangeText={text => setPassword(text)}
                 />
             </View>
             <View>
@@ -88,7 +134,9 @@ export default function ProfileSetting({route, navigation}) {
                 <Text>생년월일</Text>
                 <TextInput 
                     style={styles.input}
-                    placeholder={"YYYY/MM/DD"}
+                    // placeholder={"YYYY/MM/DD"}
+                    value = {birthday}
+                    onChangeText={text => setBirthday(text)}
                 />
             </View>
             <View>
@@ -96,7 +144,9 @@ export default function ProfileSetting({route, navigation}) {
                 <View style={styles.idContainer}>
                     <TextInput 
                         style={styles.nicknameInput}
-                        placeholder={"예: emory_mory"}
+                        // placeholder={nickname}
+                        value = {nickname}
+                        onChangeText={text => setNickname(text)}
                     />
                     <View style={styles.nicknameCheckBtn}>
                         <TouchableOpacity>
@@ -106,7 +156,7 @@ export default function ProfileSetting({route, navigation}) {
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.belowBtn} onPress={_showAlert}>
+                <TouchableOpacity style={styles.belowBtn} onPress={()=>{_editProfile()}}>
                     <AntDesign name="checkcircleo" size={20}/>
                 </TouchableOpacity>
             </View>
