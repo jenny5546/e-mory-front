@@ -20,7 +20,11 @@ import Logout from './../images/LogoutIcon.png';
 
 const { height, width } = Dimensions.get("window");
 
-export default function Settings({navigation}) {
+export default function Settings({route, navigation}) {
+
+    const {uid} = route.params;
+    console.log('settings')
+    console.log(uid.uid);
 
     const _showAlert = () => {
         Alert.alert(
@@ -44,7 +48,7 @@ export default function Settings({navigation}) {
                 <View></View>
             </View>
             <View style={styles.menuWrapper}>
-                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.push('ProfileSetting')}}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.navigate('ProfileSetting',{uid: uid})}}>
                     <Image style={styles.menuIcon} source={Profile} />
                     <Text style={styles.itemTitle}>개인정보관리</Text>
                 </TouchableOpacity>
