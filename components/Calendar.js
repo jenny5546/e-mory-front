@@ -181,12 +181,12 @@ export default function MainCalendar({ navigation }) {
     }  
   },[loaded]);
 
+  console.log(feedList)
   
   return (
       <View style={styles.container}>
         <View style={styles.header}>
-          {/* <Text>{list}</Text> */}
-          <Image style={styles.backButton} source={Menu}/>
+          <View></View>
           <Image style={styles.logo} source={Logo}/>
           <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}}>
             <Image style={styles.backButton} source={Alarm}/>
@@ -257,8 +257,8 @@ export default function MainCalendar({ navigation }) {
             // Override day Component + Styling
             dayComponent={({date, state, marking, onPress}) => {
               if (marking.marked) {
-                   return(
-                   <TouchableOpacity style={styles.dayContainer} onPress={()=> onPress(date)}>
+                    return(
+                    <TouchableOpacity style={styles.dayContainer} onPress={()=> onPress(date)}>
                       {/* <Text 
                         style={{
                           width: 32, 
@@ -298,7 +298,7 @@ export default function MainCalendar({ navigation }) {
                         _getEmoji(date.dateString) === 'Tired' ?
                         <Image style={styles.emojiIcon} source={Tired} />
                         :
-                        _getEmoji(date.dateString) === 'Depresssed' ?
+                        _getEmoji(date.dateString) === 'Depressed' ?
                         <Image style={styles.emojiIcon} source={Depressed} />
                         :
                         _getEmoji(date.dateString) === 'Worried' ?
@@ -308,7 +308,7 @@ export default function MainCalendar({ navigation }) {
                       }
 
                     </TouchableOpacity>
-                   )
+                  )
               }
               return (
                 <TouchableOpacity style={styles.dayContainer} onPress={()=> onPress(date)} >
@@ -451,14 +451,17 @@ const styles = StyleSheet.create({
     },
     loadingbar:{
       position: 'absolute',
-      top: height*0.5,
-      left: width*0.5
+      top: height*0.45,
+      left: width*0.465
     },
     emojiIcon:{
       height: 35,
       width: 35,
       // position: 'absolute',
       // marginTop: 5
+    },
+    logo: {
+      position: "relative",
+      left: 10,
     }
-
 });

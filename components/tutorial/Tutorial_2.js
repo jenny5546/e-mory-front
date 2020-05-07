@@ -33,7 +33,9 @@ export default function secondTutorial({ navigation }) {
           <Image style={styles.logo} source={Logo}/>
           <Image style={styles.backButton} source={Alarm}/>
         </View>
-        <FeedNew />
+          <FeedNew 
+            pressedDate={"2020-05-05"}
+          />
         <Calendar
             theme={calendarTheme}
             style={styles.calendarStyle}
@@ -194,13 +196,13 @@ const styles = StyleSheet.create({
       transform: [{ rotate: '-180deg' }],
       position: "absolute",
       alignSelf: "center",
-      top: height*0.33,
+      top: height*0.31,
     },
     description: {
       color: "#25a7f0",
       position: "absolute",
       alignSelf: "center",
-      top: height*0.38,
+      top: height*0.35,
       width: 110,
       textAlign: "center",
     },
@@ -209,13 +211,13 @@ const styles = StyleSheet.create({
       width: 6,
       transform: [{ rotate: '-180deg' }],
       position: "absolute",
-      left: width*0.85,
+      left: width*0.825,
       top: height*0.24,
     },
     lockDescription: {
       color: "#25a7f0",
       position: "absolute",
-      left: width*0.78,
+      left: width*0.76,
       top: height*0.28,
       width: 60,
       textAlign: "center",
@@ -229,10 +231,10 @@ const styles = StyleSheet.create({
       top: height * 0.45,
     },
     back: {
-      height: 60,
-      width: 60,
+      height: 50,
+      width: 50,
       position:"absolute",
       left: 10,
-      top: height * 0.45,
+      top: height * 0.46,
     }
 });

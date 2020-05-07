@@ -4,14 +4,32 @@ import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, V
 import BackButton from './../images/BackIcon.png';
 import ReportIcon from './../images/ReportIcon.png';
 import HeartIcon from './../images/HeartIcon.png';
+
+import HappyIcon from './../images/HappyIcon.png';
+import FilledIcon from './../images/FilledIcon.png';
+import PeaceIcon from './../images/PeaceIcon.png';
+import ThankIcon from './../images/ThankIcon.png';
+import LovelyIcon from './../images/LovelyIcon.png';
+import SadIcon from './../images/SadIcon.png';
+import LonelyIcon from './../images/LonelyIcon.png';
+import EmptyIcon from './../images/EmptyIcon.png';
+import TiredIcon from './../images/TiredIcon.png';
+import DepressedIcon from './../images/DepressedIcon.png';
+import WorriedIcon from './../images/WorriedIcon.png';
+import AngryIcon from './../images/AngryIcon.png';
+
 const { height, width } = Dimensions.get("window");
 
 export default function Comment({ route, navigation }) {
     const {feed_id} = route.params;
-    console.log(feed_id.id)
     const {uid} = route.params;
-    // console.log(uid.uid)
     const [content, setContent] = useState('');
+    const [title, setTitle] = useState('');
+    const [feedContent, setFeedContent] = useState('');
+    const [author, setAuthor] = useState('');
+    const [date, setDate] = useState('');
+    const [emoji, setEmoji] = useState('');
+    const [comments, setComments] = useState([]);
     // const [commentMode, setCommentMode] = useState(false);
 
     const _createComment= () =>{
@@ -38,6 +56,105 @@ export default function Comment({ route, navigation }) {
         });
     }
 
+    const renderEmoji=(emoji) =>{
+        switch(emoji) {
+            case 'Happy':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={HappyIcon}/>
+                    {/* <Text style={styles.emojiText}>행복해요</Text> */}
+                </>
+                )
+            case 'Filled':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={FilledIcon}/>
+                    {/* <Text style={styles.emojiText}>뿌듯해요</Text> */}
+                </>
+                )
+            case 'Peace':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={PeaceIcon}/>
+                    {/* <Text style={styles.emojiText}>평온해요</Text> */}
+                </>
+                )
+            case 'Thank':
+                return (
+                <>
+                    <Image style= {styles.emojiIcon} source={ThankIcon}/>
+                    {/* <Text style={styles.emojiText}>감사해요</Text> */}
+                </>
+                )
+            case 'Lovely':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={LovelyIcon}/>
+                        {/* <Text style={styles.emojiText}>설레요</Text> */}
+                    </>
+                )
+            case 'Sad':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={SadIcon}/>
+                        {/* <Text style={styles.emojiText}>슬퍼요</Text> */}
+                    </>
+                )
+            case 'Lonely':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={LonelyIcon}/>
+                        {/* <Text style={styles.emojiText}>외로워요</Text> */}
+                    </>
+                )
+            case 'Empty':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={EmptyIcon}/>
+                        {/* <Text style={styles.emojiText}>공허해요</Text> */}
+                    </>
+                )
+            case 'Tired':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={TiredIcon}/>
+                        {/* <Text style={styles.emojiText}>지쳐요</Text> */}
+                    </>
+                )
+            case 'Depressed':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={DepressedIcon}/>
+                        {/* <Text style={styles.emojiText}>우울해요</Text> */}
+                    </>
+                )
+            case 'Worried':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={WorriedIcon}/>
+                        {/* <Text style={styles.emojiText}>걱정돼요</Text> */}
+                    </>
+                )
+            case 'Angry':
+                return (
+                    <>
+                        <Image style= {styles.emojiIcon} source={AngryIcon}/>
+                        {/* <Text style={styles.emojiText}>화나요</Text> */}
+                    </>
+                )
+            default:
+                return <View></View>
+        }
+    }
+
+    const parseDate=(string)=>{
+        let stringArray = string.split("-"); 
+        let year = stringArray[0];
+        let month = stringArray[1];
+        let day = stringArray[2];
+        return year+'년 '+month + '월 '+ day + '일';
+    }
+
     useEffect(() =>{
         fetch(`http://127.0.0.1:8000/feeds/load/${feed_id.id}/`, {
             method: 'GET',
@@ -48,15 +165,48 @@ export default function Comment({ route, navigation }) {
         }).then((res) => {
             return res.json();
         }).then((resJSON) => {
-            console.log('get')
-            const { load_comment } = resJSON
-            console.log(JSON.parse(load_comment));
-
+            const { title, content, author, date, emoji, comments } = resJSON
+            setTitle(title);
+            setFeedContent(content);
+            setAuthor(author);
+            setDate(date);
+            setEmoji(emoji);
+            setComments(comments);
         }).catch((err) => {
                 console.log(err);
         });
     })
 
+    const Comment=({id, title, content, emoji, date, likes, comments, author, liked})=>{
+
+        return (
+            <View style={styles.comment}>
+                <View style={styles.commentContent}>
+                    <Text style={styles.commentAuthor}>{author}</Text>
+                    <Text style={styles.feedContent}>{content}</Text>
+                </View>
+                <Text style={styles.date}>{parseDate(date)}</Text>
+                {/* <View style={styles.icons}>
+                    <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
+                        {liked &&
+                            <Image style={styles.icon} source={HeartIconFilled} />
+                        }
+                        {!liked && 
+                            <Image style={styles.icon} source={HeartIcon} />
+                        }
+                    </TouchableOpacity>
+                    <Text style={styles.iconNum}>{likes.length}</Text>
+                    <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
+                        <Image style={styles.icon} source={CommentIcon} />
+                    </TouchableOpacity>
+                    <Text style={styles.iconNum}>{comments.length}</Text>
+                    <TouchableOpacity onPress={onReport}>
+                        <Image style={styles.icon} source={ReportIcon} />
+                    </TouchableOpacity>
+                </View> */}
+                </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -71,11 +221,26 @@ export default function Comment({ route, navigation }) {
             <ScrollView>
             <View style={styles.contentWrapper}>
                 <View style={styles.feed}>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>snowman39</Text>
-                        <Text style={styles.feedContent}>돈을 벌기는 참 힘들다.</Text>
+                    <View>
+                        {renderEmoji(emoji)}
+                        <Text style={styles.feedAuthor}>{author}</Text>
                     </View>
-                    <Text style={styles.date}>6시간</Text>
+                    <View style={styles.content}>
+                        <Text style={styles.feedTitle}>{title}</Text>
+                        <Text style={styles.feedContent}>{feedContent}</Text>
+                        <Text style={styles.date}>{parseDate(date)}</Text>
+                    </View>
+                </View>
+                <View style={styles.commentWrapper}>
+                    <ScrollView>
+                        {comments.map((item)=>(
+                            <Comment
+                                content={item.content}
+                                date={item.date}
+                                author = {item.author}
+                            />
+                        ))}
+                    </ScrollView>
                 </View>
                 {/* <View style={styles.comment}> */}
                     {/* <View style={styles.commentWrapper}>
@@ -121,7 +286,7 @@ export default function Comment({ route, navigation }) {
                 onPress={()=>_createComment()}
                 >
                 {/* <AntDesign name="checkcircleo" size={20}/> */}
-                <Text stlye={styles.emojiText}>댓글 작성하기</Text>
+                    <Text stlye={styles.btnText}>게시</Text>
                 </TouchableOpacity>
             </View>
             
@@ -133,7 +298,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "flex-start",
-        paddingVertical: 40,
+        paddingTop: 40,
         backgroundColor: "#fff",
     },
     header: {
@@ -154,15 +319,33 @@ const styles = StyleSheet.create({
         left: -10,
     },
     feed: {
-        padding: 13,
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        paddingLeft: 25,
+        paddingRight: 25,
         height: "auto",
+        width: width,
         borderBottomWidth: 1,
         borderBottomColor: "#fafafa",
-        paddingRight: 30,
+        paddingTop: 20,
+        paddingBottom: 10,
+    },
+    comment: {
+        justifyContent: "flex-start",
+        paddingLeft: 30,
+        paddingRight: 25,
+        height: "auto",
+        width: width,
+        borderBottomWidth: 1,
+        borderBottomColor: "#fafafa",
+        paddingTop: 15,
+        paddingBottom: 5,
     },
     content: {
-        // flex: 4,
-        flexDirection: "row",
+        flexDirection: "column"
+    },
+    commentContent: {
+        flexDirection: "row"
     },
     date: {
         color: "#aaaaaa",
@@ -173,13 +356,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: "500",
         marginRight: 5,
-    },
-    comment: {
-        padding: 13,
-        height: "auto",
-    },
-    commentWrapper: {
-        flexDirection: "row",
     },
     icon:{
         height: 16,
@@ -212,7 +388,6 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: 0,
         marginTop: 30,
-        marginBottom: 20,
         paddingHorizontal: width*0.04,
         paddingVertical: 10,
         borderTopColor: "#fafafa",
@@ -224,12 +399,13 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     input: {
-        borderRadius: 5,
+        borderRadius: 20,
         borderWidth: 2,
         borderColor: "#f9f9f9",
         padding: 10,
         backgroundColor: "#fff",
-        width: width*0.7,
+        width: width*0.8,
+        alignItems: "flex-end",
         // marginTop: 30,
         // marginBottom: 20,
         // paddingTop: 10,
@@ -242,6 +418,42 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         // bottom: 25,
         padding: 20,
+        // backgroundColor: "#fff",
         // left: width*0.43
-    }
+    },
+    emojiIcon: {
+        height: 40,
+        width: 40,
+        marginRight: 15,
+    },
+    feedAuthor: {
+        fontWeight: "300",
+        textAlign: "center",
+        position: "relative",
+        left: -7,
+        top: 5
+    },
+    feedTitle: {
+        fontWeight: "600",
+        marginBottom: 10,
+        fontSize: 16,
+    },
+    feedContent: {
+        fontWeight: "400",
+        fontSize: 14,
+    },
+    date: {
+        color: "#aaaaaa",
+        fontSize: 14,
+        marginTop: 6,
+        marginBottom: 20,
+    },
+    commentAuthor: {
+        fontWeight: "600",
+        fontSize: 14,
+        marginRight: 10,
+    },
+    btnText: {
+        color: "#3f95ef",
+    },
 });

@@ -42,6 +42,29 @@ export default function Signup({ navigation }) {
     //         return true;
     //     }
     // }
+    const _storeData = async (uid) => {
+        // let user_object = {
+        //     'uid': uid
+        // };
+        try {
+            await AsyncStorage.setItem('user', String(uid));
+        } catch (error) {
+          // Error saving data
+            console.log(error);
+        }
+    };
+
+    const _storeName = async (nickname) => {
+        // let user_object = {
+        //     'uid': uid
+        // };
+        try {
+            await AsyncStorage.setItem('name', String(nickname));
+        } catch (error) {
+          // Error saving data
+            console.log(error);
+        }
+    };
 
     const onSignup = e => {
         if(validEmail === false) {
@@ -84,17 +107,21 @@ export default function Signup({ navigation }) {
                 'Content-type': 'applications/json'
             }
             }).then((res) => {
-                Alert.alert(
-                    '축하드립니다!',
-                    '회원가입이 완료되었습니다',
-                    [
-                        {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
-                    ],
-                    { cancelable: false }
-                    )
                 return res.json();
             }).then((resJSON) => {
-                console.log(resJSON);
+                const { uid , nickname } = resJSON;
+                if(uid > 0) {
+                    _storeData(uid);
+                    _storeName(nickname);
+                    Alert.alert(
+                        '축하드립니다!',
+                        '회원가입이 완료되었습니다',
+                        [
+                            {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
+                        ],
+                        { cancelable: false }
+                    )
+                }
             }).catch((err) => {
                 console.log(err);
             })

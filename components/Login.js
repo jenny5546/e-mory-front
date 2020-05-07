@@ -16,10 +16,22 @@ export default function Login({ navigation }) {
         //     'uid': uid
         // };
         try {
-          await AsyncStorage.setItem('user', String(uid));
+            await AsyncStorage.setItem('user', String(uid));
         } catch (error) {
           // Error saving data
-          console.log(error);
+            console.log(error);
+        }
+    };
+
+    const _storeName = async (nickname) => {
+        // let user_object = {
+        //     'uid': uid
+        // };
+        try {
+            await AsyncStorage.setItem('name', String(nickname));
+        } catch (error) {
+          // Error saving data
+            console.log(error);
         }
     };
 
@@ -35,10 +47,11 @@ export default function Login({ navigation }) {
             }).then((res) => {
                 return res.json();
             }).then((resJSON) => {
-                const { uid } = resJSON
+                const { uid, nickname } = resJSON
 
                 if(uid > 0) {
                     _storeData(uid);
+                    _storeName(nickname);
                     navigation.push('MainCalendar');
                 } else {
                     Alert.alert(

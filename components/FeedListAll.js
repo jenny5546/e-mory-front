@@ -9,12 +9,13 @@ import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIcon.png';
 import Chart from './../images/ChartIcon.png';
 import Menu from './../images/MenuIcon.png';
-import Feed from './../images/FeedIconFilled.png';
+import FeedFilled from './../images/FeedIconFilled.png';
 import Setting from './../images/SettingIcon.png';
 import ReportIcon from './../images/ReportIconBlack.png';
 import HeartIcon from './../images/HeartIconBlack.png';
+import HeartIconFilled from './../images/HeartIconFilled.png';
 import CommentIcon from './../images/CommentIcon.png';
-
+import BackButton from './../images/BackIcon.png';
 
 // Emoji Icons 
 import HappyIcon from './../images/HappyIcon.png';
@@ -45,41 +46,39 @@ export default function FeedListAll({ route, navigation }) {
     const [emojiOption, setEmojiOption] = useState('All');
 
     const [uid, setUid] = useState('');
+    const [nickname, setNickname] = useState('');
     // const [likeFeedID, setlikeFeedID] = useState(0);
 
     const _storeUid = async () =>{
         try {
-          const value = await AsyncStorage.getItem('user');
-          if (value !== null) {
+            const value = await AsyncStorage.getItem('user');
+            if (value !== null) {
             setUid(value);
-          }
+            }
         } catch (error) {
           // Error retrieving data
-          console.log(error)
+            console.log(error)
         }
     }
+
+    const _storeNickname = async () =>{
+        try {
+            const value = await AsyncStorage.getItem('name');
+            if (value !== null) {
+            setNickname(value);
+            }
+        } catch (error) {
+          // Error retrieving data
+            console.log(error)
+        }
+    }
+
     const parseDate=(string)=>{
         let stringArray = string.split("-"); 
         let year = stringArray[0];
         let month = stringArray[1];
         let day = stringArray[2];
         return year+'년 '+month + '월 '+ day + '일';
-    }
-
-    const onReport = () => {
-        Alert.alert(
-        '신고',
-        '이 게시물을 신고하시겠습니까?',
-        [
-            {
-            text: "네",
-            onPress: () => console.log("Ok pressed"),
-            style: "cancel"
-            },
-            { text: "아니요", onPress: () => console.log("No Pressed") }
-        ],
-        { cancelable: false }
-        )
     }
 
     const _reset = () =>{
@@ -89,7 +88,14 @@ export default function FeedListAll({ route, navigation }) {
         setTotalPage(0);
     }
 
-    
+    const _checkLiked = (users) => {
+
+        let exist = false;
+        users.map((user) => {
+            if(nickname==user) exist = true
+        })
+        return exist
+    }
 
     const renderEmoji=(emoji) =>{
         switch(emoji) {
@@ -97,91 +103,91 @@ export default function FeedListAll({ route, navigation }) {
                 return (
                 <>
                     <Image style= {styles.emojiIcon} source={HappyIcon}/>
-                    <Text style={styles.emojiText}>행복해요</Text>
+                    {/* <Text style={styles.emojiText}>행복해요</Text> */}
                 </>
                 )
             case 'Filled':
                 return (
                 <>
                     <Image style= {styles.emojiIcon} source={FilledIcon}/>
-                    <Text style={styles.emojiText}>뿌듯해요</Text>
+                    {/* <Text style={styles.emojiText}>뿌듯해요</Text> */}
                 </>
                 )
             case 'Peace':
                 return (
                 <>
                     <Image style= {styles.emojiIcon} source={PeaceIcon}/>
-                    <Text style={styles.emojiText}>평온해요</Text>
+                    {/* <Text style={styles.emojiText}>평온해요</Text> */}
                 </>
                 )
             case 'Thank':
                 return (
                 <>
                     <Image style= {styles.emojiIcon} source={ThankIcon}/>
-                    <Text style={styles.emojiText}>감사해요</Text>
+                    {/* <Text style={styles.emojiText}>감사해요</Text> */}
                 </>
                 )
             case 'Lovely':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={LovelyIcon}/>
-                        <Text style={styles.emojiText}>설레요</Text>
+                        {/* <Text style={styles.emojiText}>설레요</Text> */}
                     </>
                 )
             case 'Sad':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={SadIcon}/>
-                        <Text style={styles.emojiText}>슬퍼요</Text>
+                        {/* <Text style={styles.emojiText}>슬퍼요</Text> */}
                     </>
                 )
             case 'Lonely':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={LonelyIcon}/>
-                        <Text style={styles.emojiText}>외로워요</Text>
+                        {/* <Text style={styles.emojiText}>외로워요</Text> */}
                     </>
                 )
             case 'Empty':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={EmptyIcon}/>
-                        <Text style={styles.emojiText}>공허해요</Text>
+                        {/* <Text style={styles.emojiText}>공허해요</Text> */}
                     </>
                 )
             case 'Tired':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={TiredIcon}/>
-                        <Text style={styles.emojiText}>지쳐요</Text>
+                        {/* <Text style={styles.emojiText}>지쳐요</Text> */}
                     </>
                 )
             case 'Depressed':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={DepressedIcon}/>
-                        <Text style={styles.emojiText}>우울해요</Text>
+                        {/* <Text style={styles.emojiText}>우울해요</Text> */}
                     </>
                 )
             case 'Worried':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={WorriedIcon}/>
-                        <Text style={styles.emojiText}>걱정돼요</Text>
+                        {/* <Text style={styles.emojiText}>걱정돼요</Text> */}
                     </>
                 )
             case 'Angry':
                 return (
                     <>
                         <Image style= {styles.emojiIcon} source={AngryIcon}/>
-                        <Text style={styles.emojiText}>화나요</Text>
+                        {/* <Text style={styles.emojiText}>화나요</Text> */}
                     </>
                 )
             default:
                 return <View></View>
         }
     }
-    console.log(data);
+    // console.log(data);
 
     const _loadFeed = () => {
         // console.log(emojiOption);
@@ -222,16 +228,9 @@ export default function FeedListAll({ route, navigation }) {
     }
     useEffect(()=>{
         _storeUid();
+        _storeNickname();
     },[])
 
-    // console.log(uid);
-
-    // useEffect(()=>{
-    //    _loadFeed();
-    // },[uid])
-    
-    // console.log('uid')
-    // console.log(uid);
 
     const _likeFeed = (id) => {
 
@@ -255,26 +254,57 @@ export default function FeedListAll({ route, navigation }) {
             console.log(err);
         });
     }
-    console.log(data);
 
+    const _reportFeed = (id) => {
+        Alert.alert(
+        '신고',
+        '이 게시물을 신고하시겠습니까?',
+        [
+            {
+            text: "네",
+            onPress: () => {
+                fetch(`http://127.0.0.1:8000/feeds/report/${id}/`, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }}).then((res) => {
+                        return res.json();
+                    }).catch((err) => {
+                    console.log(err);
+                    });
+            },
+            style: "cancel"
+            },
+            { text: "아니요" }
+        ],
+        { cancelable: false }
+        )
+    }
 
-    const Feed=({id, title, content, emoji, date, likes, comments})=>{
+    const Feed=({id, title, content, emoji, date, likes, comments, author, liked})=>{
+
         return (
             <View style={styles.feed}>
                 <View>
-                    {/* <Image style={styles.emoticon} source={PeaceIcon} /> */}
                     {renderEmoji(emoji)}
+                    <Text style={styles.feedAuthor}>{author}</Text>
                 </View>
                 <View>
                     <View style={styles.content}>
                         {/* <Text style={styles.feedDate}>Feed id: {id}</Text> */}
-                        <Text style={styles.feedDate}>{parseDate(date)}의 기록</Text>
-                        <Text style={styles.feedContent}>제목: {title}</Text>
-                        <Text style={styles.feedContent}>내용: {content}</Text>
+                        
+                        <Text style={styles.feedTitle}>{title}</Text>
+                        <Text style={styles.feedContent}>{content}</Text>
                     </View>
                     <View style={styles.icons}>
                         <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
-                            <Image style={styles.icon} source={HeartIcon} />
+                            {liked &&
+                                <Image style={styles.icon} source={HeartIconFilled} />
+                            }
+                            {!liked && 
+                                <Image style={styles.icon} source={HeartIcon} />
+                            }
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{likes.length}</Text>
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
@@ -282,11 +312,11 @@ export default function FeedListAll({ route, navigation }) {
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{comments.length}</Text>
-                        <TouchableOpacity onPress={onReport}>
+                        <TouchableOpacity onPress={()=>{_reportFeed(id)}}>
                             <Image style={styles.icon} source={ReportIcon} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.date}>6시간</Text>
+                    <Text style={styles.date}>{parseDate(date)}</Text>
                 </View>
             </View> 
         )
@@ -295,21 +325,58 @@ export default function FeedListAll({ route, navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Image style={styles.backButton} source={Menu}/>
+                <TouchableOpacity onPress={()=>navigation.goBack()}>
+                    <Image style={styles.backButton} source={BackButton}/>
+                </TouchableOpacity>
                 <Image style={styles.logo} source={Logo}/>
                 <View>
                     <TouchableOpacity onPress={()=>setOpenFilter(!openFilter)}>
                         <Image style={styles.backButton} source={Filter}/>
                     </TouchableOpacity>
-                    {openFilter &&
+                </View>
+            </View>
+            <View style={styles.feedWrapper}>
+                
+                <ScrollView
+                    onScroll={(e) => {
+                        let paddingToBottom = 0;
+                        paddingToBottom += e.nativeEvent.layoutMeasurement.height;
+                        if(e.nativeEvent.contentOffset.y >= e.nativeEvent.contentSize.height - paddingToBottom) {
+                        _loadFeed();
+                        }
+                    }}
+                    scrollEventThrottle = {1}
+                >
+                    {/* <Text style={{fontSize: 50}}>Hoi</Text> */}
+                    {data.map((item)=>(
+                        <Feed
+                            title={item[0].title}
+                            content={item[0].content}
+                            date={item[0].date}
+                            emoji={item[0].emoji}
+                            id = {item[0].id}
+                            likes = {item[2].liked_users}
+                            comments = {item[0].commented_users}
+                            author = {item[1].writter}
+                            liked = {_checkLiked(item[2].liked_users)}
+                        />
+                    ))}
+                    
+                </ScrollView>
+                {/* <TouchableOpacity style= {{position: 'absolute'}} onPress={()=>_loadMoreFeed()}>
+                    <Text>Load More</Text>
+                </TouchableOpacity> */}
+                
+                
 
+            </View>
+            {openFilter &&
                     <View style={styles.filterWrapper}>
-
                         <TouchableOpacity onPress = {()=> {
                                 setEmojiOption('All');
                                 _reset();
                                 _loadFeed();
-                        }}>
+                        }} style={{flex: 1}}>
                             <Text style={styles.option}>전체</Text>
                         </TouchableOpacity>
                         
@@ -405,43 +472,6 @@ export default function FeedListAll({ route, navigation }) {
                         </TouchableOpacity>
                     </View>
                     }
-                </View>
-            </View>
-            <View style={styles.feedWrapper}>
-                
-                <ScrollView
-                    onScroll={(e) => {
-                        let paddingToBottom = 0;
-                        paddingToBottom += e.nativeEvent.layoutMeasurement.height;
-                        if(e.nativeEvent.contentOffset.y >= e.nativeEvent.contentSize.height - paddingToBottom) {
-                          _loadFeed();
-                        }
-                    }}
-                    scrollEventThrottle = {1}
-                >
-                    {/* <Text style={{fontSize: 50}}>Hoi</Text> */}
-                    {data.map((item)=>(
-                        <Feed
-                            title={item.title}
-                            content={item.content}
-                            date={item.date}
-                            emoji={item.emoji}
-                            id = {item.id}
-                            likes = {item.liked_users}
-                            comments = {item.commented_users}
-                        />
-
-                    ))}
-                    
-                </ScrollView>
-                {/* <TouchableOpacity style= {{position: 'absolute'}} onPress={()=>_loadMoreFeed()}>
-                    <Text>Load More</Text>
-                </TouchableOpacity> */}
-                
-                
-
-            </View>
-
 
             <View style={styles.navigationbar}>
                 <TouchableOpacity  onPress={()=>{navigation.push('MainCalendar')}}>
@@ -451,10 +481,10 @@ export default function FeedListAll({ route, navigation }) {
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Image style={styles.icon} source={Feed} />
+                    <Image style={styles.icon} source={FeedFilled} />
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image style={styles.icon} source={Setting}  onPress={()=>{navigation.push('Settings')}}/>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
+                    <Image style={styles.icon} source={Setting}/>
                 </TouchableOpacity>
             </View>
         </View>
@@ -473,7 +503,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 30,
-        marginBottom: 20,
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -486,8 +515,8 @@ const styles = StyleSheet.create({
     },
     filterWrapper: {
         position:"absolute",
-        top: 25,
-        left: -40,
+        top: 60,
+        right: 10,
         width: 60,
         backgroundColor: "#fff",
         borderRadius: 5,
@@ -500,6 +529,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.18,
         shadowRadius: 1.00,
         elevation: 1,
+        zIndex: 3,
     },
     option: {
         textAlign: "center",
@@ -514,18 +544,36 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
     feed: {
-        // flexDirection: "",
-        alignItems: 'center',
+        flexDirection: "row",
+        justifyContent: "flex-start",
         paddingLeft: 25,
-        height: height*0.33,
+        paddingRight: 25,
+        height: height*0.4,
         width: width,
         borderBottomWidth: 1,
-        borderBottomColor: "#aaaaaa",
-        padding: 30,
+        borderBottomColor: "#e5e5e5",
+        paddingTop: 20,
+        paddingBottom: 15,
     },
     content: {
         // flex: 4,
         flexDirection: "column",
+    },
+    feedAuthor: {
+        fontWeight: "300",
+        textAlign: "center",
+        position: "relative",
+        left: -7,
+        top: 5
+    },
+    feedTitle: {
+        fontWeight: "600",
+        marginBottom: 10,
+        fontSize: 16,
+    },
+    feedContent: {
+        fontWeight: "400",
+        fontSize: 14,
     },
     date: {
         color: "#aaaaaa",
@@ -597,8 +645,9 @@ const styles = StyleSheet.create({
         width: width,
     },
     emojiIcon: {
-        height: 60,
-        width: 60,
+        height: 40,
+        width: 40,
+        marginRight: 15,
     },
     emojiText:{
         marginTop: 10,
