@@ -339,7 +339,7 @@ export default function MainCalendar({ navigation }) {
           <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{uid: {uid}})}}>
             <Image style={styles.icon} source={Setting} />
           </TouchableOpacity>
         </View>
@@ -457,6 +457,8 @@ const styles = StyleSheet.create({
     emojiIcon:{
       height: 35,
       width: 35,
+      position: "relative",
+      top: -7
       // position: 'absolute',
       // marginTop: 5
     },

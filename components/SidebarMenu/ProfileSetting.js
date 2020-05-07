@@ -1,5 +1,5 @@
 // 개인정보 설정 가능 한 페이지
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import { Entypo, AntDesign } from '@expo/vector-icons';
@@ -7,7 +7,12 @@ import BackButton from './../../images/BackIcon.png';
 import CompleteButton from './../../images/CompleteButton.png';
 const { height, width } = Dimensions.get("window");
 
-export default function ProfileSetting({navigation}) {
+export default function ProfileSetting({route, navigation}) {
+    const {uid} = route.params;
+
+    // console.log('profile settings');
+    // console.log(uid.uid);
+
     const _showAlert = () => {
         Alert.alert(
             '수정 완료',
@@ -18,6 +23,25 @@ export default function ProfileSetting({navigation}) {
             { cancelable: false }
         )
     }
+    useEffect(() => {
+
+          fetch(`http://127.0.0.1:8000/feeds/profile/${uid.uid}/`, {
+            method: 'GET',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }}).then((res) => {
+                return res.json();
+            }).then(profile=> {
+
+            //   profile= JSON.parse(profile);
+              console.log(profile)
+    
+            }).catch((err) => {
+              console.log(err);
+            });  
+    },[]);
+
     return (
         <View style={styles.container}>
             <View style={styles.header} >

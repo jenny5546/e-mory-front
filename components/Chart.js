@@ -95,14 +95,21 @@ export default function Chart(props) {
     }
 
     const ChartBar = styled.View`
-        borderBottomWidth: 5px;
-        height: ${height * 0.05}px;
-        marginLeft: 20px;
-        marginRight: 10px;
-        width: ${props =>props.count*width*0.04}px;
-        borderBottomColor: ${props => emojiColor(props.emoji)}
+        borderWidth: 4px;
+        width: ${props =>props.count*width*0.03}px;
+        borderColor: ${props => emojiColor(props.emoji)}
         position: relative;
-        top: -5px;
+        top: 25px;
+        left: 15px;
+        marginRight: 25px;
+        height: 0px;
+        borderRadius: 20px;
+    `;
+    const ChartNum = styled.Text`
+        position: relative;
+        top: 20px;
+        fontWeight: 700;
+        color: ${props => emojiColor(props.emoji)}
     `;
 
 
@@ -156,62 +163,66 @@ export default function Chart(props) {
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={HappyIcon} />
                                 <ChartBar count={countHappy} emoji='Happy'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countHappy}</Text> */}
+                                <ChartNum emoji='Happy'>{countHappy}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={FilledIcon} />
                                 <ChartBar count={countFilled} emoji='Filled'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countFilled}</Text> */}
+                                <ChartNum emoji='Filled'>{countFilled}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={PeaceIcon} />
                                 <ChartBar count={countPeace} emoji='Peace'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countPeace}</Text> */}
+                                <ChartNum emoji='Peace'>{countPeace}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={ThankIcon} />
                                 <ChartBar count={countThank} emoji='Thank'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countThank}</Text> */}
+                                <ChartNum emoji='Thank'>{countThank}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={LovelyIcon} />
                                 <ChartBar count={countLovely} emoji='Lovely'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countLovely}</Text> */}
+                                <ChartNum emoji='Lovely'>{countLovely}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={EmptyIcon} />
                                 <ChartBar count={countEmpty} emoji='Empty'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countEmpty}</Text> */}
+                                <ChartNum emoji='Empty'>{countEmpty}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={SadIcon} />
                                 <ChartBar count={countSad} emoji='Sad'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countSad}</Text> */}
+                                <ChartNum emoji='Sad'>{countSad}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={LonelyIcon} />
                                 <ChartBar count={countLonely} emoji='Lonely'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countLonely}</Text> */}
+                                <ChartNum emoji='Lonely'>{countLonely}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={TiredIcon} />
                                 <ChartBar count={countTired} emoji='Tired'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countTired}</Text> */}
+                                <ChartNum emoji='Tired'>{countTired}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={DepressedIcon} />
                                 <ChartBar count={countDepressed} emoji='Depressed'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countDepressed}</Text> */}
+                                <ChartNum emoji='Depressed'>{countDepressed}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={WorriedIcon} />
                                 <ChartBar count={countWorried} emoji='Worried'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countWorried}</Text> */}
+                                <ChartNum emoji='Worried'>{countWorried}</ChartNum>
                             </View>
                             <View style={styles.emojiRow}>
                                 <Image style={styles.icon} source={AngryIcon} />
                                 <ChartBar count={countAngry} emoji='Angry'></ChartBar>
-                                {/* <Text style={{marginTop: 20}}>{countAngry}</Text> */}
+                                <ChartNum emoji='Angry' count={countAngry}>{countAngry}</ChartNum>
+                                {/* {countAngry ===0 ?
+                                <></>: <ChartNum emoji='Angry' count={countAngry}>{countAngry}</ChartNum>
+                                } */}
+                                
                             </View>
                         </View>
                         
@@ -277,10 +288,13 @@ const styles = StyleSheet.create({
     emojiRow:{
         flexDirection: 'row'
     },
-    // chartBar : {
-    //     borderBottomColor: 'black',
-    //     borderBottomWidth: 1,
-    //     width: width*0.5,
-    // }
+    chartNum:{
+        // marginTop: 20,
+        position: 'relative',
+        top: 20,
+        fontWeight: '200'
+        
+
+    }
 });
 
