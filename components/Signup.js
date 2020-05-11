@@ -142,6 +142,7 @@ export default function Signup({ navigation }) {
                     placeholder={"이름을 입력해주세요"}
                     value={name}
                     onChange={(e)=>{setName(e.nativeEvent.text)}}
+                    autoCorrect={false}
                 />
             </View>
             <View>
@@ -152,6 +153,7 @@ export default function Signup({ navigation }) {
                         placeholder={"예: e-mory1@mory.com"}
                         value={email}
                         onChange={(e)=>{setEmail(e.nativeEvent.text)}}
+                        autoCorrect={false}
                     />
                     <View style={styles.emailCheckBtn}>
                         <TouchableOpacity onPress={emailValidation}>
@@ -167,6 +169,7 @@ export default function Signup({ navigation }) {
                     placeholder={"비밀번호를 입력해주세요"}
                     value={password}
                     onChange={(e)=>{setPassword(e.nativeEvent.text)}}
+                    autoCorrect={false}
                 />
             </View>
             <View>
@@ -176,6 +179,7 @@ export default function Signup({ navigation }) {
                     placeholder={"비밀번호를 한번 더 입력해주세요"}
                     value={passwordCheck}
                     onChange={(e)=>{setPasswordCheck(e.nativeEvent.text)}}
+                    autoCorrect={false}
                 />
             </View>
             <View>
@@ -185,6 +189,7 @@ export default function Signup({ navigation }) {
                     placeholder={"YYYY/MM/DD"}
                     value={date}
                     onChange={(e)=>{setDate(e.nativeEvent.text)}}
+                    autoCorrect={false}
                 />
             </View>
             <View>
@@ -195,6 +200,7 @@ export default function Signup({ navigation }) {
                         placeholder={"예: emory_mory"}
                         value={nickname}
                         onChange={(e)=>{setNickname(e.nativeEvent.text)}}
+                        autoCorrect={false}
                     />
                     <View style={styles.nicknameCheckBtn}>
                         <TouchableOpacity onPress={nicknameValidation}>
