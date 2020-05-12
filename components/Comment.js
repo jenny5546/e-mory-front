@@ -47,6 +47,8 @@ export default function Comment({ route, navigation }) {
     }
     _storeNickname();
 
+    console.log(feed_id)
+
     const _createComment= () =>{
 
         console.log(content)

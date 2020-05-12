@@ -1,5 +1,5 @@
 // 개인 정보 ~ 알림 설정 등이 들어갈 사이드 바
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, Button, View, Image, Dimensions, Alert } from 'react-native';
 
 import Filter from './../images/FilterIcon.png';
@@ -23,7 +23,8 @@ const { height, width } = Dimensions.get("window");
 
 export default function Settings({route, navigation}) {
 
-    const {uid} = route.params;
+    // const {uid} = route.params;
+    const [uid, setUid] = useState('');
     console.log('settings')
     console.log(uid.uid);
 
@@ -49,6 +50,25 @@ export default function Settings({route, navigation}) {
             console.log(error)
         }
     }
+
+
+    const _storeUid = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('user');
+          if (value !== null) {
+            setUid(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+    useEffect(()=>{
+        _storeUid();
+    },[]);
+    
+    console.log('uid is');
+    console.log(uid);
 
     return (
         <View style={styles.container}>

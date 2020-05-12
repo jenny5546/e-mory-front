@@ -79,10 +79,10 @@ export default function MainCalendar({ navigation }) {
       console.log(error)
     }
   }
-  console.log('uid');
-  console.log(uid);
+  // console.log('uid');
+  // console.log(uid);
 
-  console.log(uid);
+  // console.log(uid);
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
   // const emojiColor= (emoji) =>{
   //   switch(emoji){
@@ -171,7 +171,6 @@ export default function MainCalendar({ navigation }) {
             return res.json();
         }).then(resJSON=> {
           const {feeds} = resJSON
-          console.log(feeds)
           // feed_list= JSON.parse(feed_list);
           // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
           // console.log(feed_list);
@@ -193,7 +192,7 @@ export default function MainCalendar({ navigation }) {
         <View style={styles.header}>
           <View></View>
           <Image style={styles.logo} source={Logo}/>
-          <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity',{uid: {uid}})}}>
             <Image style={styles.backButton} source={Alarm}/>
           </TouchableOpacity>
         </View>

@@ -18,14 +18,13 @@ class Profile {
   }
 
 export default function ProfileSetting({route, navigation}) {
+
     const {uid} = route.params;
     const [name, setName] =useState('');
     const [email, setEmail] =useState('');
-    const [password, setPassword] =useState('********');
+    // const [password, setPassword] =useState('********');
     const [birthday, setBirthday] = useState('');
     const [nickname, setNickname] = useState('');
-
-
 
     // console.log('profile settings');
     // console.log(uid.uid);
@@ -40,8 +39,13 @@ export default function ProfileSetting({route, navigation}) {
             { cancelable: false }
         )
     }
+
+    
+    console.log('uid is');
+    console.log(uid);
+
     useEffect(() => {
-          fetch(`http://127.0.0.1:8000/feeds/profile/${uid.uid}/`, {
+          fetch(`http://127.0.0.1:8000/feeds/profile/${uid}/`, {
             method: 'GET',
             headers:{
                 'Accept': 'application/json',
@@ -55,7 +59,7 @@ export default function ProfileSetting({route, navigation}) {
               setEmail(context.email);
               setName(context.name);
               setNickname(context.nickname);
-              setPassword(context.password);
+            //   setPassword(context.password);
               console.log(context);
     
             }).catch((err) => {
@@ -119,7 +123,7 @@ export default function ProfileSetting({route, navigation}) {
                 <TextInput 
                     style={styles.input}
                     placeholder={"비밀번호를 입력해주세요"}
-                    value = {password}
+                    value = {""}
                     onChangeText={text => setPassword(text)}
                 />
             </View>
