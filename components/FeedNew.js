@@ -167,6 +167,7 @@ export default function FeedNew(props) {
                         placeholderTextColor={"#999"}
                         returnKeyType={"done"}
                         autoCorrect={false}
+                        autoCapitalize="none"
                         onChangeText={text => setTitle(text)}
                     />
                     <TextInput
@@ -174,6 +175,7 @@ export default function FeedNew(props) {
                         placeholder="오늘의 감정일기 100자"
                         placeholderTextColor={"#999"}
                         returnKeyType={"done"}
+                        autoCapitalize="none"
                         autoCorrect={false}
                         onChangeText={text => setContent(text)}
                     />

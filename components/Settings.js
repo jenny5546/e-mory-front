@@ -17,6 +17,7 @@ import Mail from './../images/MailIcon.png';
 import Document from './../images/DocumentIcon.png';
 import Info from './../images/InfoIcon.png';
 import Logout from './../images/LogoutIcon.png';
+import {AsyncStorage} from 'react-native';
 
 const { height, width } = Dimensions.get("window");
 
@@ -31,11 +32,22 @@ export default function Settings({route, navigation}) {
             '로그 아웃',
             '로그 아웃 하시겠습니까?',
             [
-                {text: '네', onPress: () => {navigation.push('Login')}},
+                {text: '네', onPress: () => {
+                    _logOut();
+                    navigation.push('Login')
+                }},
                 {text: "아니요", onPress: () => console.log("No Pressed") }
             ],
             { cancelable: false }
         )
+    }
+
+    const _logOut = () => {
+        try {
+            AsyncStorage.clear;
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (

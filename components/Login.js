@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, {useState, useEffect}  from 'react';
-import { StyleSheet, Dimensions, Button, View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
+import React, {useState}  from 'react';
+import { StyleSheet, Dimensions, View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import Logo from './../images/Logo.png';
 import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
@@ -12,13 +12,9 @@ export default function Login({ navigation }) {
     const [password, setPassword] = useState(null);
     
     const _storeData = async (uid) => {
-        // let user_object = {
-        //     'uid': uid
-        // };
         try {
             await AsyncStorage.setItem('user', String(uid));
         } catch (error) {
-          // Error saving data
             console.log(error);
         }
     };
@@ -48,7 +44,7 @@ export default function Login({ navigation }) {
                 return res.json();
             }).then((resJSON) => {
                 const { uid, nickname } = resJSON
-
+                console.log(uid, nickname)
                 if(uid > 0) {
                     _storeData(uid);
                     _storeName(nickname);
@@ -77,12 +73,17 @@ export default function Login({ navigation }) {
                 placeholder={"아이디를 입력해주세요"}
                 value={email}
                 onChange={(e)=>{setEmail(e.nativeEvent.text)}}
+                autoCapitalize="none"
+                autoCorrect={false}
             />
             <TextInput
                 style={styles.input}
                 placeholder={"비밀번호를 입력해주세요"}
                 value={password}
                 onChange={(e)=>{setPassword(e.nativeEvent.text)}}
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry={true}
             />
             <View style={styles.loginButtonWrapper}>
                 <TouchableOpacity onPress={onLogin}>

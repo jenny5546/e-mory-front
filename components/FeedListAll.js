@@ -246,16 +246,16 @@ export default function FeedListAll({ route, navigation }) {
         }).then((resJSON) => {
             // const { title, content, emoji, date } = resJSON
             console.log('Liked Success!');
-            // console.log(title);
-            // console.log(content);
-            // console.log(emoji);
-            // console.log(date);
+
         }).catch((err) => {
             console.log(err);
         });
     }
 
+
+
     const _reportFeed = (id) => {
+        
         Alert.alert(
         '신고',
         '이 게시물을 신고하시겠습니까?',
@@ -263,26 +263,52 @@ export default function FeedListAll({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/report/${id}/`, {
+                fetch(`http://127.0.0.1:8000/feeds/report/${id}/${uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }}).then((res) => {
-                        return res.json();
+                        return res.json()
+                    }).then((resJSON) => {
+                        const {already} = resJSON
+                        console.log(already)
+                        if(already) {
+                            Alert.alert(
+                                '이미 신고가 접수된 상태입니다'
+                            )
+                        } else {
+                            Alert.alert(
+                                '신고 접수가 완료되었습니다'
+                            )
+                        }
                     }).catch((err) => {
                     console.log(err);
                     });
             },
             style: "cancel"
             },
-            { text: "아니요" }
+            { text: "아니요",
+            }
         ],
         { cancelable: false }
         )
     }
 
-    const Feed=({id, title, content, emoji, date, likes, comments, author, liked})=>{
+    const Feed=({id, title, content, emoji, date, likes, comments, author, liked, report})=>{
+
+        const [likeNum, setLikeNum] = useState(likes.length);
+        const [isLiked, setIsLiked] = useState(liked);
+        const [isReported, setIsReported] = useState(report);
+        let nextNum = likeNum;
+        let nextBool = isLiked;
+
+        if(isReported) {
+            return(
+                <>
+                </>
+            );
+        }
 
         return (
             <View style={styles.feed}>
@@ -298,21 +324,33 @@ export default function FeedListAll({ route, navigation }) {
                         <Text style={styles.feedContent}>{content}</Text>
                     </View>
                     <View style={styles.icons}>
-                        <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
-                            {liked &&
+                        <TouchableOpacity onPress={()=>{
+                                if(isLiked) nextNum--;
+                                else nextNum++;
+                                setLikeNum(nextNum);
+                                nextBool = !nextBool;
+                                setIsLiked(nextBool);
+                                _likeFeed(id)
+                            }}>
+                            {isLiked &&
                                 <Image style={styles.icon} source={HeartIconFilled} />
                             }
-                            {!liked && 
+                            {!isLiked && 
                                 <Image style={styles.icon} source={HeartIcon} />
                             }
                         </TouchableOpacity>
-                        <Text style={styles.iconNum}>{likes.length}</Text>
+                        <Text style={styles.iconNum}>{likeNum}</Text>
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
                         <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{comments.length}</Text>
-                        <TouchableOpacity onPress={()=>{_reportFeed(id)}}>
+                        <TouchableOpacity onPress={()=>{
+                            // let bool = _reportFeed(id)
+                            let bool = _reportFeed(id)
+                            console.log(bool)
+                            // setIsReported(bool);
+                            }}>
                             <Image style={styles.icon} source={ReportIcon} />
                         </TouchableOpacity>
                     </View>
@@ -359,6 +397,7 @@ export default function FeedListAll({ route, navigation }) {
                             comments = {item[0].commented_users}
                             author = {item[1].writter}
                             liked = {_checkLiked(item[2].liked_users)}
+                            report = {false}
                         />
                     ))}
                     
