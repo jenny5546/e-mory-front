@@ -300,8 +300,14 @@ export default function FeedListAll({ route, navigation }) {
         const [likeNum, setLikeNum] = useState(likes.length);
         const [isLiked, setIsLiked] = useState(liked);
         const [isReported, setIsReported] = useState(report);
+        const [commentNum, setCommentNum] = useState(comments.length);
         let nextNum = likeNum;
         let nextBool = isLiked;
+
+        const _commentWirte = () => {
+            let prevNum = commentNum;
+            setCommentNum(++prevNum);
+        }
 
         if(isReported) {
             return(
@@ -341,10 +347,10 @@ export default function FeedListAll({ route, navigation }) {
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{likeNum}</Text>
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
-                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, _commentWirte: _commentWirte()})}}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
-                        <Text style={styles.iconNum}>{comments.length}</Text>
+                        <Text style={styles.iconNum}>{commentNum}</Text>
                         <TouchableOpacity onPress={()=>{
                             // let bool = _reportFeed(id)
                             let bool = _reportFeed(id)
@@ -587,7 +593,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         paddingLeft: 25,
         paddingRight: 25,
-        height: height*0.4,
+        height: "auto",
         width: width,
         borderBottomWidth: 1,
         borderBottomColor: "#e5e5e5",
@@ -613,6 +619,7 @@ const styles = StyleSheet.create({
     feedContent: {
         fontWeight: "400",
         fontSize: 14,
+        width: width*0.7,
     },
     date: {
         color: "#aaaaaa",

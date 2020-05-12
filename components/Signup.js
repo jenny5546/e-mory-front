@@ -1,7 +1,8 @@
 // 회원가입 정보 기입 form
 import React, { useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import BackButton from './../images/BackIcon.png';
 import { AntDesign } from '@expo/vector-icons';
 import {AsyncStorage} from 'react-native';
@@ -14,10 +15,40 @@ export default function Signup({ navigation }) {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [passwordCheck, setPasswordCheck] = useState(null);
-    const [date, setDate] = useState(null);
+    const [date, setDate] = useState('YYYY-MM-DD');
     const [nickname, setNickname] = useState(null);
     const [validEmail, setValidEmail] = useState(false);
     const [validNickname, setValidNickname] = useState(false);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        // console.warn("A date has been picked: ", date);
+        let pickedDate = formatDate(date);
+        setDate(pickedDate)
+        hideDatePicker();
+    };
+
+    const formatDate = (date) => {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
 
     const emailValidation = (e) => {
 
@@ -240,13 +271,17 @@ export default function Signup({ navigation }) {
             </View>
             <View>
                 <Text>생년월일</Text>
-                <TextInput 
-                    style={styles.input}
-                    placeholder={"YYYY/MM/DD"}
-                    value={date}
-                    onChange={(e)=>{setDate(e.nativeEvent.text)}}
-                    autoCapitalize="none"
-                    autoCorrect={false}
+                {/* <DateTimePicker style={styles.dateTimePicker} mode="date" value={new Date()}/> */}
+                <TouchableOpacity onPress={showDatePicker}>
+                    <View style={styles.input}>
+                        <Text style={ date=='YYYY-MM-DD' ? styles.dateInit: styles.dateAfter}>{date}</Text>
+                    </View>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleConfirm}
+                    onCancel={hideDatePicker}
                 />
             </View>
             <View>
@@ -359,5 +394,26 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         marginTop: 30,
-    }
+    },
+    dateTimePicker: {
+        position: "absolute",
+        bottom: 0,
+    },
+    dateInput: {
+        padding: 10,
+        borderColor: "#bbb",
+        borderWidth: 1,
+        fontSize: 14,
+        borderRadius: 3,
+        marginBottom: 10,
+        marginTop: 10,
+        height: 40,
+        backgroundColor: "#fff",
+    },
+    dateInit:{
+        color: "#c4c4c6",
+    },
+    dateAfter: {
+        color: "#000",
+    },
 });

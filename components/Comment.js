@@ -24,6 +24,7 @@ const { height, width } = Dimensions.get("window");
 export default function Comment({ route, navigation }) {
     const {feed_id} = route.params;
     const {uid} = route.params;
+    const {_commentWrite} = route.params;
     const [nickname, setNickname] = useState(null);
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
@@ -69,6 +70,7 @@ export default function Comment({ route, navigation }) {
             let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon'}]
             setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
             setContent(null)
+            _commentWrite;
         }).catch((err) => {
                 console.log(err);
         });
@@ -299,7 +301,7 @@ export default function Comment({ route, navigation }) {
                     </View>
                 </View>
                 <View style={styles.commentWrapper}>
-                    <ScrollView>
+                    {/* <ScrollView> */}
                         {comments.map((item)=>(
                             <Comment
                                 content={item.content}
@@ -308,7 +310,8 @@ export default function Comment({ route, navigation }) {
                                 id={item.id}
                             />
                         ))}
-                    </ScrollView>
+                    {/* </ScrollView> */}
+                    <View style={{height:80}}></View>
                 </View>
                 {/* <View style={styles.comment}> */}
                     {/* <View style={styles.commentWrapper}>
@@ -532,5 +535,8 @@ const styles = StyleSheet.create({
         marginLeft: 7,
         position: "relative",
         top: 5,
+    },
+    contentWrapper: {
+    
     },
 });
