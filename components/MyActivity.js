@@ -71,7 +71,7 @@ export default function MyActivity({route, navigation}) {
 
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:8000/feeds/notification/${uid.uid}/`, {
+        fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/notification/${uid.uid}/`, {
           method: 'GET',
           headers:{
               'Accept': 'application/json',

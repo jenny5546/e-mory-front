@@ -45,7 +45,7 @@ export default function ProfileSetting({route, navigation}) {
     console.log(uid);
 
     useEffect(() => {
-          fetch(`http://127.0.0.1:8000/feeds/profile/${uid}/`, {
+          fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/profile/${uid}/`, {
             method: 'GET',
             headers:{
                 'Accept': 'application/json',
@@ -71,7 +71,7 @@ export default function ProfileSetting({route, navigation}) {
 
         const editedProfile = new Profile(name, email, password, birthday, nickname);
 
-        fetch(`http://127.0.0.1:8000/feeds/profile/${uid.uid}/`, {
+        fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/profile/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(editedProfile),
             headers:{
