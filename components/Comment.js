@@ -53,7 +53,7 @@ export default function Comment({ route, navigation }) {
 
         console.log(content)
 
-        fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
+        fetch(`https://cryptic-journey-73348.herokuapp.com/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(content),
             headers: {
@@ -181,7 +181,7 @@ export default function Comment({ route, navigation }) {
     }
 
     useEffect(() =>{
-        fetch(`http://127.0.0.1:8000/feeds/load/${feed_id.id}/`, {
+        fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/load/${feed_id.id}/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -211,7 +211,7 @@ export default function Comment({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/comment/report/${id}/${uid.uid}/`, {
+                fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/comment/report/${id}/${uid.uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
