@@ -157,6 +157,9 @@ export default function Chart(props) {
                                 hideDayNames={true}
                                 style={styles.calendarStyle} 
                                 onMonthChange={(month) => setMonth(month.dateString.substr(0,7))} 
+                                theme={{
+                                    arrowColor: 'orange',
+                                }}
                             />
                         </View>
                         <View style={styles.monthStatistics}>

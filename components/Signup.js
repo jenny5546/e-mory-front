@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import BackButton from './../images/BackIcon.png';
-import { Entypo, AntDesign } from '@expo/vector-icons';
-import CompleteButton from './../images/CompleteButton.png';
+import { AntDesign } from '@expo/vector-icons';
+import {AsyncStorage} from 'react-native';
+
 const { height, width } = Dimensions.get("window");
 
 export default function Signup({ navigation }) {
@@ -19,33 +20,81 @@ export default function Signup({ navigation }) {
     const [validNickname, setValidNickname] = useState(false);
 
     const emailValidation = (e) => {
-        Alert.alert(
-            '이메일이 발송되었습니다',
-            '발송된 메일을 통해 인증을 완료해주세요'
-        )
+
+        fetch(`http://127.0.0.1:8000/accounts/email/valid/`, {
+            method: 'POST',
+            body: JSON.stringify({email:email}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+            }).then((res) => {
+                return res.json();
+            }).then((resJSON) => {
+                const { valid } = resJSON;
+                if(valid) {
+                    Alert.alert(
+                        '이메일이 발송되었습니다',
+                        '발송된 메일을 통해 인증을 완료해주세요'
+                    )
+                } else {
+                    Alert.alert(
+                        '이미 사용중인 이메일입니다',
+                    )
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         setValidEmail(true);
     }
 
     const nicknameValidation = (e) => {
-        Alert.alert(
-            '사용 가능한 닉네임입니다',
-            '발송된 메일을 통해 인증을 완료해주세요'
-        )
-        setValidNickname(true);
+        const check_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+        if(check_kor.test(nickname)) {
+            Alert.alert(
+                '형식 오류',
+                '닉네임은 영어, 숫자, 특수문자만 사용가능합니다'
+            )
+            return;
+        }
+    
+        fetch(`http://127.0.0.1:8000/accounts/nickname/valid/`, {
+            method: 'POST',
+            body: JSON.stringify({nickname:nickname}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+            }).then((res) => {
+                return res.json();
+            }).then((resJSON) => {
+                const { valid } = resJSON;
+                if(valid) {
+                    Alert.alert(
+                        '사용 가능한 닉네임입니다',
+                    )
+                    setValidNickname(true);
+                } else {
+                    Alert.alert(
+                        '이미 사용중인 닉네임입니다',
+                    )
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+
     }
 
-    // const pwdValidCheck = (pwd) => {
-    //     let regPwd = /^.*(?=^.{8,12}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[~,!,@,#,$,*,(,),=,+,_,.,|]).*$/;
-    //     if(!regPwd.test(pwd)) {
-    //         return false;
-    //     }else{
-    //         return true;
-    //     }
-    // }
+    const pwdValidCheck = (pwd) => {
+        const regPwd = /^[A-Za-z0-9]{6,12}$/;
+        if(!regPwd.test(pwd)) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     const _storeData = async (uid) => {
-        // let user_object = {
-        //     'uid': uid
-        // };
         try {
             await AsyncStorage.setItem('user', String(uid));
         } catch (error) {
@@ -83,14 +132,14 @@ export default function Signup({ navigation }) {
                 )
             );
         }
-        // if(pwdValidCheck(password) === false) {
-        //     return (
-        //         Alert.alert(
-        //             '비밀번호',
-        //             '알파벳, 숫자, 특수기호포함 8자 이상'
-        //         )
-        //     );
-        // }
+        if(pwdValidCheck(password) === false) {
+            return (
+                Alert.alert(
+                    '비밀번호는 숫자, 영문 포함 6자 이상'
+                )
+            );
+        }
+
         if(validNickname === false) {
             return (
                 Alert.alert(
@@ -142,6 +191,9 @@ export default function Signup({ navigation }) {
                     placeholder={"이름을 입력해주세요"}
                     value={name}
                     onChange={(e)=>{setName(e.nativeEvent.text)}}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    autoFocus={true}
                 />
             </View>
             <View>
@@ -152,6 +204,8 @@ export default function Signup({ navigation }) {
                         placeholder={"예: e-mory1@mory.com"}
                         value={email}
                         onChange={(e)=>{setEmail(e.nativeEvent.text)}}
+                        autoCapitalize="none"
+                        autoCorrect={false}
                     />
                     <View style={styles.emailCheckBtn}>
                         <TouchableOpacity onPress={emailValidation}>
@@ -167,6 +221,9 @@ export default function Signup({ navigation }) {
                     placeholder={"비밀번호를 입력해주세요"}
                     value={password}
                     onChange={(e)=>{setPassword(e.nativeEvent.text)}}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
                 />
             </View>
             <View>
@@ -176,6 +233,9 @@ export default function Signup({ navigation }) {
                     placeholder={"비밀번호를 한번 더 입력해주세요"}
                     value={passwordCheck}
                     onChange={(e)=>{setPasswordCheck(e.nativeEvent.text)}}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
                 />
             </View>
             <View>
@@ -185,6 +245,8 @@ export default function Signup({ navigation }) {
                     placeholder={"YYYY/MM/DD"}
                     value={date}
                     onChange={(e)=>{setDate(e.nativeEvent.text)}}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                 />
             </View>
             <View>
@@ -195,6 +257,8 @@ export default function Signup({ navigation }) {
                         placeholder={"예: emory_mory"}
                         value={nickname}
                         onChange={(e)=>{setNickname(e.nativeEvent.text)}}
+                        autoCapitalize="none"
+                        autoCorrect={false}
                     />
                     <View style={styles.nicknameCheckBtn}>
                         <TouchableOpacity onPress={nicknameValidation}>

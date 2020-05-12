@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image, Dimensions, TouchableOpacity } from 'react-native';
+import {AsyncStorage} from 'react-native';
 import EditIcon from './../images/EditIcon.png';
 import DeleteIcon from './../images/DeleteIcon.png';
 import CloseIcon from './../images/CloseIconGray.png';
@@ -7,8 +8,13 @@ import LockDisabled from './../images/LockIconGray.png';
 import LockEnabled from './../images/LockIcon.png';
 import Emoji from './../images/EmojiTemp.png';
 import FeedEmoji from './FeedEmoji';
+
+import HeartIconFilled from './../images/HeartIconBlack.png';
+import CommentIcon from './../images/CommentIcon.png';
+
 const { height, width } = Dimensions.get("window");
 // Emoji Icons 
+
 import HappyIcon from './../images/HappyIcon.png';
 import FilledIcon from './../images/FilledIcon.png';
 import PeaceIcon from './../images/PeaceIcon.png';
@@ -23,14 +29,15 @@ import WorriedIcon from './../images/WorriedIcon.png';
 import AngryIcon from './../images/AngryIcon.png';
 
 class Feed {
-    constructor(emoji, title, content, date, privacy) {
-      this.emoji = emoji;
-      this.title = title;
-      this.content = content;
-      this.date = date;
-      // this.author = author;
-      this.privacy = privacy;
-  
+    constructor(emoji, title, content, date, privacy,  comment, like) {
+        this.emoji = emoji;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        // this.author = author;
+        this.privacy = privacy;
+        this.comment = comment;
+        this.like = like;
       // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
     }
 }
@@ -42,6 +49,23 @@ export default function FeedDetail(props) {
     const [editedContent, setEditedContent] = useState(props.matchingFeed.content);
     const [editedPrivacy, setEditedPrivacy] = useState(props.matchingFeed.privacy);
     const [editedEmoji, setEditedEmoji] = useState(props.matchingFeed.emoji);
+    const [likes, setLikes] = useState(props.matchingFeed.like);
+    const [comments, setComments] = useState(props.matchingFeed.comment);
+    const [id, setId] = useState(props.matchingFeed.id);
+    const [uid, setUid] = useState(null);
+
+    const _storeUid = async () =>{
+        try {
+            const value = await AsyncStorage.getItem('user');
+            if (value !== null) {
+                setUid(value);
+            }
+        } catch (error) {
+            // Error retrieving data
+            console.log(error)
+        }
+    }
+    _storeUid();
 
     const parseDate=(string)=>{
         let stringArray = string.split("-"); 
@@ -153,7 +177,6 @@ export default function FeedDetail(props) {
             console.log('deleted successfully');
             props.closeFeedDetail();
             props.loadAgain();
-            
         }).catch((err) => {
         console.log(err);
         });
@@ -175,13 +198,12 @@ export default function FeedDetail(props) {
             props.loadAgain();
             props.closeFeedDetail();
             
-            
         }).catch((err) => {
         console.log(err);
         });
     }
 
-
+    const navigation = props.navigation;
     // console.log(props.matchingFeed.content);
     return (
         <View style={styles.background}>
@@ -203,7 +225,6 @@ export default function FeedDetail(props) {
                                 <Image style={styles.closeBtn} source={CloseIcon} />
                             </TouchableOpacity>
                         </View>
-
                     </View>
 
                     {editMode ? 
@@ -255,7 +276,16 @@ export default function FeedDetail(props) {
 
                         </>
                     }
-                    
+                    <View style={styles.reactionWrapper}>
+                        <TouchableOpacity>
+                            <Image style={styles.reactionBtn} source={HeartIconFilled} />
+                        </TouchableOpacity>
+                        <Text style={styles.reactionNum}>{likes.length}</Text>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
+                            <Image style={styles.reactionBtn} source={CommentIcon} />
+                        </TouchableOpacity>
+                        <Text style={styles.reactionNum}>{comments.length}</Text>
+                    </View>
                     
                     <View style={styles.btnContainer}>
                         {editMode && 
@@ -388,5 +418,22 @@ const styles = StyleSheet.create({
         marginRight: 90,
         alignSelf: 'flex-start'
         // textAlign: 'center'
+    },
+    reactionWrapper: {
+        flexDirection: "row",
+        position: "relative",
+        top: 5,
+    },
+    reactionBtn: {
+        height: 20,
+        width: 20,
+        marginTop: 1,
+        marginRight: 6,
+        // alignSelf: 'flex-end'
+    },
+    reactionNum: {
+        position: "relative",
+        top: 2,
+        marginRight: 6,
     }
 });

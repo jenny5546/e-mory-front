@@ -40,14 +40,16 @@ LocaleConfig.locales['kr'] = {
 LocaleConfig.defaultLocale = 'kr';
 
 class Feed {
-  constructor(emoji, title, content, date, privacy) {
+  constructor(emoji, title, content, date, privacy, comment, like, id) {
     this.emoji = emoji;
     this.title = title;
     this.content = content;
     this.date = date;
     // this.author = author;
     this.privacy = privacy;
-
+    this.comment = comment;
+    this.like = like;
+    this.id = id;
     // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
   }
 }
@@ -78,7 +80,7 @@ export default function MainCalendar({ navigation }) {
     }
   }
 
-
+  console.log(uid);
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
   const emojiColor= (emoji) =>{
     switch(emoji){
@@ -144,7 +146,6 @@ export default function MainCalendar({ navigation }) {
     const feed = feedList.find(obj => obj.date == pickedDate);
     // console.log(feed)
     return feed;
-    
   }
 
   const _getEmoji = (date) =>{
@@ -165,14 +166,16 @@ export default function MainCalendar({ navigation }) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }}).then((res) => {
-            return res.text();
-        }).then(feed_list=> {
-          feed_list= JSON.parse(feed_list);
+            return res.json();
+        }).then(resJSON=> {
+          const {feeds} = resJSON
+          console.log(feeds)
+          // feed_list= JSON.parse(feed_list);
           // ** 댓글, 좋아요 갖고오기도 추가하자. 나중에 **
           // console.log(feed_list);
           setFeedList(
-            feed_list.map((feed) => 
-              new Feed(feed.fields.emoji, feed.fields.title, feed.fields.content, feed.fields.date, feed.fields.privacy)),
+            feeds.map((feed) => 
+              new Feed(feed.emoji, feed.title, feed.content, feed.date, feed.privacy, feed.comment, feed.like, feed.id)),
           )
 
         }).catch((err) => {
@@ -181,7 +184,7 @@ export default function MainCalendar({ navigation }) {
     }  
   },[loaded]);
 
-  console.log(feedList)
+  // console.log(feedList)
   
   return (
       <View style={styles.container}>
@@ -204,7 +207,7 @@ export default function MainCalendar({ navigation }) {
             pressedDate={pressedDate}
             submitNewFeed={async (title,content,emoji,privacy)=> {
 
-              const newFeed= new Feed(emoji, title, content, pressedDate, privacy);
+              const newFeed= new Feed(emoji, title, content, pressedDate, privacy, [], []);
               // console.log(newFeed);
               
               /* 이 부분에 Post를 넣읍시다*/
@@ -238,6 +241,7 @@ export default function MainCalendar({ navigation }) {
             matchingFeed = {findFeed(pressedDate)}
             uid = {uid}
             loadAgain = {()=> setLoaded(false)}
+            navigation= {navigation}
           />
         }
         {loaded ? 

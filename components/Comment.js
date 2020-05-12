@@ -1,6 +1,7 @@
 //댓글 창 - //////////////////////
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image} from 'react-native';
+import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert} from 'react-native';
+import {AsyncStorage} from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import ReportIcon from './../images/ReportIcon.png';
 import HeartIcon from './../images/HeartIcon.png';
@@ -23,6 +24,7 @@ const { height, width } = Dimensions.get("window");
 export default function Comment({ route, navigation }) {
     const {feed_id} = route.params;
     const {uid} = route.params;
+    const [nickname, setNickname] = useState(null);
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
     const [feedContent, setFeedContent] = useState('');
@@ -31,8 +33,23 @@ export default function Comment({ route, navigation }) {
     const [emoji, setEmoji] = useState('');
     const [comments, setComments] = useState([]);
     // const [commentMode, setCommentMode] = useState(false);
+    const _storeNickname = async () =>{
+        try {
+            const value = await AsyncStorage.getItem('name');
+            if (value !== null) {
+                setNickname(value);
+            }
+        } catch (error) {
+            // Error retrieving data
+            console.log(error)
+        }
+    }
+    _storeNickname();
 
     const _createComment= () =>{
+
+        console.log(content)
+
         fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(content),
@@ -41,16 +58,17 @@ export default function Comment({ route, navigation }) {
                 'Content-type': 'applications/json'
             }
         }).then((res) => {
-                    return res.text();
+            return res.text();
         }).then((resJSON) => {
             // const { title, content, emoji, date } = resJSON
             // console.log(content);
+            let today = new Date();   
+            let hours = today.getHours(); // 시
+            let minutes = today.getMinutes();  // 분
             console.log('Comment Success');
-            // setCommentMode(false);
-            // console.log(title);
-            // console.log(content);
-            // console.log(emoji);
-            // console.log(date);
+            let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon'}]
+            setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
+            setContent(null)
         }).catch((err) => {
                 console.log(err);
         });
@@ -148,6 +166,9 @@ export default function Comment({ route, navigation }) {
     }
 
     const parseDate=(string)=>{
+        if(string=='soon') {
+            return '방금 전';
+        }
         let stringArray = string.split("-"); 
         let year = stringArray[0];
         let month = stringArray[1];
@@ -175,7 +196,48 @@ export default function Comment({ route, navigation }) {
         }).catch((err) => {
                 console.log(err);
         });
-    })
+    }, [])
+
+    const _reportComment = (id) => {
+        console.log(id, uid)
+        Alert.alert(
+        '신고',
+        '이 댓글을 신고하시겠습니까?',
+        [
+            {
+            text: "네",
+            onPress: () => {
+                fetch(`http://127.0.0.1:8000/feeds/comment/report/${id}/${uid.uid}/`, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }}).then((res) => {
+                        return res.json()
+                    }).then((resJSON) => {
+                        const {already} = resJSON
+                        console.log(already)
+                        if(already) {
+                            Alert.alert(
+                                '이미 신고가 접수된 상태입니다'
+                            )
+                        } else {
+                            Alert.alert(
+                                '신고 접수가 완료되었습니다'
+                            )
+                        }
+                    }).catch((err) => {
+                    console.log(err);
+                    });
+            },
+            style: "cancel"
+            },
+            { text: "아니요",
+            }
+        ],
+        { cancelable: false }
+        )
+    }
 
     const Comment=({id, title, content, emoji, date, likes, comments, author, liked})=>{
 
@@ -185,7 +247,12 @@ export default function Comment({ route, navigation }) {
                     <Text style={styles.commentAuthor}>{author}</Text>
                     <Text style={styles.feedContent}>{content}</Text>
                 </View>
-                <Text style={styles.date}>{parseDate(date)}</Text>
+                <View style={{flexDirection: "row"}}>
+                    <Text style={styles.date}>{parseDate(date)}</Text>
+                    <TouchableOpacity onPress={()=>{_reportComment(id)}}>
+                        <Image style={styles.reportBtn} source={ReportIcon} />
+                    </TouchableOpacity>
+                </View>
                 {/* <View style={styles.icons}>
                     <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
                         {liked &&
@@ -237,7 +304,8 @@ export default function Comment({ route, navigation }) {
                             <Comment
                                 content={item.content}
                                 date={item.date}
-                                author = {item.author}
+                                author={item.author}
+                                id={item.id}
                             />
                         ))}
                     </ScrollView>
@@ -279,7 +347,9 @@ export default function Comment({ route, navigation }) {
                     placeholderTextColor={"#999"}
                     returnKeyType={"done"}
                     autoCorrect={false}
+                    autoCapitalize={false}
                     onChangeText={text => setContent(text)}
+                    value={content}
                 />
                 <TouchableOpacity 
                 style={styles.submitButton}
@@ -455,5 +525,12 @@ const styles = StyleSheet.create({
     },
     btnText: {
         color: "#3f95ef",
+    },
+    reportBtn: {
+        height: 16,
+        width: 16,
+        marginLeft: 7,
+        position: "relative",
+        top: 5,
     },
 });
