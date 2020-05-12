@@ -79,39 +79,41 @@ export default function MainCalendar({ navigation }) {
       console.log(error)
     }
   }
+  console.log('uid');
+  console.log(uid);
 
   console.log(uid);
   // feedList에 있는 feed들을 실제 calendar에 표시하는 부분 
-  const emojiColor= (emoji) =>{
-    switch(emoji){
-      case 'Happy':
-        return '#F7E98A';
-      case 'Filled':
-        return '#E7B88C';
-      case 'Peace':
-        return '#F3C94F';
-      case 'Thank':
-        return '#8DCA9A';
-      case 'Lovely':
-        return '#E9B1BF';
-      case 'Empty':
-        return '#C4C4C5';
-      case 'Sad':
-        return '#BBEBDE';
-      case 'Lonely':
-        return '#93BFE5';
-      case 'Tired':
-        return '#6B93C8';
-      case 'Depressed':
-        return '#9177C0';
-      case 'Worried':
-        return '#9E9BE5';
-      case 'Angry':
-        return '#D05C58';
-      default:
-        return '#FFFFFF';
-    }
-  }
+  // const emojiColor= (emoji) =>{
+  //   switch(emoji){
+  //     case 'Happy':
+  //       return '#F7E98A';
+  //     case 'Filled':
+  //       return '#E7B88C';
+  //     case 'Peace':
+  //       return '#F3C94F';
+  //     case 'Thank':
+  //       return '#8DCA9A';
+  //     case 'Lovely':
+  //       return '#E9B1BF';
+  //     case 'Empty':
+  //       return '#C4C4C5';
+  //     case 'Sad':
+  //       return '#BBEBDE';
+  //     case 'Lonely':
+  //       return '#93BFE5';
+  //     case 'Tired':
+  //       return '#6B93C8';
+  //     case 'Depressed':
+  //       return '#9177C0';
+  //     case 'Worried':
+  //       return '#9E9BE5';
+  //     case 'Angry':
+  //       return '#D05C58';
+  //     default:
+  //       return '#FFFFFF';
+  //   }
+  // }
 
   // calendar에 mark하기 위해서 일기 쓴 날짜를 object: customStyle로 만드는 method
   const markedFeeds = () =>{
