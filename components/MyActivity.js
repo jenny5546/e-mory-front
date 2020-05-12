@@ -1,5 +1,5 @@
 //나의 활동
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import Home from './../images/HomeIconFilled.png';
@@ -9,7 +9,88 @@ import Feed from './../images/FeedIcon.png';
 import Setting from './../images/SettingIcon.png';
 const { height, width } = Dimensions.get("window");
 
-export default function MyActivity({navigation}) {
+class Notification {
+
+    constructor(title, content, from, type, timelapse, feed) {
+      this.title =title;
+      this.content= content;
+      this.from =from;
+      this.type= type;
+      this.timelapse= timelapse;
+      this.feed = feed;
+    }
+
+}
+export default function MyActivity({route, navigation}) {
+    const {uid} = route.params;
+    const [notiList, setNotiList] = useState([]);
+    console.log(uid.uid);
+
+    var timeSince = function(date) {
+        if (typeof date !== 'object') {
+          date = new Date(date);
+        }
+      
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var intervalType;
+      
+        var interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) {
+          intervalType = 'year';
+        } else {
+          interval = Math.floor(seconds / 2592000);
+          if (interval >= 1) {
+            intervalType = '개월 ';
+          } else {
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) {
+              intervalType = '일 ';
+            } else {
+              interval = Math.floor(seconds / 3600);
+              if (interval >= 1) {
+                intervalType = "시간 ";
+              } else {
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) {
+                  intervalType = "분 ";
+                } else {
+                  interval = seconds;
+                  intervalType = "초 ";
+                }
+              }
+            }
+          }
+        }
+      
+        // if (interval > 1 || interval === 0) {
+        //   intervalType += 's';
+        // }
+      
+        return interval + ' ' + intervalType;
+    };
+
+
+    useEffect(() => {
+        fetch(`http://127.0.0.1:8000/feeds/notification/${uid.uid}/`, {
+          method: 'GET',
+          headers:{
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          }}).then((res) => {
+              return res.json();
+          }).then(context=> {
+                const notifications = JSON.parse(context.notifications);
+                console.log(notifications)
+                setNotiList(
+                    notifications.map((noti) => 
+                      new Notification(noti.fields.title, noti.fields.message, noti.fields.by, noti.fields.notiType, noti.fields.created_at, noti.fields.feed)),
+                )
+          }).catch((err) => {
+            console.log(err);
+          });  
+    },[]);
+
+    console.log(notiList);
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -21,22 +102,45 @@ export default function MyActivity({navigation}) {
             </View>
             <View style={styles.contentWrapper}>
                 <View style={styles.activityWrapper}>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>jenny_doobap</Text>
-                        <Text style={styles.feedContent}>님이 내 글에 답글을 달았습니다</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>suuuum36</Text>
-                        <Text style={styles.feedContent}>님의 글에 공감을 했습니다</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>snowman39</Text>
-                        <Text style={styles.feedContent}>님이 글을 작성했습니다</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>suuuum36</Text>
-                        <Text style={styles.feedContent}>님이 댓글에 답장을 했습니다</Text>
-                    </View>
+                    {notiList.reverse().map((item)=>{
+                        if (item.type==='like'){
+                            let id = item.feed
+                            return(
+                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: uid.uid})}}>
+                                        <Text style={styles.feedWritter}>{item.from}</Text>
+                                        <Text style={styles.feedContent}>{item.title}</Text>
+                                        <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+                        else{
+                            let id = item.feed
+                            return(
+                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: uid.uid})}}>
+                                        <View style={styles.flexbox}>
+                                            <Text style={styles.feedWritter}>{item.from}</Text>
+                                            <Text style={styles.feedContent}>{item.title} :</Text>
+                                            {(String(item.content).length > 10) ? 
+                                                
+                                                <Text style={styles.feedComment}>
+                                                    {String(item.content).substring(0,6).concat('...')}
+                                                </Text>
+                                                :
+                                                <Text style={styles.feedComment}>
+                                                    {String(item.content)}
+                                                </Text>
+                                                
+                                            }
+                                            
+                                            {/* <Text style={styles.feedComment}> 긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글ㅋㅋㅋㅋㅋㅋ</Text> */}
+                                            <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
+                                        </View>
+
+                                </TouchableOpacity>
+                            )
+                        }
+                        
+                    })}
                 </View>
             </View>
             <View style={styles.navigationbar}>
@@ -104,6 +208,7 @@ const styles = StyleSheet.create({
     },
     activityWrapper: {
         justifyContent: "flex-start",
+        
     },
     icon: {
         height: 20,
@@ -125,15 +230,43 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "flex-start",
     },
-    content: {
+    likeContent: {
         flexDirection: "row",
-        marginHorizontal: 20,
+        // marginHorizontal: 20,
+        padding: 20,
+        borderBottomColor: "black", 
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        width: width,
+        height: 70,
+        alignItems: 'center'
+
+    },
+    flexbox: {
+        flexDirection: "row",
+        alignItems:'center',
+    },
+    feedComment:{
+        fontSize: 14,
+        fontWeight: "300",
+    },
+    commentContent: {
+        // marginHorizontal: 20,
+        padding: 20,
+        borderBottomColor: "black", 
+        borderBottomWidth: StyleSheet.hairlineWidth, 
+        width: width, 
+        height: 70,
+        justifyContent: 'center'
     },
     feedWritter: {
         fontSize: 14,
         fontWeight: "500",
         marginRight: 5,
-        marginBottom: 20,
+    },
+    feedTime: {
+        fontSize: 13,
+        fontWeight: "100",
+        marginLeft: 5,
     },
     headerContent: {
         fontSize: 18,
