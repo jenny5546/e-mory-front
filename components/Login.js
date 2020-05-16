@@ -33,7 +33,7 @@ export default function Login({ navigation }) {
 
     const onLogin = e => {
         // navigation.push('MainCalendar'); //for android test(android fetch doesn't work)
-        fetch(`https://cryptic-journey-73348.herokuapp.com/accounts/login/`, {
+        fetch(`http://127.0.0.1:8000/accounts/login/`, {
             method: 'POST',
             body: JSON.stringify({email: email, password: password}),
             headers: {
@@ -51,7 +51,7 @@ export default function Login({ navigation }) {
                     navigation.push('MainCalendar');
                 } else {
                     Alert.alert(
-                        '아이다가 비밀번호와 일치하지 않습니다',
+                        '아이디와 비밀번호가 일치하지 않습니다',
                     )
                 }
             }).catch((err) => {
@@ -70,7 +70,7 @@ export default function Login({ navigation }) {
             </View>
             <TextInput
                 style={styles.input}
-                placeholder={"아이디를 입력해주세요"}
+                placeholder={"닉네임을 입력해주세요"}
                 value={email}
                 onChange={(e)=>{setEmail(e.nativeEvent.text)}}
                 autoCapitalize="none"

@@ -295,8 +295,8 @@ const styles = StyleSheet.create({
       width: 90,
       textAlign: "center",
       position: "absolute",
-      top: height*0.22,
-      left: width*0.15,
+      top: height*0.26,
+      left: width*0.1,
     },
     feedsDescription: {
       color: "#25a7f0",
@@ -331,10 +331,10 @@ const styles = StyleSheet.create({
     feedArrow: {
       height: 23,
       width: 6,
-      transform: [{ rotate: '-45deg' }],
+      transform: [{ rotate: '-60deg' }],
       position: "absolute",
-      top: height*0.25,
-      left: width*0.4,
+      top: height*0.275,
+      left: width*0.38,
     },
     chartArrow: {
       height: 20,

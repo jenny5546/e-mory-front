@@ -162,7 +162,7 @@ export default function MainCalendar({ navigation }) {
     // console.log(feedList);
     _storeUid();
     if (uid){
-      fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/${uid}/`, {
+      fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -213,7 +213,7 @@ export default function MainCalendar({ navigation }) {
               // console.log(newFeed);
               
               /* 이 부분에 Post를 넣읍시다*/
-              fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/${uid}/`, {
+              fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
                 method: 'POST',
                 body: JSON.stringify(newFeed),
                 headers: {
