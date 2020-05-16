@@ -1,6 +1,6 @@
 // 회원가입 정보 기입 form
 import React, { useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import BackButton from './../images/BackIcon.png';
@@ -20,6 +20,8 @@ export default function Signup({ navigation }) {
     const [validEmail, setValidEmail] = useState(false);
     const [validNickname, setValidNickname] = useState(false);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    let today = new Date();
+    const [pickedDate, setPickedDate] = useState(today);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -31,6 +33,7 @@ export default function Signup({ navigation }) {
 
     const handleConfirm = (date) => {
         // console.warn("A date has been picked: ", date);
+        setPickedDate(date);
         let pickedDate = formatDate(date);
         setDate(pickedDate)
         hideDatePicker();
@@ -52,7 +55,7 @@ export default function Signup({ navigation }) {
 
     const emailValidation = (e) => {
 
-        fetch(`https://cryptic-journey-73348.herokuapp.com/accounts/email/valid/`, {
+        fetch(`http://127.0.0.1:8000/accounts/email/valid/`, {
             method: 'POST',
             body: JSON.stringify({email:email}),
             headers: {
@@ -89,7 +92,7 @@ export default function Signup({ navigation }) {
             return;
         }
     
-        fetch(`https://cryptic-journey-73348.herokuapp.com/accounts/nickname/valid/`, {
+        fetch(`http://127.0.0.1:8000/accounts/nickname/valid/`, {
             method: 'POST',
             body: JSON.stringify({nickname:nickname}),
             headers: {
@@ -179,7 +182,7 @@ export default function Signup({ navigation }) {
                 )
             );
         }
-        fetch(`https://cryptic-journey-73348.herokuapp.com/accounts/signup/`, {
+        fetch(`http://127.0.0.1:8000/accounts/signup/`, {
             method: 'POST',
             body: JSON.stringify({name:name, email: email, password: password, date: date, nickname:nickname }),
             headers: {
@@ -215,17 +218,18 @@ export default function Signup({ navigation }) {
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
             </View>
+            <ScrollView keyboardShouldPersistTaps='handled'>
             <View>
                 <Text>이름</Text>
                 <TextInput 
-                    style={styles.input}
-                    placeholder={"이름을 입력해주세요"}
-                    value={name}
-                    onChange={(e)=>{setName(e.nativeEvent.text)}}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    autoFocus={true}
-                />
+                        style={styles.input}
+                        placeholder={"이름을 입력해주세요"}
+                        value={name}
+                        onChange={(e)=>{setName(e.nativeEvent.text)}}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        autoFocus={true}
+                    />
             </View>
             <View>
                 <Text>이메일</Text>
@@ -246,10 +250,12 @@ export default function Signup({ navigation }) {
                 </View>
             </View>
             <View>
-                <Text>비밀번호</Text>
+                <View style={{flexDirection: "row"}}>
+                    <Text>비밀번호</Text>
+                </View>
                 <TextInput 
                     style={styles.input}
-                    placeholder={"비밀번호를 입력해주세요"}
+                    placeholder={"영문, 숫자 조합 6자 이상을 만족시켜주세요"}
                     value={password}
                     onChange={(e)=>{setPassword(e.nativeEvent.text)}}
                     autoCapitalize="none"
@@ -282,6 +288,10 @@ export default function Signup({ navigation }) {
                     mode="date"
                     onConfirm={handleConfirm}
                     onCancel={hideDatePicker}
+                    date={pickedDate}
+                    confirmTextIOS="선택"
+                    cancelTextIOS="취소"
+                    headerTextIOS="날짜 선택"
                 />
             </View>
             <View>
@@ -294,6 +304,7 @@ export default function Signup({ navigation }) {
                         onChange={(e)=>{setNickname(e.nativeEvent.text)}}
                         autoCapitalize="none"
                         autoCorrect={false}
+                        locale="ko_KR"
                     />
                     <View style={styles.nicknameCheckBtn}>
                         <TouchableOpacity onPress={nicknameValidation}>
@@ -302,11 +313,15 @@ export default function Signup({ navigation }) {
                     </View>
                 </View>
             </View>
+            <TouchableOpacity>
+                <Text style={styles.term}>회원가입 시 이용약관 및 개인정보 이용 방침에 동의함을 가정합니다</Text>
+            </TouchableOpacity>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.belowBtn} onPress={onSignup}>
-                    <AntDesign name="checkcircleo" size={20}/>
+                <TouchableOpacity onPress={onSignup}>
+                    <AntDesign style={styles.belowBtn} name="checkcircleo" size={20}/>
                 </TouchableOpacity>
             </View>
+            </ScrollView>
         </View>
     );
 }
@@ -385,12 +400,11 @@ const styles = StyleSheet.create({
     checkText: {
         color: "#fff",
     },
-    completeBtn:{
+    belowBtn:{
         marginTop: 30,
-        paddingHorizontal: width*0.04,
         alignSelf: "center",
         height: 25,
-        width: 7,
+        width: 25,
     },
     buttonContainer: {
         marginTop: 30,
@@ -416,4 +430,17 @@ const styles = StyleSheet.create({
     dateAfter: {
         color: "#000",
     },
+    description: {
+        fontSize: 9,
+        marginLeft: 5,
+        position: "relative",
+        top: 2,
+    },
+    term:{
+        fontSize: 10,
+        textAlign: "center",
+        color: "#5a5a5a",
+        position: "relative",
+        top: 30,
+    }
 });

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Dimensions, TextInput, Text, Button, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, TextInput, Text, Button, TouchableOpacity, Image, Alert, ScrollView, Keyboard } from 'react-native';
 import CloseIcon from './../images/CloseIconGray.png';
 import LockDisabled from './../images/LockIconGray.png';
 import LockEnabled from './../images/LockIcon.png';
 import FeedEmoji from './FeedEmoji';
-// import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 // Emoji Icons 
 import HappyIcon from './../images/HappyIcon.png';
 import FilledIcon from './../images/FilledIcon.png';
@@ -29,7 +29,7 @@ export default function FeedNew(props) {
     const [emoji, setEmoji] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [privacy, setPrivate] = useState(false);
+    const [privacy, setPrivate] = useState(true);
 
     const parseDate=(string)=>{
         let stringArray = string.split("-"); 
@@ -130,31 +130,109 @@ export default function FeedNew(props) {
         }
     }
 
+    const _setPrivate = e => {
+
+        if(privacy == true) {
+            Alert.alert(
+                '알림',
+                '일기를 공개하시겠습니까?',
+                [
+                    {
+                    text: "네",
+                    onPress: () => {
+                        setPrivate(!privacy)
+                        Alert.alert(
+                            '일기가 공개되었습니다 :)'
+                        )
+                    },
+                    style: "cancel"
+                    },
+                    { text: "아니요",
+                    }
+                ],
+                { cancelable: false }
+            )
+        } else {
+            Alert.alert(
+                '알림',
+                '일기를 비공개하시겠습니까?',
+                [
+                    {
+                    text: "네",
+                    onPress: () => {
+                        setPrivate(!privacy)
+                        Alert.alert(
+                            '일기가 비공개되었습니다 :)'
+                        )
+                    },
+                    style: "cancel"
+                    },
+                    { text: "아니요",
+                    }
+                ],
+                { cancelable: false }
+            )
+        }
+    }
+
+    const _stopWrite = e => {
+        Alert.alert(
+            '알림',
+            '일기를 작성을 중단하시겠습니까?',
+            [
+                {
+                text: "네",
+                onPress: () => {
+                    props.closeNewFeed()
+                },
+                style: "cancel"
+                },
+                { text: "아니요",
+                }
+            ],
+            { cancelable: false }
+        )
+    }
+    
+    const _openEmojiModal = e => {
+        Keyboard.dismiss()
+        openEmojiModal(true)
+    }
+
     return (
         <View style={styles.background}>
             {/* {feed===1 && */}
             <View style={styles.container}>
                 <View style={styles.popup}>
+                <ScrollView keyboardShouldPersistTaps='handled'>
                     <View style={styles.header}>
-                        <Text style={styles.date}>{parseDate(props.pressedDate)}</Text>
+                        {/* <Text style={styles.date}>{parseDate(props.pressedDate)}</Text> */}
+                        <TouchableOpacity onPress={() => {_setPrivate()}}>
+                            {privacy ? 
+                                <Image style={styles.lockBtn} source={LockEnabled} />:
+                                <Image style={styles.lockBtn} source={LockDisabled} />
+                            }
+                        </TouchableOpacity>
                         <View style={{flexDirection: "row", marginBottom: 10}}>
-                            <TouchableOpacity onPress={()=>{setPrivate(!privacy)}}>
-                                {privacy ? 
-                                    <Image style={styles.lockBtn} source={LockEnabled} />:
-                                    <Image style={styles.lockBtn} source={LockDisabled} />
-                                }
+                            <TouchableOpacity 
+                                style={styles.submitButton}
+                                onPress={()=>{
+                                    props.closeNewFeed(); 
+                                    props.submitNewFeed(title,content,emoji,privacy);
+                                }}
+                            >
+                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={19} color="#b5b5b5"/>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>{props.closeNewFeed()}}>
+                            <TouchableOpacity onPress={()=>{_stopWrite()}}>
                                     <Image style={styles.closeBtn} source={CloseIcon} />
                             </TouchableOpacity>
                         </View>
-
                     </View>
                     <Button
                     // onPress={onPressLearnMore}
-                    onPress={()=>{openEmojiModal(true)}}
+                    onPress={()=>{ _openEmojiModal() }}
                     title="오늘의 감정은?"
-                    color="#e5e5e5"
+                    color="#5c5c5c"
                     backgroundColor="rgb(247, 247, 247)"
                     accessibilityLabel="Learn more about this purple button"
                     />
@@ -169,6 +247,7 @@ export default function FeedNew(props) {
                         autoCorrect={false}
                         autoCapitalize="none"
                         onChangeText={text => setTitle(text)}
+                        multiline={true}
                     />
                     <TextInput
                         style={styles.contentInput}
@@ -178,25 +257,15 @@ export default function FeedNew(props) {
                         autoCapitalize="none"
                         autoCorrect={false}
                         onChangeText={text => setContent(text)}
+                        multiline={true}
                     />
-                    {/* 완료 버튼 수정 부탁합니다  */}
-                    <TouchableOpacity 
-                        style={styles.submitButton}
-                        onPress={()=>{
-                            props.closeNewFeed(); 
-                            // + 실제 post해서 main calendar 에 넘겨줄 수 있게 해주자.
-                            props.submitNewFeed(title,content,emoji,privacy);
-                        }}
-                    >
-                        {/* <AntDesign name="checkcircleo" size={20}/> */}
-                        <Text stlye={styles.emojiText}>작성 완료!</Text>
-                    </TouchableOpacity>
                     {emojiModal===true &&
                         <FeedEmoji 
                             closeEmojiModal={() => openEmojiModal(false)}
                             passEmoji={(evt) => {setEmoji(evt); openEmojiModal(false)}}
                         />
                     }
+                </ScrollView>
                 </View>
             </View>
             {/* } */}
@@ -223,7 +292,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         padding: 20,
         borderRadius: 20,
-        height: "80%",
+        height: "92%",
     },
     header: {
         flexDirection: "row",
@@ -236,14 +305,15 @@ const styles = StyleSheet.create({
     titleInput: {
         paddingTop: 20,
         fontSize: 14,
-        marginTop: 20
+        marginTop: 20,
+        width: width
         // flexWrap: "wrap",
     },
     contentInput: {
         paddingTop: 20,
         fontSize: 14,
         marginTop: 20,
-        width: width*0.7
+        width: width,
         // flexWrap: "wrap",
     },
     closeBtn: {
@@ -272,11 +342,15 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#999999",
     },
-
-    // 완료 버튼 수정 부탁합니다 
-    submitButton:{
-        position: 'absolute',
-        bottom: 25,
-        left: width*0.43
+    SubmitBtn:{
+        position: "relative",
+        top: 1.5,
+        right: 5,
     }
+    // 완료 버튼 수정 부탁합니다 
+    // submitButton:{
+    //     position: 'absolute',
+    //     bottom: 25,
+    //     left: width*0.43
+    // }
 });
