@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, Button, View, Image, Dimensions, Alert } from 'react-native';
 
 import Filter from './../images/FilterIcon.png';
+import ChartComponent from './Chart';
 import BackButton from './../images/BackIcon.png';
 import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIcon.png';
@@ -24,7 +25,9 @@ const { height, width } = Dimensions.get("window");
 export default function Settings({route, navigation}) {
 
     // const {uid} = route.params;
+    const {allFeeds} = route.params;
     const [uid, setUid] = useState('');
+    const [chart, openChartModal] = useState(false);
     console.log('settings')
     console.log(uid.uid);
 
@@ -79,6 +82,12 @@ export default function Settings({route, navigation}) {
                 <Image style={styles.logo} source={Logo}/>
                 <View></View>
             </View>
+            {chart &&
+                <ChartComponent 
+                    closeChart={() => openChartModal(false)}
+                    allFeeds = {allFeeds.feedList}
+                />
+            }
             <View style={styles.menuWrapper}>
                 <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.navigate('ProfileSetting',{uid: uid})}}>
                     <Image style={styles.menuIcon} source={Profile} />
@@ -113,13 +122,13 @@ export default function Settings({route, navigation}) {
                 <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.menuIcon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={async()=>{openChartModal(true);}}>
                     <Image style={styles.menuIcon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds: allFeeds})}}>
                     <Image style={styles.menuIcon} source={Feed} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{allFeeds:allFeeds})}}>
                     <Image style={styles.menuIcon} source={Setting} />
                 </TouchableOpacity>
             </View>
@@ -152,6 +161,9 @@ const styles = StyleSheet.create({
         height: height - 180,
         justifyContent: "flex-start",
         alignItems: "flex-start",
+        position: "relative",
+        top: 20,
+        // marginTop: '10%'
     },
     menuIcon: {
         height: 20,

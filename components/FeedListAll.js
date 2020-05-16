@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator, Image, Dimensions, Alert } from 'react-native';
 // import ListView from "deprecated-react-native-listview";
 import {AsyncStorage} from 'react-native';
-
+import ChartComponent from './Chart';
 import Down from './../images/DownIcon.png';
 import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIcon.png';
@@ -34,17 +34,17 @@ import { reset } from 'expo/build/AR';
 
 const { height, width } = Dimensions.get("window");
 
+
 export default function FeedListAll({ route, navigation }) {
 
-    // const { uid } = route.params;
-    // const [filterModal, setfilterModal] = useState(0);
+    const {allFeeds} = route.params;
+    const [chart, openChartModal] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
     const [data, setData] =useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(0);
     const [firstLoaded, setFirstLoaded] = useState(false);
     const [emojiOption, setEmojiOption] = useState('All');
-
     const [uid, setUid] = useState('');
     const [nickname, setNickname] = useState('');
     // const [likeFeedID, setlikeFeedID] = useState(0);
@@ -60,6 +60,7 @@ export default function FeedListAll({ route, navigation }) {
             console.log(error)
         }
     }
+    console.log(allFeeds.feedList);
 
     const _storeNickname = async () =>{
         try {
@@ -202,7 +203,7 @@ export default function FeedListAll({ route, navigation }) {
             }).then((resJSON)=> {
                 const { total_pages, load_feed } = resJSON
                 setTotalPage(total_pages);
-                console.log(load_feed);
+                // console.log(load_feed);
                 setData(data.concat(load_feed));
                 setPage(page+1);
                 setEmojiOption(emojiOption);
@@ -230,6 +231,7 @@ export default function FeedListAll({ route, navigation }) {
         _storeUid();
         _storeNickname();
     },[])
+    console.log(allFeeds);
 
 
     const _likeFeed = (id) => {
@@ -272,7 +274,7 @@ export default function FeedListAll({ route, navigation }) {
                         return res.json()
                     }).then((resJSON) => {
                         const {already} = resJSON
-                        console.log(already)
+                        // console.log(already)
                         if(already) {
                             Alert.alert(
                                 '이미 신고가 접수된 상태입니다'
@@ -297,6 +299,7 @@ export default function FeedListAll({ route, navigation }) {
 
     const Feed=({id, title, content, emoji, date, likes, comments, author, liked, report})=>{
 
+        // const [likeNum, setLikeNum] = useState(likes.length);
         const [likeNum, setLikeNum] = useState(likes.length);
         const [isLiked, setIsLiked] = useState(liked);
         const [isReported, setIsReported] = useState(report);
@@ -319,19 +322,26 @@ export default function FeedListAll({ route, navigation }) {
         }
 
         return (
-            <View style={styles.feed}>
-                <View>
+            <TouchableOpacity style={styles.feed} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, _commentWirte: _commentWirte()})}}>
+                <View style={styles.feedleft}>
                     {renderEmoji(emoji)}
                     <Text style={styles.feedAuthor}>{author}</Text>
                 </View>
-                <View>
+                <View style={styles.feedright}>
+                    <Text style={styles.date}>{parseDate(date)}</Text>
                     <View style={styles.content}>
                         {/* <Text style={styles.feedDate}>Feed id: {id}</Text> */}
                         
                         <Text style={styles.feedTitle}>{title}</Text>
-                        <Text style={styles.feedContent}>{content}</Text>
+                        <Text style={styles.feedContent}>
+                        {
+                            String(content).length >= 15 ?
+                            String(content).substr(0,15)+'...':
+                            content
+                        }
+                        </Text>
                     </View>
-                    <View style={styles.icons}>
+                    <View style={styles.feedicons}>
                         <TouchableOpacity onPress={()=>{
                                 if(isLiked) nextNum--;
                                 else nextNum++;
@@ -341,30 +351,32 @@ export default function FeedListAll({ route, navigation }) {
                                 _likeFeed(id)
                             }}>
                             {isLiked &&
-                                <Image style={styles.icon} source={HeartIconFilled} />
+                                <Image style={styles.feedicon} source={HeartIconFilled} />
                             }
                             {!isLiked && 
-                                <Image style={styles.icon} source={HeartIcon} />
+                                <Image style={styles.feedicon} source={HeartIcon} />
                             }
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{likeNum}</Text>
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
+
                         <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, commentNum: {commentNum}})}}>
                             <Image style={styles.icon} source={CommentIcon} />
+
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{commentNum}</Text>
-                        <TouchableOpacity onPress={()=>{
+                        
+                    </View>
+                    <TouchableOpacity style={styles.reportWrap} onPress={()=>{
                             // let bool = _reportFeed(id)
                             let bool = _reportFeed(id)
-                            console.log(bool)
+                            // console.log(bool)
                             // setIsReported(bool);
                             }}>
-                            <Image style={styles.icon} source={ReportIcon} />
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={styles.date}>{parseDate(date)}</Text>
+                            <Image style={styles.feedicon} source={ReportIcon} />
+                    </TouchableOpacity>
                 </View>
-            </View> 
+            </TouchableOpacity> 
         )
     }
 
@@ -417,6 +429,12 @@ export default function FeedListAll({ route, navigation }) {
                 
 
             </View>
+            {chart &&
+                <ChartComponent 
+                    closeChart={() => openChartModal(false)}
+                    allFeeds = {allFeeds.feedList}
+                />
+            }
             {openFilter &&
                     <View style={styles.filterWrapper}>
                         <TouchableOpacity onPress = {()=> {
@@ -524,13 +542,14 @@ export default function FeedListAll({ route, navigation }) {
                 <TouchableOpacity  onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.icon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={async()=>{openChartModal(true);}} >
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+            
+                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds: allFeeds})}}>
                     <Image style={styles.icon} source={FeedFilled} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{allFeeds:allFeeds})}}>
                     <Image style={styles.icon} source={Setting}/>
                 </TouchableOpacity>
             </View>
@@ -597,9 +616,10 @@ const styles = StyleSheet.create({
     feed: {
         flexDirection: "row",
         justifyContent: "flex-start",
-        paddingLeft: 25,
+        paddingLeft: 15,
         paddingRight: 25,
-        height: "auto",
+        // marginLeft:
+        height: 140,
         width: width,
         borderBottomWidth: 1,
         borderBottomColor: "#e5e5e5",
@@ -608,14 +628,14 @@ const styles = StyleSheet.create({
     },
     content: {
         // flex: 4,
+        // marginLeft: 20,
         flexDirection: "column",
     },
     feedAuthor: {
         fontWeight: "300",
-        textAlign: "center",
-        position: "relative",
-        left: -7,
-        top: 5
+        alignSelf: 'center',
+        fontSize: 11,
+        marginTop: 10,
     },
     feedTitle: {
         fontWeight: "600",
@@ -627,11 +647,33 @@ const styles = StyleSheet.create({
         fontSize: 14,
         width: width*0.7,
     },
+    feedicon:{
+        height: 16,
+        width: 16,
+        marginTop: 11,
+        marginRight: 3,
+    },
+    feedicons:{
+        // marginLeft: 20,
+        flexDirection: "row",
+        // justifyContent: "space-around",
+    },
+    feedright: {
+        marginLeft: 15,
+    },
+    feedleft: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor: 'black',
+        width: width*0.2
+    },
     date: {
         color: "#aaaaaa",
         fontSize: 14,
-        marginTop: 6,
-        marginBottom: 20,
+        // marginTop: 6,
+        marginBottom: 10,
+        
     },
     feedDate: {
         fontSize: 14,
@@ -697,11 +739,18 @@ const styles = StyleSheet.create({
     emojiIcon: {
         height: 40,
         width: 40,
-        marginRight: 15,
+        // marginRight: 15,
+        alignSelf: 'center'
     },
     emojiText:{
         marginTop: 10,
         fontSize: 14,
         color: "#999999",
     },
+    reportWrap:{
+        alignSelf: 'flex-end',
+        position: 'relative',
+        top: -70,
+        right: 10,
+    }
 });

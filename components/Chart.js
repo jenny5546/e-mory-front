@@ -43,6 +43,7 @@ export default function Chart(props) {
         return result;
     }
 
+
     const [month, setMonth] = useState(_getCurrMonth());
     const [countHappy, setCountHappy] = useState(0);
     const [countFilled, setCountFilled] = useState(0);
@@ -60,11 +61,11 @@ export default function Chart(props) {
     const emojiColor= (emoji) =>{
         switch(emoji){
           case 'Happy':
-            return '#F7E98A';
+            return '#FADC4A';
           case 'Filled':
-            return '#E7B88C';
+            return '#F2A64E';
           case 'Peace':
-            return '#F3C94F';
+            return '#91F7A6';
           case 'Thank':
             return '#8DCA9A';
           case 'Lovely':
@@ -74,7 +75,7 @@ export default function Chart(props) {
           case 'Sad':
             return '#BBEBDE';
           case 'Lonely':
-            return '#93BFE5';
+            return '#6AE7DB';
           case 'Tired':
             return '#6B93C8';
           case 'Depressed':
@@ -111,6 +112,7 @@ export default function Chart(props) {
         color: ${props => emojiColor(props.emoji)}
     `;
 
+    console.log(props.allFeeds)
 
     // 달이 바뀔 때마다, 새로운 데이터를 로딩해 온다. 
     useEffect(() => {
@@ -132,6 +134,8 @@ export default function Chart(props) {
         setCountAngry(countEmojis(currMonthFeeds,'Angry'));
 
     },[month]);
+
+    // console.log(props);
 
     
 
@@ -255,6 +259,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingTop: 60,
         backgroundColor: "rgba(153, 153, 153, 0.5);",
+        zIndex: 99,
     },
     popup: {
         backgroundColor: "#fff",
