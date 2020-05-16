@@ -18,7 +18,6 @@ import styled from 'styled-components/native';
 
 const { height, width } = Dimensions.get("window");
 
-
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
 //modal 구현 애매하게 되어있음
 
@@ -158,7 +157,7 @@ export default function Chart(props) {
                                 style={styles.calendarStyle} 
                                 onMonthChange={(month) => setMonth(month.dateString.substr(0,7))} 
                                 theme={{
-                                    arrowColor: 'orange',
+                                    arrowColor: '#cccccc',
                                 }}
                             />
                         </View>

@@ -242,7 +242,8 @@ const styles = StyleSheet.create({
     contentInput: {
         paddingTop: 20,
         fontSize: 14,
-        marginTop: 20
+        marginTop: 20,
+        width: width*0.7
         // flexWrap: "wrap",
     },
     closeBtn: {

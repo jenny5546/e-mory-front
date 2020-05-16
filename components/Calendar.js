@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator, StatusBar } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import BackButton from './../images/BackIcon.png';
 import Alarm from './../images/AlarmIcon.png';
@@ -189,6 +189,7 @@ export default function MainCalendar({ navigation }) {
   
   return (
       <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
         <View style={styles.header}>
           <View></View>
           <Image style={styles.logo} source={Logo}/>

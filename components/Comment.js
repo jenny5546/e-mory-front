@@ -53,7 +53,7 @@ export default function Comment({ route, navigation }) {
 
         console.log(content)
 
-        fetch(`https://cryptic-journey-73348.herokuapp.com/${feed_id.id}/${uid.uid}/`, {
+        fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/comment/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(content),
             headers: {
