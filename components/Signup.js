@@ -313,9 +313,13 @@ export default function Signup({ navigation }) {
                     </View>
                 </View>
             </View>
-            <TouchableOpacity>
-                <Text style={styles.term}>회원가입 시 이용약관 및 개인정보 이용 방침에 동의함을 가정합니다</Text>
-            </TouchableOpacity>
+            <View style={{flexDirection: "row", alignSelf:"center"}}>
+                <Text style={styles.term}>회원가입 시 </Text>
+                <TouchableOpacity onPressIn={() =>{navigation.push('Terms')}}>
+                    <Text style={styles.termpage}>이용약관 및 개인정보 이용 방침</Text>
+                </TouchableOpacity>
+                <Text style={styles.term}>에 동의함을 인정합니다</Text>
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={onSignup}>
                     <AntDesign style={styles.belowBtn} name="checkcircleo" size={20}/>
@@ -359,10 +363,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
+        // flexDirection: "row",
+        // justifyContent: "flex-start",
+        // marginTop: 30,
+        // marginBottom: 20,
+        // paddingHorizontal: width*0.04,
+        // paddingBottom: 10,
+        // borderBottomColor: "#fafafa",
+        // borderBottomWidth: 2,
+        // width: width,
         flexDirection: "row",
-        justifyContent: "flex-start",
-        marginTop: 30,
-        marginBottom: 20,
+        justifyContent: "space-between",
+        marginTop: '10%',
+        // marginBottom: 5,
+        // paddingTop: 10,
+        // backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -440,6 +455,13 @@ const styles = StyleSheet.create({
         fontSize: 10,
         textAlign: "center",
         color: "#5a5a5a",
+        position: "relative",
+        top: 30,
+    },
+    termpage: {
+        fontSize: 10,
+        textAlign: "center",
+        color: "#0066cc",
         position: "relative",
         top: 30,
     }

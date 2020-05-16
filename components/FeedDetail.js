@@ -344,14 +344,14 @@ const styles = StyleSheet.create({
     },
     title: {
         paddingTop: 20,
-        fontSize: 15,
+        fontSize: 17,
         marginTop: 20,
         fontWeight: '500'
         // flexWrap: "wrap",
     },
     content: {
         paddingTop: 20,
-        fontSize: 14,
+        fontSize: 16,
         marginTop: 20,
         color: "#999999",
         // flexWrap: "wrap",

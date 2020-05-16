@@ -1,13 +1,14 @@
 // Tutorial step 1
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
+import { CalendarList, LocaleConfig } from 'react-native-calendars';
 import Alarm from './../../images/AlarmIcon.png';
 import Logo from './../../images/SmallLogo.png';
 import Home from './../../images/HomeIconFilled.png';
 import Chart from './../../images/ChartIcon.png';
 import Next from './../../images/NextIcon.png';
 import Feed from './../../images/FeedIcon.png';
+import { isSunday, getWeeksInMonth } from "date-fns";
 import Setting from './../../images/SettingIcon.png';
 import LongArrow from './../../images/LongArrow.png';
 import ShortArrow from './../../images/ShortArrow.png';
@@ -24,6 +25,40 @@ LocaleConfig.defaultLocale = 'kr';
 
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
 export default function firstTutorial({ navigation }) {
+  const formatDate = (date) => {
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  const [uid, setUid] = useState('');
+  const [loaded, setLoaded] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [pickedDate, setPickedDate] = useState(formatDate(Date()));
+  const [feedList, setFeedList] = useState([]);
+  // const [date, setDate] = useState([]);
+  
+  
+  const _storeUid = async () =>{
+    try {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        setUid(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log(error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -31,11 +66,42 @@ export default function firstTutorial({ navigation }) {
         <Image style={styles.logo} source={Logo}/>
         <Image style={styles.backButton} source={Alarm}/>
       </View>
-      <Calendar
-          theme={calendarTheme}
-          style={styles.calendarStyle}
-          monthFormat={'M월'}
-      />
+      <CalendarList
+            // onVisibleMonthsChange = {(months)=>console.log(months)}
+            current={new Date()}
+            horizontal={true}
+            calendarHeight={height}
+            pagingEnabled={true}
+            calendarWidth={width}
+            showScrollIndicator={false}
+            theme={calendarTheme}
+            style={styles.calendarStyle}
+            // markedDates = {logFeeds()}
+            monthFormat={'M월'}
+            markingType = {'custom'}
+            dayComponent={({date, state, marking, onPress}) => {
+                return (
+                <TouchableOpacity style={styles.dayContainer}>
+                  <Text 
+                    style={{
+                      width: 32, 
+                      // height: height*0.1, 
+                      height: getWeeksInMonth(Date.parse(date.dateString))==4 ? 
+                        height*0.14: 
+                        getWeeksInMonth(Date.parse(date.dateString))==5 ? height*0.125 : height*0.1,
+                      alignItems: 'center', 
+                      textAlign: 'center',
+                      fontSize: 13,
+                      // color: state === 'disabled' ? 'gray' : 'black'
+                      color: isSunday(Date.parse(date.dateString))==true ? 'red' : 'black'
+                    }}>
+                    {date.day}
+                  </Text>
+                
+                </TouchableOpacity>
+              );
+            }}
+        />
       <View style={styles.background}>
         <View style={styles.pseudoHeader}>
           <View></View>
@@ -114,12 +180,12 @@ export default function firstTutorial({ navigation }) {
 /* Calendar Theme Overriding: 색, 폰트, 글자 크기 */
 const calendarTheme = {
   // calendarBackground: 'rgba(196, 196, 196, 0.5)',
-  selectedDayBackgroundColor: '#00adf5',
-  selectedDayTextColor: '#ffffff',
-  todayTextColor: '#00adf5',
-  dayTextColor: '#2d4150', //
-  textDisabledColor: '#d9e1e8', //#d9e1e8
-  // dotColor: '#00adf5',
+  // selectedDayBackgroundColor: '#00adf5',
+  // selectedDayTextColor: '#ffffff',
+  // todayTextColor: '#00adf5',
+  // dayTextColor: '#2d4150', //
+  // textDisabledColor: '#d9e1e8', //#d9e1e8
+  dotColor: 'pink',
   // selectedDotColor: '#ffff',
   arrowColor: 'grey',
   disabledArrowColor: '#d9e1e8',
@@ -135,10 +201,10 @@ const calendarTheme = {
   textDayFontSize: 16,
   textMonthFontSize: 16,
   textDayHeaderFontSize: 16,
-  'stylesheet.day.basic': {
+  'stylesheet.day.single': {
     base: {
       width: 32,
-      height: 80,
+      height: height*0.2,
       alignItems: 'center'
     },
   }
@@ -165,15 +231,17 @@ const styles = StyleSheet.create({
     calendarStyle: {
       height: height*0.6,
       width: width,
-      justifyContent: "center",
+      // justifyContent: "center",
       // position: "relative",
       // top: height*-0.2,
     },
     header: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginTop: 30,
-      marginBottom: 20,
+      marginTop: '10%',
+      // marginBottom: 5,
+      // paddingTop: 10,
+      // backgroundColor: '#FEFAE4',
       paddingHorizontal: width*0.04,
       paddingBottom: 10,
       borderBottomColor: "#fafafa",
@@ -224,7 +292,7 @@ const styles = StyleSheet.create({
       alignSelf: "center",
       flexDirection: "row",
       position: "absolute",
-      top: 55,
+      top: 65,
     },
     circle: {
       width: 13,
@@ -275,16 +343,16 @@ const styles = StyleSheet.create({
       paddingHorizontal: width*0.04,
       width: width,
       position: "absolute",
-      bottom: -5,
+      bottom: -10,
       left: -6,
     },
     square: {
-      height: 53,
-      width: 53,
+      height: 55,
+      width: 55,
       borderWidth: 3,
       borderColor: "#fff",
       position: "absolute",
-      top: height*0.43,
+      top: height*0.405,
       alignSelf: "center",
     },
     description: {
@@ -295,7 +363,7 @@ const styles = StyleSheet.create({
       width: 90,
       textAlign: "center",
       position: "absolute",
-      top: height*0.26,
+      top: height*0.235,
       left: width*0.1,
     },
     feedsDescription: {
@@ -333,7 +401,7 @@ const styles = StyleSheet.create({
       width: 6,
       transform: [{ rotate: '-60deg' }],
       position: "absolute",
-      top: height*0.275,
+      top: height*0.26,
       left: width*0.38,
     },
     chartArrow: {

@@ -1,9 +1,10 @@
 //댓글 창 - //////////////////////
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert} from 'react-native';
+import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import ReportIcon from './../images/ReportIcon.png';
+import DeleteIcon from './../images/DeleteIconGray.png';
 import HeartIcon from './../images/HeartIcon.png';
 
 import HappyIcon from './../images/HappyIcon.png';
@@ -24,7 +25,7 @@ const { height, width } = Dimensions.get("window");
 export default function Comment({ route, navigation }) {
     const {feed_id} = route.params;
     const {uid} = route.params;
-    const {_commentWrite} = route.params;
+    let {commentNum} = route.params;
     const [nickname, setNickname] = useState(null);
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
@@ -47,11 +48,9 @@ export default function Comment({ route, navigation }) {
     }
     _storeNickname();
 
-    console.log(feed_id)
 
     const _createComment= () =>{
 
-        console.log(content)
 
         fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
@@ -68,11 +67,10 @@ export default function Comment({ route, navigation }) {
             let today = new Date();   
             let hours = today.getHours(); // 시
             let minutes = today.getMinutes();  // 분
-            console.log('Comment Success');
+            // console.log('Comment Success');
             let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon'}]
             setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
             setContent(null)
-            _commentWrite;
         }).catch((err) => {
                 console.log(err);
         });
@@ -203,7 +201,7 @@ export default function Comment({ route, navigation }) {
     }, [])
 
     const _reportComment = (id) => {
-        console.log(id, uid)
+        // console.log(id, uid)
         Alert.alert(
         '신고',
         '이 댓글을 신고하시겠습니까?',
@@ -220,7 +218,7 @@ export default function Comment({ route, navigation }) {
                         return res.json()
                     }).then((resJSON) => {
                         const {already} = resJSON
-                        console.log(already)
+                        // console.log(already)
                         if(already) {
                             Alert.alert(
                                 '이미 신고가 접수된 상태입니다'
@@ -243,7 +241,44 @@ export default function Comment({ route, navigation }) {
         )
     }
 
-    const Comment=({id, title, content, emoji, date, likes, comments, author, liked})=>{
+    const _deleteComment = (id) => {
+        // console.log(id, uid)
+        Alert.alert(
+        '삭제',
+        '이 댓글을 삭제하시겠습니까?',
+        [
+            {
+            text: "네",
+            onPress: () => {
+                fetch(`http://127.0.0.1:8000/feeds/comment/delete/${id}/${uid.uid}/`, {
+                    method: 'POST',
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }}).then((res) => {
+                        let tempComments = [...comments]
+                        const itemToFind = tempComments.find(function(item) {return item.id === id}) 
+                        const idx = tempComments.indexOf(itemToFind)
+                        if (idx > -1) tempComments.splice(idx, 1)
+                        setComments(tempComments)
+                        // console.log(comments)
+                        return res.json()
+                    }).catch((err) => {
+                    console.log(err);
+                    });
+            },
+            style: "cancel"
+            },
+            { text: "아니요",
+            }
+        ],
+        { cancelable: false }
+        )
+    }
+
+
+
+    const Comment=({id, title, content, emoji, date, likes, comments, author, liked, authorId})=>{
 
         return (
             <View style={styles.comment}>
@@ -251,30 +286,17 @@ export default function Comment({ route, navigation }) {
                     <Text style={styles.commentAuthor}>{author}</Text>
                     <Text style={styles.feedContent}>{content}</Text>
                 </View>
-                <View style={{flexDirection: "row"}}>
+                <View style={{flexDirection: "row", width: width}}>
                     <Text style={styles.date}>{parseDate(date)}</Text>
-                    <TouchableOpacity onPress={()=>{_reportComment(id)}}>
-                        <Image style={styles.reportBtn} source={ReportIcon} />
+                    {(authorId) === parseInt(uid.uid) && 
+                    <TouchableOpacity onPress={()=>{_deleteComment(id)}}>
+                        <Image style={styles.deleteBtn} source={DeleteIcon} />
                     </TouchableOpacity>
+                    }
                 </View>
-                {/* <View style={styles.icons}>
-                    <TouchableOpacity onPress={()=>{_likeFeed(id)}}>
-                        {liked &&
-                            <Image style={styles.icon} source={HeartIconFilled} />
-                        }
-                        {!liked && 
-                            <Image style={styles.icon} source={HeartIcon} />
-                        }
-                    </TouchableOpacity>
-                    <Text style={styles.iconNum}>{likes.length}</Text>
-                    <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
-                        <Image style={styles.icon} source={CommentIcon} />
-                    </TouchableOpacity>
-                    <Text style={styles.iconNum}>{comments.length}</Text>
-                    <TouchableOpacity onPress={onReport}>
-                        <Image style={styles.icon} source={ReportIcon} />
-                    </TouchableOpacity>
-                </View> */}
+                <TouchableOpacity onPress={()=>{_reportComment(id)}}>
+                        <Image style={styles.reportBtn} source={ReportIcon} />
+                </TouchableOpacity>
                 </View>
         )
     }
@@ -283,88 +305,70 @@ export default function Comment({ route, navigation }) {
         <View style={styles.container}>
             <StatusBar barStyle="dark-content"/>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
                 <Text style={styles.headerContent}>댓글</Text>
                 <View></View>
             </View>
-            <ScrollView>
-            <View style={styles.contentWrapper}>
-                <View style={styles.feed}>
+            <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            style={styles.container}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        {renderEmoji(emoji)}
-                        <Text style={styles.feedAuthor}>{author}</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.feedTitle}>{title}</Text>
-                        <Text style={styles.feedContent}>{feedContent}</Text>
-                        <Text style={styles.date}>{parseDate(date)}</Text>
-                    </View>
-                </View>
-                <View style={styles.commentWrapper}>
-                    {/* <ScrollView> */}
-                        {comments.map((item)=>(
-                            <Comment
-                                content={item.content}
-                                date={item.date}
-                                author={item.author}
-                                id={item.id}
-                            />
-                        ))}
-                    {/* </ScrollView> */}
-                    <View style={{height:80}}></View>
-                </View>
-                {/* <View style={styles.comment}> */}
-                    {/* <View style={styles.commentWrapper}>
-                        <View style={styles.content}>
-                            <Text style={styles.feedWritter}>jenny_doobap</Text>
-                            <Text style={styles.feedContent}>배고픈데 밥이나 먹고 할까</Text>
+                    <ScrollView>
+                    <View style={styles.contentWrapper}>
+                        <View style={styles.feed}>
+                            <View>
+                                {renderEmoji(emoji)}
+                                <Text style={styles.feedAuthor}>{author}</Text>
+                            </View>
+                            <View style={styles.content}>
+                                <Text style={styles.feeddate}>{parseDate(date)}</Text>
+                                <Text style={styles.feedTitle}>{title}</Text>
+                                <Text style={styles.feedContent}>{feedContent}</Text>
+                            </View>
                         </View>
-                        <View style={styles.heartView}>
-                            <Image style={styles.heart} source={HeartIcon} />
+                        <View style={styles.commentWrapper}>
+                            {/* <ScrollView> */}
+                                {comments.map((item)=>(
+                                    <Comment
+                                        content={item.content}
+                                        date={item.date}
+                                        author={item.author}
+                                        id={item.id}
+                                        authorId = {item.authorId}
+                                    />
+                                ))}
+                            {/* </ScrollView> */}
+                            <View style={{height:80}}></View>
                         </View>
-                    </View> */}
-                    {/* <View style={styles.content}>
-                        <Text style={styles.date}>6시간</Text>
+                    </View>
+                </ScrollView>
+                    <View style={styles.inputWrapper}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="댓글 달기..."
+                            placeholderTextColor={"#999"}
+                            returnKeyType={"done"}
+                            autoCorrect={false}
+                            autoCapitalize={false}
+                            onChangeText={text => setContent(text)}
+                            value={content}
+                        />
+                        <TouchableOpacity 
+                        style={styles.submitButton}
+                        onPress={()=>_createComment()}
+                        >
+                        {/* <AntDesign name="checkcircleo" size={20}/> */}
+                            <Text stlye={styles.btnText}>게시</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </View>
 
-                        <Text style={styles.replyButton}>답글 달기</Text>
-                        <Image style={styles.icon} source={ReportIcon} />
-                    </View>
-                    <View style={styles.reply}>
-                        <View style={styles.content}>
-                            <Text style={styles.feedWritter}>jenny_doobap</Text>
-                            <Text style={styles.feedContent}>@jenny_doobap 밥은 내가 살게</Text>
-                        </View>
-                        <View style={styles.content}>
-                            <Text style={styles.date}>5시간</Text>
-                            <Text style={styles.replyButton}>답글 달기</Text>
-                            <Image style={styles.icon} source={ReportIcon} />
-                        </View>
-                    </View> */}
-                {/* </View> */}
-            </View>
-            </ScrollView>
-            <View style={styles.inputWrapper}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="댓글 달기..."
-                    placeholderTextColor={"#999"}
-                    returnKeyType={"done"}
-                    autoCorrect={false}
-                    autoCapitalize={false}
-                    onChangeText={text => setContent(text)}
-                    value={content}
-                />
-                <TouchableOpacity 
-                style={styles.submitButton}
-                onPress={()=>_createComment()}
-                >
-                {/* <AntDesign name="checkcircleo" size={20}/> */}
-                    <Text stlye={styles.btnText}>게시</Text>
-                </TouchableOpacity>
-            </View>
-            
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </View>
     );
 }
@@ -402,7 +406,6 @@ const styles = StyleSheet.create({
         width: width,
         borderBottomWidth: 1,
         borderBottomColor: "#fafafa",
-        paddingTop: 20,
         paddingBottom: 10,
     },
     comment: {
@@ -422,10 +425,12 @@ const styles = StyleSheet.create({
     commentContent: {
         flexDirection: "row"
     },
-    date: {
-        color: "#aaaaaa",
+    feedDate: {
+        color: "#000000",
         fontSize: 14,
+        fontWeight: "600",
         marginTop: 6,
+        marginBottom: 10,
     },
     feedWritter: {
         fontSize: 14,
@@ -469,7 +474,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
-        height: 80,
+        height: 90,
         flexDirection:'row',
         justifyContent:'space-between'
     },
@@ -509,13 +514,14 @@ const styles = StyleSheet.create({
         top: 5
     },
     feedTitle: {
-        fontWeight: "600",
+        fontWeight: "500",
         marginBottom: 10,
         fontSize: 16,
     },
     feedContent: {
         fontWeight: "400",
         fontSize: 14,
+        width: width*0.7,
     },
     date: {
         color: "#aaaaaa",
@@ -531,14 +537,22 @@ const styles = StyleSheet.create({
     btnText: {
         color: "#3f95ef",
     },
-    reportBtn: {
+    deleteBtn: {
         height: 16,
         width: 16,
         marginLeft: 7,
         position: "relative",
         top: 5,
     },
-    contentWrapper: {
-    
+    reportBtn: {
+        height: 16,
+        width: 16,
+        position: "absolute",
+        right: 0,
+        top: -45,
     },
+    contentWrapper: {
+        position: "relative",
+        height: height
+    }
 });

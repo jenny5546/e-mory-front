@@ -19,6 +19,7 @@ import MyActivity from './components/MyActivity';
 import ProfileSetting from './components/SidebarMenu/ProfileSetting';
 import AlarmSetting from './components/SidebarMenu/AlarmSetting';
 import PasswordFind from './components/PasswordFind';
+import Terms from './components/Terms';
 import UserFeedback from './components/SidebarMenu/UserFeedback';
 import ServiceTerm from './components/SidebarMenu/ServiceTerm';
 
@@ -65,6 +66,7 @@ export default function App(){
         }
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={Signup} />
+        <Stack.Screen name="Terms" component={Terms} />
         <Stack.Screen name="TutorialOne" component={TutorialOne} />
         <Stack.Screen name="TutorialTwo" component={TutorialTwo} />
         <Stack.Screen name="TutorialThree" component={TutorialThree} />
@@ -77,6 +79,7 @@ export default function App(){
         <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
         <Stack.Screen name="AlarmSetting" component={AlarmSetting} />
         <Stack.Screen name="PasswordFind" component={PasswordFind} />
+
         {/* <Stack.Screen name="Chart" component={Chart} /> */}
       </Stack.Navigator>
     </NavigationContainer>
