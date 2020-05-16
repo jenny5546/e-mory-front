@@ -161,7 +161,7 @@ export default function MainCalendar({ navigation }) {
     // console.log(feedList);
     _storeUid();
     if (uid){
-      fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/${uid}/`, {
+      fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -229,7 +229,6 @@ export default function MainCalendar({ navigation }) {
                 }).catch((err) => {
                     console.log(err);
                 });
-
                 setFeedList([
                   ...feedList,
                   newFeed,

@@ -8,14 +8,15 @@ import CompleteButton from './../../images/CompleteButton.png';
 const { height, width } = Dimensions.get("window");
 
 class Profile {
-    constructor(name, email, password, birthday, nickname) {
-      this.name = name;
-      this.email = email;
-      this.password = password;
-      this.birthday = birthday;
-      this.nickname = nickname;
+    constructor(name, email, password, birthday, nickname, newPassword) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.birthday = birthday;
+        this.nickname = nickname;
+        this.newPassword = newPassword;
     }
-  }
+}
 
 export default function ProfileSetting({route, navigation}) {
 
@@ -25,9 +26,13 @@ export default function ProfileSetting({route, navigation}) {
     // const [password, setPassword] =useState('********');
     const [birthday, setBirthday] = useState('');
     const [nickname, setNickname] = useState('');
+    const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [newCheckPassword, setNewCheckPassword] = useState('');
 
     // console.log('profile settings');
     // console.log(uid.uid);
+    console.log(uid)
 
     const _showAlert = () => {
         Alert.alert(
@@ -40,12 +45,8 @@ export default function ProfileSetting({route, navigation}) {
         )
     }
 
-    
-    console.log('uid is');
-    console.log(uid);
-
     useEffect(() => {
-          fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/profile/${uid}/`, {
+        fetch(`http://127.0.0.1:8000/feeds/profile/${uid}/`, {
             method: 'GET',
             headers:{
                 'Accept': 'application/json',
@@ -55,34 +56,61 @@ export default function ProfileSetting({route, navigation}) {
             }).then(context=> {
 
             //   profile= JSON.parse(profile);
-              setBirthday(context.birthday);
-              setEmail(context.email);
-              setName(context.name);
-              setNickname(context.nickname);
+                setBirthday(context.birthday);
+                setEmail(context.email);
+                setName(context.name);
+                setNickname(context.nickname);
             //   setPassword(context.password);
-              console.log(context);
+                console.log(context);
     
             }).catch((err) => {
-              console.log(err);
+                console.log(err);
             });  
     },[]);
 
+    const pwdValidCheck = (pwd) => {
+        const regPwd = /^[A-Za-z0-9]{6,12}$/;
+        if(!regPwd.test(pwd)) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     const _editProfile = () => {
 
-        const editedProfile = new Profile(name, email, password, birthday, nickname);
+        if(newPassword !== newCheckPassword) {
+            return (
+                Alert.alert(
+                    '새 비밀번호가 일치하지 않습니다',
+                )
+            );
+        }
 
-        fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/profile/${uid.uid}/`, {
+        const editedProfile = new Profile(name, email, password, birthday, nickname, newPassword);
+
+        fetch(`http://127.0.0.1:8000/feeds/profile/${uid}/`, {
             method: 'POST',
             body: JSON.stringify(editedProfile),
             headers:{
                 // 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }}).then((res) => {
-                return res.text();
-            }).then(resjson=> {
-              console.log('edited done');
+                return res.json();
+            }).then(resJSON=> {
+                const {uid} = resJSON;
+                if(uid > 0) {
+                    Alert.alert(
+                        '변경된 회원 정보가 반영되었습니다',
+                    )
+                } else {
+                    Alert.alert(
+                        '아이디와 비밀번호가 일치하지 않습니다',
+                    )
+                }
+                console.log('edited done');
             }).catch((err) => {
-              console.log(err);
+                console.log(err);
         });  
     }
 
@@ -119,19 +147,30 @@ export default function ProfileSetting({route, navigation}) {
                 </View>
             </View>
             <View>
-                <Text>비밀번호</Text>
+                <Text>기존 비밀번호</Text>
                 <TextInput 
                     style={styles.input}
-                    placeholder={"비밀번호를 입력해주세요"}
-                    value = {""}
+                    placeholder={"기존 비밀번호를 입력해주세요"}
+                    value = {password}
                     onChangeText={text => setPassword(text)}
                 />
             </View>
             <View>
-                <Text>비밀번호 확인</Text>
+                <Text>새 비밀번호</Text>
                 <TextInput 
                     style={styles.input}
-                    placeholder={"비밀번호를 한번 더 입력해주세요"}
+                    placeholder={"새로 사용할 비밀번호를 입력해주세요"}
+                    value = {newPassword}
+                    onChangeText={text => setNewPassword(text)}
+                />
+            </View>
+            <View>
+                <Text>새 비밀번호 확인</Text>
+                <TextInput 
+                    style={styles.input}
+                    placeholder={"새 비밀번호를 한번 더 입력해주세요"}
+                    value = {newCheckPassword}
+                    onChangeText={text => setNewCheckPassword(text)}
                 />
             </View>
             <View>
