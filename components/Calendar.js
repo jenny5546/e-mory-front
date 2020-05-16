@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator, StatusBar } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator, StatusBar, Alert } from 'react-native';
 import { CalendarList, LocaleConfig } from 'react-native-calendars';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -205,30 +205,39 @@ export default function MainCalendar({ navigation }) {
             closeNewFeed={() => openNewFeedModal(false)} 
             pressedDate={pressedDate}
             submitNewFeed={async (title,content,emoji,privacy)=> {
+              if (!emoji || !title || !content){
+                Alert.alert(
+                  '일기의 제목, 내용, 감정을 기입해주세요',
+                )
+              }
+              else{
+                const newFeed= new Feed(emoji, title, content, pressedDate, privacy, [], []);
+                // console.log(newFeed);
+                
+                /* 이 부분에 Post를 넣읍시다*/
+                fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/${uid}/`, {
+                  method: 'POST',
+                  body: JSON.stringify(newFeed),
+                  headers: {
+                      // 'Accept': 'application/json',
+                      'Content-type': 'applications/json'
+                  }
+                }).then((res) => {
+                      return res.json();
+                }).then((resJSON) => {
+                    console.log('Post Success');
+                }).catch((err) => {
+                    console.log(err);
+                });
 
-              const newFeed= new Feed(emoji, title, content, pressedDate, privacy, [], []);
-              // console.log(newFeed);
+                setFeedList([
+                  ...feedList,
+                  newFeed,
+                ]);
+                openNewFeedModal(false);
+
+              }
               
-              /* 이 부분에 Post를 넣읍시다*/
-              fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/${uid}/`, {
-                method: 'POST',
-                body: JSON.stringify(newFeed),
-                headers: {
-                    // 'Accept': 'application/json',
-                    'Content-type': 'applications/json'
-                }
-              }).then((res) => {
-                    return res.json();
-              }).then((resJSON) => {
-                  console.log('Post Success');
-              }).catch((err) => {
-                  console.log(err);
-              });
-
-              setFeedList([
-                ...feedList,
-                newFeed,
-              ]);
 
             }}
           />
@@ -319,7 +328,10 @@ export default function MainCalendar({ navigation }) {
                         _getEmoji(date.dateString) === 'Worried' ?
                         <Image style={styles.emojiIcon} source={Worried} />
                         :
+                        _getEmoji(date.dateString) === 'Angry' ?
                         <Image style={styles.emojiIcon} source={Angry} />
+                        :
+                        <View></View>
                       }
 
                     </TouchableOpacity>
@@ -332,8 +344,8 @@ export default function MainCalendar({ navigation }) {
                       width: 32, 
                       // height: height*0.1, 
                       height: getWeeksInMonth(Date.parse(date.dateString))==4 ? 
-                        height*0.13: 
-                        getWeeksInMonth(Date.parse(date.dateString))==5 ? height*0.12 : height*0.09,
+                        height*0.14: 
+                        getWeeksInMonth(Date.parse(date.dateString))==5 ? height*0.125 : height*0.1,
                       alignItems: 'center', 
                       textAlign: 'center',
                       fontSize: 13,
@@ -405,7 +417,7 @@ const calendarTheme = {
 /* Calendar Style Overriding: 크기, 테두리, 등등 */
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: '#FEFAE4',
+        // backgroundColor: '#FEFAE4',
         flex: 1,
         width: width,
         height: height,
@@ -426,7 +438,7 @@ const styles = StyleSheet.create({
       marginTop: '10%',
       // marginBottom: 5,
       // paddingTop: 10,
-      backgroundColor: '#FEFAE4',
+      // backgroundColor: '#FEFAE4',
       paddingHorizontal: width*0.04,
       paddingBottom: 10,
       borderBottomColor: "#fafafa",

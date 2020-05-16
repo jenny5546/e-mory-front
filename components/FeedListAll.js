@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator
 // import ListView from "deprecated-react-native-listview";
 import {AsyncStorage} from 'react-native';
 
-import Filter from './../images/FilterIcon.png';
+import Down from './../images/DownIcon.png';
 import Logo from './../images/SmallLogo.png';
 import Home from './../images/HomeIcon.png';
 import Chart from './../images/ChartIcon.png';
@@ -375,7 +375,7 @@ export default function FeedListAll({ route, navigation }) {
                 <Image style={styles.logo} source={Logo}/>
                 <View>
                     <TouchableOpacity onPress={()=>setOpenFilter(!openFilter)}>
-                        <Image style={styles.backButton} source={Filter}/>
+                        <Image style={styles.backButton} source={Down}/>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -547,7 +547,10 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: 30,
+        marginTop: '12%',
+        // marginBottom: 5,
+        // paddingTop: 10,
+        // backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -562,7 +565,7 @@ const styles = StyleSheet.create({
         position:"absolute",
         top: 60,
         right: 10,
-        width: 60,
+        width: 80,
         backgroundColor: "#fff",
         borderRadius: 5,
         padding: 5,
@@ -578,8 +581,9 @@ const styles = StyleSheet.create({
     },
     option: {
         textAlign: "center",
-        marginBottom: 10,
-        fontSize: 13,
+        marginBottom: 16,
+        padding: 3,
+        fontSize: 15,
         fontWeight: "400",
     },
     feedWrapper: {
@@ -641,13 +645,11 @@ const styles = StyleSheet.create({
     },
     icons: {
         flexDirection: "row",
-        // justifyContent: "space-between",
+        justifyContent: "space-around",
     },
-    icon:{
-        height: 16,
-        width: 16,
-        marginTop: 11,
-        marginRight: 3,
+    icon: {
+        height: 20,
+        width: 20,
     },
     iconNum: {
         marginTop: 10,
@@ -684,8 +686,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         marginTop: 30,
         marginBottom: 20,
-        paddingTop: 10,
-        paddingHorizontal: width*0.04,
+        paddingTop: 20,
+        paddingHorizontal: width*0.1,
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,

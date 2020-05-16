@@ -27,8 +27,8 @@ export default function FeedNew(props) {
 
     const [emojiModal, openEmojiModal] = useState(false);
     const [emoji, setEmoji] = useState(null);
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [title, setTitle] = useState(null);
+    const [content, setContent] = useState(null);
     const [privacy, setPrivate] = useState(false);
 
     const parseDate=(string)=>{
@@ -183,7 +183,7 @@ export default function FeedNew(props) {
                     <TouchableOpacity 
                         style={styles.submitButton}
                         onPress={()=>{
-                            props.closeNewFeed(); 
+                            // props.closeNewFeed(); 
                             // + 실제 post해서 main calendar 에 넘겨줄 수 있게 해주자.
                             props.submitNewFeed(title,content,emoji,privacy);
                         }}
