@@ -190,7 +190,7 @@ export default function MainCalendar({ navigation }) {
         <View style={styles.header}>
           <View></View>
           <Image style={styles.logo} source={Logo}/>
-          <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity',{uid: {uid}})}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity',{uid: {uid}, allFeeds:{feedList}})}}>
             <Image style={styles.backButton} source={Alarm}/>
           </TouchableOpacity>
         </View>
@@ -215,7 +215,7 @@ export default function MainCalendar({ navigation }) {
                 // console.log(newFeed);
                 
                 /* 이 부분에 Post를 넣읍시다*/
-                fetch(`https://cryptic-journey-73348.herokuapp.com/feeds/${uid}/`, {
+                fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
                   method: 'POST',
                   body: JSON.stringify(newFeed),
                   headers: {
@@ -369,10 +369,10 @@ export default function MainCalendar({ navigation }) {
           <TouchableOpacity onPress={()=>{openChartModal(true)}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds:{feedList}})}}>
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{uid: {uid}})}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{uid: {uid}, allFeeds:{feedList}})}}>
             <Image style={styles.icon} source={Setting} />
           </TouchableOpacity>
         </View>
