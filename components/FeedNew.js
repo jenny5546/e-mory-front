@@ -27,9 +27,10 @@ export default function FeedNew(props) {
 
     const [emojiModal, openEmojiModal] = useState(false);
     const [emoji, setEmoji] = useState(null);
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [privacy, setPrivate] = useState(true);
+    const [title, setTitle] = useState(null);
+    const [content, setContent] = useState(null);
+    const [privacy, setPrivate] = useState(false);
+
 
     const parseDate=(string)=>{
         let stringArray = string.split("-"); 

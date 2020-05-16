@@ -251,6 +251,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start",
         width: width,
+        // alignContent: 'center',
         paddingHorizontal: 10,
         paddingTop: 60,
         backgroundColor: "rgba(153, 153, 153, 0.5);",
@@ -265,6 +266,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "flex-end",
+        // marginBottom: height*0.015,
     },
     date: {
         color: "#999999",
@@ -273,12 +275,16 @@ const styles = StyleSheet.create({
     icon: {
         height: 35,
         width: 35,
-        marginTop: 11,
+        marginTop: height*0.016,
     },
     closeBtn: {
         height: 22,
         width: 22,
         marginTop: 1,
+    },
+    monthStatistics: {
+        paddingLeft: 10,
+        marginTop: height*0.01,
     },
     input: {
         paddingTop: 20,
