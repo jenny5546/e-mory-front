@@ -218,7 +218,7 @@ export default function FeedNew(props) {
                             <TouchableOpacity 
                                 style={styles.submitButton}
                                 onPress={()=>{
-                                    props.closeNewFeed(); 
+                                    // props.closeNewFeed(); 
                                     props.submitNewFeed(title,content,emoji,privacy);
                                 }}
                             >

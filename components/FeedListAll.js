@@ -304,9 +304,11 @@ export default function FeedListAll({ route, navigation }) {
         let nextNum = likeNum;
         let nextBool = isLiked;
 
-        const _commentWirte = () => {
-            let prevNum = commentNum;
-            setCommentNum(++prevNum);
+        const _commentWirte = (e) => {
+            if(e){
+                let prevNum = commentNum;
+                setCommentNum(++prevNum);
+            }
         }
 
         if(isReported) {
@@ -347,7 +349,7 @@ export default function FeedListAll({ route, navigation }) {
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{likeNum}</Text>
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
-                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, _commentWirte: _commentWirte()})}}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, commentNum: {commentNum}})}}>
                             <Image style={styles.icon} source={CommentIcon} />
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{commentNum}</Text>

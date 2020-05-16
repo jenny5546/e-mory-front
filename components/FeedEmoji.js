@@ -171,6 +171,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         marginBottom: 10,
+        position: "relative",
+        paddingBottom: 25,
+        left: -23,
+        top: 20,
     },
     emotion: {
         textAlign: "center",
