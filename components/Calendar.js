@@ -194,12 +194,12 @@ export default function MainCalendar({ navigation }) {
             <Image style={styles.backButton} source={Alarm}/>
           </TouchableOpacity>
         </View>
-        {chart &&
+        {/* {chart &&
           <ChartComponent 
             closeChart={() => openChartModal(false)}
             allFeeds = {feedList}
           />
-        }
+        } */}
         {newFeedModal &&
           <FeedNew 
             closeNewFeed={() => openNewFeedModal(false)} 
@@ -366,7 +366,7 @@ export default function MainCalendar({ navigation }) {
           <TouchableOpacity>
             <Image style={styles.icon} source={Home} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{openChartModal(true)}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Chart',{allFeeds:{feedList}})}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds:{feedList}})}}>
