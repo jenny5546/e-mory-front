@@ -32,7 +32,7 @@ import Tired from './../images/TiredIcon.png';
 import Depressed from './../images/DepressedIcon.png';
 import Worried from './../images/WorriedIcon.png';
 import Angry from './../images/AngryIcon.png';
-import { format } from 'date-fns/esm';
+import { format, isWithinInterval } from 'date-fns/esm';
 
 
 LocaleConfig.locales['kr'] = {
@@ -82,7 +82,8 @@ export default function MainCalendar({ navigation }) {
   const [loaded, setLoaded] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [pickedDate, setPickedDate] = useState(formatDate(Date()));
-  const [routeFeed, setRouteFeed] = useState(null);
+  // const [routeFeed, setRouteFeed] = useState(null);
+  const [loadingFinished, setLoadingFinished] = useState(false);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -166,7 +167,8 @@ export default function MainCalendar({ navigation }) {
   }
 
   setTimeout(() => {
-    setLoaded(true); 
+    setLoaded(true);
+    _storeFeeds(); 
   }, 1000)
 
 
@@ -198,6 +200,9 @@ export default function MainCalendar({ navigation }) {
         }).then(()=>{
           // console.log('hi')
           _storeFeeds();
+          // console.log('hi')
+          // console.log(feedList)
+          setLoadingFinished(true);
         });
     }  
   },[loaded]);
@@ -267,9 +272,10 @@ export default function MainCalendar({ navigation }) {
           />
         }
 
-        {loaded ? 
+        
         <View style={styles.calendarWrapper}>
-          
+          {loadingFinished ? 
+          <>
           <TouchableOpacity style={styles.openDateTimeWrapper} onPress={()=>setDatePickerVisibility(!isDatePickerVisible)}>
             <Image style={styles.downbtn} source={Down}/>
           </TouchableOpacity>
@@ -368,15 +374,22 @@ export default function MainCalendar({ navigation }) {
                     }}>
                     {date.day}
                   </Text>
+
                 
                 </TouchableOpacity>
+                
               );
+              
             }}
           
         />
+        </>
+        : 
+        
+        <ActivityIndicator style={styles.loadingbar}/>}
         </View>
         
-        : <ActivityIndicator style={styles.loadingbar}/>}
+        
         <View style={styles.navigationbar}>
           <TouchableOpacity>
             <Image style={styles.icon} source={Home} />
@@ -431,20 +444,14 @@ const calendarTheme = {
 /* Calendar Style Overriding: 크기, 테두리, 등등 */
 const styles = StyleSheet.create({
     container:{
-        // backgroundColor: '#FEFAE4',
+        backgroundColor: '#FEFAE4',
         flex: 1,
         width: width,
         height: height,
         flexDirection: 'column',
-        // alignItems: 'center',
-        // justifyContent: 'space-between',
     },
     calendarStyle: {
-      // height: height*0.55,
       width: width,
-      // justifyContent: "center",
-      // position: "relative",
-      // top: height*-0.2,
     },
     header: {
       flexDirection: "row",
@@ -452,7 +459,7 @@ const styles = StyleSheet.create({
       marginTop: '10%',
       // marginBottom: 5,
       // paddingTop: 10,
-      // backgroundColor: '#FEFAE4',
+      backgroundColor: '#FEFAE4',
       paddingHorizontal: width*0.04,
       paddingBottom: 10,
       borderBottomColor: "#fafafa",
@@ -483,6 +490,8 @@ const styles = StyleSheet.create({
     },
     calendarWrapper: {
       flex: 1,
+      // height: height*0.9,
+      backgroundColor: 'white'
     },
     icons: {
       flexDirection: "row",

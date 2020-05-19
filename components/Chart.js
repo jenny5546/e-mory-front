@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import CloseIcon from './../images/CloseIconGray.png';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
@@ -66,6 +66,7 @@ export default function Chart({navigation}) {
     const [countAngry, setCountAngry] = useState(0);
     const [loaded, setLoaded] = useState(false);
     const [storageFeeds, setStorageFeeds] = useState(null);
+    const [loadingFinished, setLoadingFinished] = useState(false);
 
     const emojiColor= (emoji) =>{
         switch(emoji){
@@ -122,14 +123,14 @@ export default function Chart({navigation}) {
     `;
 
     const _storeStorageFeeds = async () =>{
-        // console.log('hi')
+        console.log('hi')
         try {
           const value = await AsyncStorage.getItem('feedlist').then(
               (response)=>{
                 //   console.log(response)
                   var list = JSON.parse(response);
                   setStorageFeeds(list)
-                //   console.log(storageFeeds)
+                  console.log(storageFeeds)
                 }
             );
           
@@ -141,13 +142,16 @@ export default function Chart({navigation}) {
 
     setTimeout(() => {setLoaded(true)}, 1000)
     // console.log(storageFeeds)
+    // _storeStorageFeeds();
 
     // 달이 바뀔 때마다, 새로운 데이터를 로딩해 온다. 
     useEffect(() => {
+
         _storeStorageFeeds();
+
         if (storageFeeds){
             // console.log('chart')
-            // console.log(storageFeeds)
+            console.log(storageFeeds)
             var currMonthFeeds = storageFeeds.filter(feed => {
                 return String(feed.date).substr(0,7) === month;
             });
@@ -164,6 +168,7 @@ export default function Chart({navigation}) {
             setCountDepressed(countEmojis(currMonthFeeds,'Depressed'));
             setCountWorried(countEmojis(currMonthFeeds,'Worried'));
             setCountAngry(countEmojis(currMonthFeeds,'Angry'));
+            setLoadingFinished(true);
         } 
         // setLoaded(false);
 
@@ -181,7 +186,8 @@ export default function Chart({navigation}) {
                 </TouchableOpacity>
             </View>
             <View style={styles.popup}>
-                <View style={styles.body}>
+                
+                    <View style={styles.body}>
                     <View style={styles.monthPicker}>
                         <Calendar
                             dayComponent={() => {
@@ -195,6 +201,7 @@ export default function Chart({navigation}) {
                             }}
                         />
                     </View>
+                    { loadingFinished ? 
                     <View style={styles.monthStatistics}>
                         <View style={styles.emojiRow}>
                             <Image style={styles.icon} source={HappyIcon} />
@@ -261,8 +268,13 @@ export default function Chart({navigation}) {
                             
                         </View>
                     </View>
+                    :
+                    <ActivityIndicator style={styles.loadingbar}/>
+                    }
                     
                 </View>
+                
+
             </View>
             <View style={styles.navigationbar}>
                 <TouchableOpacity onPress={()=>{navigation.navigate('MainCalendar')}}>
@@ -292,7 +304,7 @@ const styles = StyleSheet.create({
         marginTop: '10%',
         // marginBottom: 5,
         // paddingTop: 10,
-        // backgroundColor: '#FEFAE4',
+        backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -310,7 +322,7 @@ const styles = StyleSheet.create({
         // alignContent: 'center',
         // paddingHorizontal: 10,
         // paddingTop: 60,
-        backgroundColor: "rgba(153, 153, 153, 0.5);",
+        backgroundColor: '#FEFAE4',
         // zIndex: 99,
     },
 
@@ -322,6 +334,10 @@ const styles = StyleSheet.create({
         // height: height-100,
         width: width
         // height: height*0.8,
+    },
+    body: {
+        minHeight: height,
+        backgroundColor: "#fff",
     },
     navigationbar: {
         flexDirection: "row",
@@ -335,7 +351,7 @@ const styles = StyleSheet.create({
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
-        zIndex: 99,
+        zIndex: 99
     },
     navicon: {
         height: 20,
@@ -345,6 +361,7 @@ const styles = StyleSheet.create({
         position: "relative",
         left: 10,
     },
+
     date: {
         color: "#999999",
         fontSize: 15,

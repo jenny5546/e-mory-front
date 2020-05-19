@@ -570,7 +570,7 @@ export default function FeedListAll({ route, navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#FEFAE4',
         flex: 1,
         width: width,
         height: height,
@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
         marginTop: '12%',
         // marginBottom: 5,
         // paddingTop: 10,
-        // backgroundColor: '#FEFAE4',
+        backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -619,7 +619,8 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     feedWrapper: {
-        height: height - 180,
+        height: height,
+        backgroundColor: 'white',
         // height: height,
         justifyContent: "flex-start",
         alignItems: "flex-start",
@@ -636,6 +637,7 @@ const styles = StyleSheet.create({
         borderBottomColor: "#e5e5e5",
         paddingTop: 20,
         paddingBottom: 15,
+
     },
     content: {
         // flex: 4,
@@ -740,12 +742,16 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 30,
-        marginBottom: 20,
+        // marginBottom: 20,
         paddingTop: 20,
         paddingHorizontal: width*0.1,
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
+        height: 70,
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: '#FEFAE4',
     },
     emojiIcon: {
         height: 40,

@@ -1,7 +1,8 @@
 //나의 활동
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import BackButton from './../images/BackIcon.png';
+import Logo from './../images/SmallLogo.png';
 import {AsyncStorage} from 'react-native';
 import ChartComponent from './Chart';
 import Home from './../images/HomeIconFilled.png';
@@ -28,6 +29,7 @@ export default function MyActivity({route, navigation}) {
     const [notiList, setNotiList] = useState([]);
     const [uid, setUid] = useState('');
     const [loaded, setLoaded] = useState(false);
+    const [loadingFinished, setLoadingFinished] = useState(false);
     // const [chart, openChartModal] = useState(false);
 
     const _storeUid = async () =>{
@@ -43,9 +45,6 @@ export default function MyActivity({route, navigation}) {
     }
     setTimeout(() => {setLoaded(true)}, 1000)
 
-    useEffect(()=>{
-        
-    },[]);
 
 
     var timeSince = function(date) {
@@ -110,6 +109,7 @@ export default function MyActivity({route, navigation}) {
                     notifications.map((noti) => 
                       new Notification(noti.fields.title, noti.fields.message, noti.fields.by, noti.fields.notiType, noti.fields.created_at, noti.fields.feed)),
                 )
+                setLoadingFinished(true);
           }).catch((err) => {
             console.log(err);
           });  
@@ -121,15 +121,16 @@ export default function MyActivity({route, navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
+                <TouchableOpacity onPress={()=>navigation.goBack()}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
-                <Text style={styles.headerContent}>나의 활동</Text>
+                <Image style={styles.logo} source={Logo}/>
                 <View></View>
             </View>
 
             <View style={styles.contentWrapper}>
-                <View style={styles.activityWrapper}>
+                { loadingFinished ?
+                    <View style={styles.activityWrapper}>
                     {notiList.reverse().map((item)=>{
                         if (item.type==='like'){
                             let id = item.feed
@@ -170,12 +171,19 @@ export default function MyActivity({route, navigation}) {
                         
                     })}
                 </View>
+                :
+                <ActivityIndicator style={styles.loadingbar}/>
+            
+                }
+                
             </View>
+
+
             <View style={styles.navigationbar}>
                 <TouchableOpacity>
                     <Image style={styles.icon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={async()=>{openChartModal(true);}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
@@ -190,7 +198,7 @@ export default function MyActivity({route, navigation}) {
 }
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#FEFAE4',
         flex: 1,
         width: width,
         height: height,
@@ -200,18 +208,20 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: 50,
-        marginBottom: 20,
+        marginTop: '10%',
+        // marginBottom: 5,
+        // paddingTop: 10,
+        backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
         borderBottomWidth: 2,
         width: width,
-        
     },
     backButton: {
         height: 20,
         width: 20,
+        marginLeft: 'auto'
     },
     headerContent: {
         fontSize: 18,
@@ -237,27 +247,41 @@ const styles = StyleSheet.create({
     },
     activityWrapper: {
         justifyContent: "flex-start",
+        height: height,
+        backgroundColor: 'white'
+        
         
     },
     icon: {
         height: 20,
         width: 20,
+        // zIndex:99,
     },
     navigationbar: {
         flexDirection: "row",
         justifyContent: "space-between",
         // marginTop: 30,
+        // height: 100,
+        backgroundColor: "white",
         marginBottom: 20,
         paddingTop: 10,
         paddingHorizontal: width*0.1,
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
+        zIndex:99,
+        // position: "absolute"
+        position: 'absolute',
+        bottom: 0,
     },
     contentWrapper: {
-        height: height - 180,
+        height: height,
+        width: width,
         justifyContent: "flex-start",
         alignItems: "flex-start",
+        backgroundColor: "white",
+        // zIndex: 5,
+
     },
     likeContent: {
         flexDirection: "row",
@@ -302,4 +326,5 @@ const styles = StyleSheet.create({
         position: "relative",
         left: -10,
     },
+
 });
