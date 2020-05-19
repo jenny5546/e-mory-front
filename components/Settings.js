@@ -1,7 +1,7 @@
 // 개인 정보 ~ 알림 설정 등이 들어갈 사이드 바
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, Button, View, Image, Dimensions, Alert } from 'react-native';
-
+import 'react-native-gesture-handler';
 import Filter from './../images/FilterIcon.png';
 import ChartComponent from './Chart';
 import BackButton from './../images/BackIcon.png';
@@ -28,8 +28,8 @@ export default function Settings({route, navigation}) {
 
     const [uid, setUid] = useState('');
     // const [chart, openChartModal] = useState(false);
-    console.log('settings')
-    console.log(uid.uid);
+    // console.log('settings')
+    // console.log(uid.uid);
 
     const _showAlert = () => {
         Alert.alert(
@@ -89,11 +89,13 @@ export default function Settings({route, navigation}) {
                 />
             } */}
             <View style={styles.menuWrapper}>
-                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.navigate('ProfileSetting',{uid: uid})}}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.push('ProfileSetting',{uid: uid})}}>
                     <Image style={styles.menuIcon} source={Profile} />
                     <Text style={styles.itemTitle}>개인정보관리</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.push('AlarmSetting')}}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{
+                    navigation.push('AlarmSetting')}
+                    }>
                     <Image style={styles.menuIcon} source={Alarm} />
                     <Text style={styles.itemTitle}>알림설정</Text>
                 </TouchableOpacity> 
@@ -122,13 +124,13 @@ export default function Settings({route, navigation}) {
                 <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.menuIcon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
                     <Image style={styles.menuIcon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
                     <Image style={styles.menuIcon} source={Feed} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
                     <Image style={styles.menuIcon} source={Setting} />
                 </TouchableOpacity>
             </View>

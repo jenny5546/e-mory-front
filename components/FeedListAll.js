@@ -337,7 +337,7 @@ export default function FeedListAll({ route, navigation }) {
         }
 
         return (
-            <TouchableOpacity style={styles.feed} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, _commentWirte: _commentWirte()})}}>
+            <TouchableOpacity style={styles.feed} onPress={()=>{navigation.push('Comment',{feed_id: {id}, uid: {uid}, _commentWirte: _commentWirte()})}}>
                 <View style={styles.feedleft}>
                     {renderEmoji(emoji)}
                     <Text style={styles.feedAuthor}>{author}</Text>
@@ -375,7 +375,7 @@ export default function FeedListAll({ route, navigation }) {
                         <Text style={styles.iconNum}>{likeNum}</Text>
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
 
-                        <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, commentNum: {commentNum}})}}>
+                        <TouchableOpacity onPress={()=>{navigation.push('Comment',{feed_id: {id}, uid: {uid}, commentNum: {commentNum}})}}>
                             <Image style={styles.commenticon} source={CommentIcon} />
 
                         </TouchableOpacity>
@@ -556,14 +556,14 @@ export default function FeedListAll({ route, navigation }) {
                 <TouchableOpacity  onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.icon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
             
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
                     <Image style={styles.icon} source={FeedFilled} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
                     <Image style={styles.icon} source={Setting}/>
                 </TouchableOpacity>
             </View>
