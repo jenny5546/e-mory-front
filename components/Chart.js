@@ -401,6 +401,11 @@ const styles = StyleSheet.create({
         fontWeight: '200'
         
 
+    },
+    loadingbar: {
+        position: 'absolute',
+        top: height*0.36,
+        alignSelf: "center"
     }
 });
 

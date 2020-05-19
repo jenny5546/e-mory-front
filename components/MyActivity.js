@@ -10,6 +10,7 @@ import Chart from './../images/ChartIcon.png';
 import Menu from './../images/MenuIcon.png';
 import Feed from './../images/FeedIcon.png';
 import Setting from './../images/SettingIcon.png';
+import { ScrollView } from 'react-native-gesture-handler';
 const { height, width } = Dimensions.get("window");
 
 class Notification {
@@ -131,6 +132,7 @@ export default function MyActivity({route, navigation}) {
             <View style={styles.contentWrapper}>
                 { loadingFinished ?
                     <View style={styles.activityWrapper}>
+                    <ScrollView>
                     {notiList.reverse().map((item)=>{
                         if (item.type==='like'){
                             let id = item.feed
@@ -170,6 +172,7 @@ export default function MyActivity({route, navigation}) {
                         }
                         
                     })}
+                    </ScrollView>
                 </View>
                 :
                 <ActivityIndicator style={styles.loadingbar}/>
@@ -324,5 +327,10 @@ const styles = StyleSheet.create({
         position: "relative",
         left: -10,
     },
+    loadingbar:{
+        position: 'absolute',
+        top: height*0.36,
+        alignSelf: "center"
+      },
 
 });

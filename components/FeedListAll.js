@@ -47,6 +47,7 @@ export default function FeedListAll({ route, navigation }) {
     const [emojiOption, setEmojiOption] = useState('All');
     const [uid, setUid] = useState('');
     const [nickname, setNickname] = useState('');
+    const [loadingFinished, setLoadingFinished] = useState(false);
     // const [routeFeed, setRouteFeed] = useState(allFeeds.feedList);
     // const [likeFeedID, setlikeFeedID] = useState(0);
 
@@ -203,6 +204,7 @@ export default function FeedListAll({ route, navigation }) {
 
     const _loadFeed = () => {
         // console.log(emojiOption);
+        setLoadingFinished(true);
         if (totalPage===0 || totalPage > page-1){
             fetch(`http://127.0.0.1:8000/feeds/${emojiOption}/${page}/`, {
             method: 'GET',
@@ -219,6 +221,7 @@ export default function FeedListAll({ route, navigation }) {
                 setPage(page+1);
                 setEmojiOption(emojiOption);
                 // isLoading(false);
+                
                 
 
             }).catch((err) => {
@@ -405,6 +408,7 @@ export default function FeedListAll({ route, navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
+            {loadingFinished ?
             <View style={styles.feedWrapper}>
                 
                 <ScrollView
@@ -441,12 +445,10 @@ export default function FeedListAll({ route, navigation }) {
                 
 
             </View>
-            {/* {chart &&
-                <ChartComponent 
-                    closeChart={() => openChartModal(false)}
-                    allFeeds = {allFeeds.feedList}
-                />
-            } */}
+            :
+            <ActivityIndicator style={styles.loadingbar}/>
+            }
+
             {openFilter &&
                     <View style={styles.filterWrapper}>
                         <TouchableOpacity onPress = {()=> {
@@ -777,5 +779,10 @@ const styles = StyleSheet.create({
         position: "relative",
         top: 11,
         marginRight: 6,
+    },
+    loadingbar:{
+        position: 'absolute',
+        top: height*0.36,
+        alignSelf: "center"
     },
 });

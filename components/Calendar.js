@@ -515,8 +515,8 @@ const styles = StyleSheet.create({
     },
     loadingbar:{
       position: 'absolute',
-      top: height*0.45,
-      left: width*0.465
+      top: height*0.36,
+      alignSelf: "center"
     },
     emojiIcon:{
       height: 35,
