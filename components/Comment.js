@@ -169,15 +169,57 @@ export default function Comment({ route, navigation }) {
     }
 
     const parseDate=(string)=>{
-        if(string=='soon') {
-            return '방금 전';
-        }
-        let stringArray = string.split("-"); 
+        let stringArray = string.substring(0,10).split("-"); 
         let year = stringArray[0];
         let month = stringArray[1];
         let day = stringArray[2];
         return year+'년 '+month + '월 '+ day + '일';
     }
+    
+
+    var timeSince = function(date) {
+
+        if (typeof date !== 'object') {
+          date = new Date(date);
+        }
+
+      
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var intervalType;
+      
+        var interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) {
+        //   intervalType = '년';
+          return 'date';
+        } else {
+          interval = Math.floor(seconds / 2592000);
+          if (interval >= 1) {
+            // intervalType = '개월 ';
+            return 'date';
+          } else {
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) {
+            //   intervalType = '일 ';
+            return 'date';
+            } else {
+              interval = Math.floor(seconds / 3600);
+              if (interval >= 1) {
+                intervalType = "시간 ";
+              } else {
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) {
+                  intervalType = "분 ";
+                } else {
+                  interval = seconds;
+                  intervalType = "초 ";
+                }
+              }
+            }
+          }
+        }
+      
+        return interval + ' ' + intervalType;
+    };
 
     useEffect(() =>{
         fetch(`http://127.0.0.1:8000/feeds/load/${feed_id.id}/`, {
@@ -288,7 +330,16 @@ export default function Comment({ route, navigation }) {
                     <Text style={styles.feedContent}>{content}</Text>
                 </View>
                 <View style={{flexDirection: "row", width: width}}>
+                    {/* <Text style={styles.date}>{parseDate(date)}</Text> */}
+                    {
+                    date == 'soon' ? 
+                    <Text style={styles.date}>방금 전</Text>
+                    :
+                    timeSince(date) == 'date' ?
                     <Text style={styles.date}>{parseDate(date)}</Text>
+                    :
+                    <Text style={styles.date}>{timeSince(date)}전</Text>
+                    }
                     {(authorId) === parseInt(uid.uid) && 
                     <TouchableOpacity onPress={()=>{_deleteComment(id)}}>
                         <Image style={styles.deleteBtn} source={DeleteIcon} />

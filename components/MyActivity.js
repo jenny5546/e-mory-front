@@ -46,7 +46,14 @@ export default function MyActivity({route, navigation}) {
     }
     setTimeout(() => {setLoaded(true)}, 1000)
 
-
+    const parseDate=(string)=>{
+        let stringArray = string.substring(0,10).split("-"); 
+        let year = stringArray[0];
+        let month = stringArray[1];
+        let day = stringArray[2];
+        return year+'년 '+month + '월 '+ day + '일';
+    }
+    
 
     var timeSince = function(date) {
         if (typeof date !== 'object') {
@@ -58,15 +65,18 @@ export default function MyActivity({route, navigation}) {
       
         var interval = Math.floor(seconds / 31536000);
         if (interval >= 1) {
-          intervalType = 'year';
+        //   intervalType = '년';
+          return 'date';
         } else {
           interval = Math.floor(seconds / 2592000);
           if (interval >= 1) {
-            intervalType = '개월 ';
+            // intervalType = '개월 ';
+            return 'date';
           } else {
             interval = Math.floor(seconds / 86400);
             if (interval >= 1) {
-              intervalType = '일 ';
+            //   intervalType = '일 ';
+            return 'date';
             } else {
               interval = Math.floor(seconds / 3600);
               if (interval >= 1) {
@@ -84,14 +94,9 @@ export default function MyActivity({route, navigation}) {
           }
         }
       
-        // if (interval > 1 || interval === 0) {
-        //   intervalType += 's';
-        // }
-      
         return interval + ' ' + intervalType;
     };
 
-    
 
     useEffect(() => {
         _storeUid();
@@ -137,24 +142,32 @@ export default function MyActivity({route, navigation}) {
                         if (item.type==='like'){
                             let id = item.feed
                             return(
-                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.navigate('MyActivityComment',{feed_id: {id}, uid: uid.uid})}}>
+                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: uid.uid})}}>
                                         <Text style={styles.feedWritter}>{item.from}</Text>
                                         <Text style={styles.feedContent}>{item.title}</Text>
-                                        <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
+                                        {timeSince(item.timelapse) == 'date' ?
+                                            <Text style={styles.feedTime}>{parseDate(item.timelapse)}</Text>
+                                            :
+                                            <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
+                                        }
+                                        
                                 </TouchableOpacity>
                             )
                         }
                         else{
                             let id = item.feed
                             return(
-                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
+                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.push('Comment',{feed_id: {id}, uid: {uid}})}}>
                                         <View style={styles.flexbox}>
                                             <Text style={styles.feedWritter}>{item.from}</Text>
                                             <Text style={styles.feedContent}>{item.title} :</Text>
+                                            
+                                        </View>
+                                        <View style={styles.flexbox}>
                                             {(String(item.content).length > 10) ? 
                                                 
                                                 <Text style={styles.feedComment}>
-                                                    {String(item.content).substring(0,6).concat('...')}
+                                                    {String(item.content).substring(0,10).concat('...')}
                                                 </Text>
                                                 :
                                                 <Text style={styles.feedComment}>
@@ -165,6 +178,7 @@ export default function MyActivity({route, navigation}) {
                                             
                                             {/* <Text style={styles.feedComment}> 긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글ㅋㅋㅋㅋㅋㅋ</Text> */}
                                             <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
+
                                         </View>
 
                                 </TouchableOpacity>
@@ -186,13 +200,13 @@ export default function MyActivity({route, navigation}) {
                 <TouchableOpacity>
                     <Image style={styles.icon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
                     <Image style={styles.icon} source={Feed} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
                     <Image style={styles.icon} source={Setting} />
                 </TouchableOpacity>
             </View>
@@ -298,6 +312,7 @@ const styles = StyleSheet.create({
     flexbox: {
         flexDirection: "row",
         alignItems:'center',
+        width: width*0.9
     },
     feedComment:{
         fontSize: 14,

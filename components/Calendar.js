@@ -34,6 +34,9 @@ import Worried from './../images/WorriedIcon.png';
 import Angry from './../images/AngryIcon.png';
 import { format, isWithinInterval } from 'date-fns/esm';
 
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
+
 
 LocaleConfig.locales['kr'] = {
   monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
@@ -105,7 +108,41 @@ export default function MainCalendar({ navigation }) {
   // feeds는 back에서 GET한 것들로, setFeedList
   const [feedList, setFeedList] = useState([]);
   // const [date, setDate] = useState([]);
-  
+  const [tokenValue, setTokenValue] = useState('none');
+
+  const getPushNotificationPermissions = async () => {
+
+    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let finalStatus = existingStatus;
+
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+    if (existingStatus !== 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
+    }
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') {
+      return;
+    }
+    console.log(finalStatus)
+    // Get the token that uniquely identifies this device'
+    const token = await Notifications.getExpoPushTokenAsync()
+    console.log("Notification Token: ", token);
+    setTokenValue(token);
+
+    return (
+      <View style={styles.container}>
+        <Text>...</Text>
+      </View>
+    );
+  }
+  useEffect(() => {
+    getPushNotificationPermissions();
+    // _storeToken();
+  });
   
   const _storeUid = async () =>{
 
@@ -130,6 +167,18 @@ export default function MainCalendar({ navigation }) {
         console.log(error);
     }
   };
+
+  // const _getToken = async () => {
+  //   try {
+  //         const value =await AsyncStorage.getItem('token');
+  //         console.log(value)
+
+  //   } catch (error) {
+  //       console.log(error);
+  //   }
+  // };
+
+  // _getToken();
 
   // calendar에 mark하기 위해서 일기 쓴 날짜를 object: customStyle로 만드는 method
   const markedFeeds = () =>{
@@ -215,7 +264,7 @@ export default function MainCalendar({ navigation }) {
         <View style={styles.header}>
           <View></View>
           <Image style={styles.logo} source={Logo}/>
-          <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity',{uid: {uid}, allFeeds:{feedList}})}}>
+          <TouchableOpacity onPress={()=>{navigation.push('MyActivity',{uid: {uid}, allFeeds:{feedList}})}}>
             <Image style={styles.backButton} source={Alarm}/>
           </TouchableOpacity>
         </View>
@@ -394,13 +443,13 @@ export default function MainCalendar({ navigation }) {
           <TouchableOpacity>
             <Image style={styles.icon} source={Home} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
+          <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
+          <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{uid: {uid}})}}>
+          <TouchableOpacity onPress={()=>{navigation.push('Settings',{uid: {uid}})}}>
             <Image style={styles.icon} source={Setting} />
           </TouchableOpacity>
         </View>

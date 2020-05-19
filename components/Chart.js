@@ -185,7 +185,7 @@ export default function Chart({navigation}) {
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
                 <Image style={styles.logo} source={Logo}/>
-                <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}}>
                     <Image style={styles.backButton} source={Alarm}/>
                 </TouchableOpacity>
             </View>
@@ -281,16 +281,16 @@ export default function Chart({navigation}) {
 
             </View>
             <View style={styles.navigationbar}>
-                <TouchableOpacity onPress={()=>{navigation.navigate('MainCalendar')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.navicon} source={Home} />
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Image style={styles.navicon} source={ChartIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
                     <Image style={styles.navicon} source={FeedIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
                     <Image style={styles.navicon} source={Setting} />
                 </TouchableOpacity>
             </View>
