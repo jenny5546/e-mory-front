@@ -15,6 +15,7 @@ import FeedListAll from './components/FeedListAll';
 import FeedListSpecific from './components/FeedListSpecific';
 import Sidebar from './components/Settings';
 import Comment from './components/Comment';
+import MyActivityComment from './components/MyAcitivityComment';
 import MyActivity from './components/MyActivity';
 
 import ProfileSetting from './components/SidebarMenu/ProfileSetting';
@@ -77,6 +78,7 @@ export default function App(){
         {/* <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} /> */}
         <Stack.Screen name="Settings" component={Sidebar} />
         <Stack.Screen name="Comment" component={Comment} />
+        <Stack.Screen name="MyActivityComment" component={MyActivityComment} />
         <Stack.Screen name="MyActivity" component={MyActivity} />
         <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
         <Stack.Screen name="AlarmSetting" component={AlarmSetting} />

@@ -5,7 +5,9 @@ import CloseIcon from './../images/CloseIconGray.png';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Logo from './../images/SmallLogo.png';
 import Alarm from './../images/AlarmIcon.png';
-import Home from './../images/HomeIconFilled.png';
+import Home from './../images/HomeIcon.png';
+import BackButton from './../images/BackIcon.png';
+import ChartIcon from './../images/ChartIconFilled.png';
 import Menu from './../images/MenuIcon.png';
 import FeedIcon from './../images/FeedIcon.png';
 import Setting from './../images/SettingIcon.png';
@@ -179,7 +181,9 @@ export default function Chart({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <View></View>
+                <TouchableOpacity onPress={()=>navigation.goBack()}>
+                    <Image style={styles.backButton} source={BackButton}/>
+                </TouchableOpacity>
                 <Image style={styles.logo} source={Logo}/>
                 <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity')}}>
                     <Image style={styles.backButton} source={Alarm}/>
@@ -281,7 +285,7 @@ export default function Chart({navigation}) {
                     <Image style={styles.navicon} source={Home} />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <Image style={styles.navicon} source={Chart} />
+                    <Image style={styles.navicon} source={ChartIcon} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
                     <Image style={styles.navicon} source={FeedIcon} />
@@ -342,16 +346,17 @@ const styles = StyleSheet.create({
     navigationbar: {
         flexDirection: "row",
         justifyContent: "space-between",
-        // marginTop: 10,
-        marginBottom: 20,
-        position: 'absolute',
-        bottom: 0,
+        marginTop: 30,
+        // marginBottom: 20,
         paddingTop: 20,
         paddingHorizontal: width*0.1,
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
-        zIndex: 99
+        height: 70,
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: '#FEFAE4',
     },
     navicon: {
         height: 20,

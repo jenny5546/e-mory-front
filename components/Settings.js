@@ -12,7 +12,7 @@ import Menu from './../images/MenuIcon.png';
 import Feed from './../images/FeedIcon.png';
 import Setting from './../images/SettingIconFilled.png';
 import Profile from './../images/ProfileIcon.png';
-import Alarm from './../images/AlarmIcon.png';
+import Alarm from './../images/AlarmIconBlack.png';
 import Write from './../images/WriteIcon.png';
 import Mail from './../images/MailIcon.png';
 import Document from './../images/DocumentIcon.png';
@@ -138,7 +138,7 @@ export default function Settings({route, navigation}) {
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: '#fff',
+        backgroundColor: '#FEFAE4',
         flex: 1,
         width: width,
         height: height,
@@ -147,10 +147,10 @@ const styles = StyleSheet.create({
     header:{
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: '12%',
+        marginTop: '10%',
         // marginBottom: 5,
         // paddingTop: 10,
-        // backgroundColor: '#FEFAE4',
+        backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -158,11 +158,12 @@ const styles = StyleSheet.create({
         width: width,
     },
     menuWrapper: {
-        height: height - 180,
+        height: height + 150,
         justifyContent: "flex-start",
         alignItems: "flex-start",
         position: "relative",
-        top: 20,
+        backgroundColor: '#FFF',
+        paddingTop: 25,
         // marginTop: '10%'
     },
     menuIcon: {
@@ -186,11 +187,15 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 30,
-        marginBottom: 20,
+        // marginBottom: 20,
         paddingTop: 20,
         paddingHorizontal: width*0.1,
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
+        height: 70,
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: '#FEFAE4',
     },
 });

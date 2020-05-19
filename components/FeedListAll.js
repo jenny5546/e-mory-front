@@ -241,6 +241,7 @@ export default function FeedListAll({ route, navigation }) {
     useEffect(()=>{
         _storeUid();
         _storeNickname();
+        _loadFeed();
     },[])
     // console.log(allFeeds);
 

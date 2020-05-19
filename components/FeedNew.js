@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
         padding: 20,
         fontSize: 14,
         marginTop: 20,
-        width: width*0.85,
+        width: width*1.02,
         // textAlign: "center",
         // position: "relative",
         // left: -30,

@@ -22,7 +22,7 @@ import AngryIcon from './../images/AngryIcon.png';
 
 const { height, width } = Dimensions.get("window");
 
-export default function Comment({ route, navigation }) {
+export default function MyActivityComment({ route, navigation }) {
     const {feed_id} = route.params;
     const {uid} = route.params;
     let {commentNum} = route.params;
@@ -306,7 +306,7 @@ export default function Comment({ route, navigation }) {
         <View style={styles.container}>
             <StatusBar barStyle="dark-content"/>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
                 <Text style={styles.headerContent}>댓글</Text>

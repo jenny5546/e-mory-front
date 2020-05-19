@@ -135,7 +135,7 @@ export default function MyActivity({route, navigation}) {
                         if (item.type==='like'){
                             let id = item.feed
                             return(
-                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: uid.uid})}}>
+                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.navigate('MyActivityComment',{feed_id: {id}, uid: uid.uid})}}>
                                         <Text style={styles.feedWritter}>{item.from}</Text>
                                         <Text style={styles.feedContent}>{item.title}</Text>
                                         <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
@@ -260,19 +260,17 @@ const styles = StyleSheet.create({
     navigationbar: {
         flexDirection: "row",
         justifyContent: "space-between",
-        // marginTop: 30,
-        // height: 100,
-        backgroundColor: "white",
-        marginBottom: 20,
-        paddingTop: 10,
+        marginTop: 30,
+        // marginBottom: 20,
+        paddingTop: 20,
         paddingHorizontal: width*0.1,
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
-        zIndex:99,
-        // position: "absolute"
+        height: 70,
         position: 'absolute',
         bottom: 0,
+        backgroundColor: '#FEFAE4',
     },
     contentWrapper: {
         height: height,
@@ -287,7 +285,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         // marginHorizontal: 20,
         padding: 20,
-        borderBottomColor: "black", 
+        borderBottomColor: "#fafafa", 
         borderBottomWidth: StyleSheet.hairlineWidth,
         width: width,
         height: 70,
@@ -305,7 +303,7 @@ const styles = StyleSheet.create({
     commentContent: {
         // marginHorizontal: 20,
         padding: 20,
-        borderBottomColor: "black", 
+        borderBottomColor: "#fafafa", 
         borderBottomWidth: StyleSheet.hairlineWidth, 
         width: width, 
         height: 70,
