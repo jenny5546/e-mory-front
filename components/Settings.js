@@ -25,9 +25,9 @@ const { height, width } = Dimensions.get("window");
 export default function Settings({route, navigation}) {
 
     // const {uid} = route.params;
-    const {allFeeds} = route.params;
+
     const [uid, setUid] = useState('');
-    const [chart, openChartModal] = useState(false);
+    // const [chart, openChartModal] = useState(false);
     console.log('settings')
     console.log(uid.uid);
 
@@ -82,12 +82,12 @@ export default function Settings({route, navigation}) {
                 <Image style={styles.logo} source={Logo}/>
                 <View></View>
             </View>
-            {chart &&
+            {/* {chart &&
                 <ChartComponent 
                     closeChart={() => openChartModal(false)}
                     allFeeds = {allFeeds.feedList}
                 />
-            }
+            } */}
             <View style={styles.menuWrapper}>
                 <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.navigate('ProfileSetting',{uid: uid})}}>
                     <Image style={styles.menuIcon} source={Profile} />
@@ -122,13 +122,13 @@ export default function Settings({route, navigation}) {
                 <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.menuIcon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={async()=>{openChartModal(true);}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
                     <Image style={styles.menuIcon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds: allFeeds})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
                     <Image style={styles.menuIcon} source={Feed} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{allFeeds:allFeeds})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
                     <Image style={styles.menuIcon} source={Setting} />
                 </TouchableOpacity>
             </View>

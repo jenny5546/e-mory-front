@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
+import {AsyncStorage} from 'react-native';
 import CloseIcon from './../images/CloseIconGray.png';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Logo from './../images/SmallLogo.png';
@@ -27,7 +28,7 @@ const { height, width } = Dimensions.get("window");
 //component 이름이랑, library 이름이랑 겹쳐서 main calendar라고 이름 지어줌.
 //modal 구현 애매하게 되어있음
 
-export default function Chart({route, navigation}) {
+export default function Chart({navigation}) {
 
     LocaleConfig.locales['kr'] = {
         monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
@@ -49,7 +50,7 @@ export default function Chart({route, navigation}) {
         return result;
     }
 
-    const {allFeeds} = route.params;
+    // const {allFeeds} = route.params;
     const [month, setMonth] = useState(_getCurrMonth());
     const [countHappy, setCountHappy] = useState(0);
     const [countFilled, setCountFilled] = useState(0);
@@ -63,6 +64,8 @@ export default function Chart({route, navigation}) {
     const [countDepressed, setCountDepressed] = useState(0);
     const [countWorried, setCountWorried] = useState(0);
     const [countAngry, setCountAngry] = useState(0);
+    const [loaded, setLoaded] = useState(false);
+    const [storageFeeds, setStorageFeeds] = useState(null);
 
     const emojiColor= (emoji) =>{
         switch(emoji){
@@ -118,41 +121,62 @@ export default function Chart({route, navigation}) {
         color: ${props => emojiColor(props.emoji)}
     `;
 
-    console.log(allFeeds.feedList)
+    const _storeStorageFeeds = async () =>{
+        // console.log('hi')
+        try {
+          const value = await AsyncStorage.getItem('feedlist').then(
+              (response)=>{
+                //   console.log(response)
+                  var list = JSON.parse(response);
+                  setStorageFeeds(list)
+                //   console.log(storageFeeds)
+                }
+            );
+          
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+
+    setTimeout(() => {setLoaded(true)}, 1000)
+    // console.log(storageFeeds)
 
     // 달이 바뀔 때마다, 새로운 데이터를 로딩해 온다. 
     useEffect(() => {
-        var currMonthFeeds = allFeeds.feedList.filter(feed => {
-            return String(feed.date).substr(0,7) === month;
-        });
-        // console.log(currMonthFeeds);
-        setCountHappy(countEmojis(currMonthFeeds,'Happy'));
-        setCountFilled(countEmojis(currMonthFeeds,'Filled'));
-        setCountPeace(countEmojis(currMonthFeeds,'Peace'));
-        setCountThank(countEmojis(currMonthFeeds,'Thank'));
-        setCountLovely(countEmojis(currMonthFeeds,'Lovely'));
-        setCountEmpty(countEmojis(currMonthFeeds,'Empty'));
-        setCountSad(countEmojis(currMonthFeeds,'Sad'));
-        setCountLonely(countEmojis(currMonthFeeds,'Lonely'));
-        setCountTired(countEmojis(currMonthFeeds,'Tired'));
-        setCountDepressed(countEmojis(currMonthFeeds,'Depressed'));
-        setCountWorried(countEmojis(currMonthFeeds,'Worried'));
-        setCountAngry(countEmojis(currMonthFeeds,'Angry'));
+        _storeStorageFeeds();
+        if (storageFeeds){
+            // console.log('chart')
+            // console.log(storageFeeds)
+            var currMonthFeeds = storageFeeds.filter(feed => {
+                return String(feed.date).substr(0,7) === month;
+            });
+            // console.log(currMonthFeeds);
+            setCountHappy(countEmojis(currMonthFeeds,'Happy'));
+            setCountFilled(countEmojis(currMonthFeeds,'Filled'));
+            setCountPeace(countEmojis(currMonthFeeds,'Peace'));
+            setCountThank(countEmojis(currMonthFeeds,'Thank'));
+            setCountLovely(countEmojis(currMonthFeeds,'Lovely'));
+            setCountEmpty(countEmojis(currMonthFeeds,'Empty'));
+            setCountSad(countEmojis(currMonthFeeds,'Sad'));
+            setCountLonely(countEmojis(currMonthFeeds,'Lonely'));
+            setCountTired(countEmojis(currMonthFeeds,'Tired'));
+            setCountDepressed(countEmojis(currMonthFeeds,'Depressed'));
+            setCountWorried(countEmojis(currMonthFeeds,'Worried'));
+            setCountAngry(countEmojis(currMonthFeeds,'Angry'));
+        } 
+        // setLoaded(false);
 
-    },[month]);
-
-    // console.log(props);
+    },[loaded, month]);
 
     
-
-    // console.log(countHappy);
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View></View>
                 <Image style={styles.logo} source={Logo}/>
-                <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity',{uid: {uid}, allFeeds:{feedList}})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('MyActivity')}}>
                     <Image style={styles.backButton} source={Alarm}/>
                 </TouchableOpacity>
             </View>
@@ -247,10 +271,10 @@ export default function Chart({route, navigation}) {
                 <TouchableOpacity>
                     <Image style={styles.navicon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds:{feedList}})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
                     <Image style={styles.navicon} source={FeedIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{uid: {uid}, allFeeds:{feedList}})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
                     <Image style={styles.navicon} source={Setting} />
                 </TouchableOpacity>
             </View>

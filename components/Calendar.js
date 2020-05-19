@@ -82,6 +82,7 @@ export default function MainCalendar({ navigation }) {
   const [loaded, setLoaded] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [pickedDate, setPickedDate] = useState(formatDate(Date()));
+  const [routeFeed, setRouteFeed] = useState(null);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -92,7 +93,6 @@ export default function MainCalendar({ navigation }) {
   };
 
   
-
   const handleConfirm = (date) => {
       // console.warn("A date has been picked: ", date);
       // console.log(date);
@@ -100,16 +100,17 @@ export default function MainCalendar({ navigation }) {
       setPickedDate(pickedDate)
       hideDatePicker();
   };
-  console.log(pickedDate);
+  // console.log(pickedDate);
   // feeds는 back에서 GET한 것들로, setFeedList
   const [feedList, setFeedList] = useState([]);
   // const [date, setDate] = useState([]);
   
   
   const _storeUid = async () =>{
+
     try {
       const value = await AsyncStorage.getItem('user');
-      if (value !== null) {
+      if (value !== null){
         setUid(value);
       }
     } catch (error) {
@@ -117,6 +118,17 @@ export default function MainCalendar({ navigation }) {
       console.log(error)
     }
   }
+
+
+  const _storeFeeds = async () => {
+    try {
+          await AsyncStorage.setItem('feedlist', JSON.stringify(feedList));
+          console.log('complete')
+
+    } catch (error) {
+        console.log(error);
+    }
+  };
 
   // calendar에 mark하기 위해서 일기 쓴 날짜를 object: customStyle로 만드는 method
   const markedFeeds = () =>{
@@ -153,13 +165,15 @@ export default function MainCalendar({ navigation }) {
     return feed.emoji;
   }
 
-  setTimeout(() => {setLoaded(true)}, 1000)
+  setTimeout(() => {
+    setLoaded(true); 
+  }, 1000)
 
-  // const date= Date.parse('2020-05-16');
-  // console.log(getWeeksInMonth(date));
+
   useEffect(() => {
-    // console.log(feedList);
+
     _storeUid();
+
     if (uid){
       fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
         method: 'GET',
@@ -175,16 +189,22 @@ export default function MainCalendar({ navigation }) {
             feeds.map((feed) => 
               new Feed(feed.emoji, feed.title, feed.content, feed.date, feed.privacy, feed.comment, feed.like, feed.id)),
           )
+          // AsyncStorage.setItem('feedlist', feedList);
+          
+          
 
         }).catch((err) => {
           console.log(err);
+        }).then(()=>{
+          // console.log('hi')
+          _storeFeeds();
         });
     }  
   },[loaded]);
 
-  // console.log(feedList)
   
   return (
+
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.header}>
@@ -194,12 +214,7 @@ export default function MainCalendar({ navigation }) {
             <Image style={styles.backButton} source={Alarm}/>
           </TouchableOpacity>
         </View>
-        {/* {chart &&
-          <ChartComponent 
-            closeChart={() => openChartModal(false)}
-            allFeeds = {feedList}
-          />
-        } */}
+
         {newFeedModal &&
           <FeedNew 
             closeNewFeed={() => openNewFeedModal(false)} 
@@ -225,7 +240,7 @@ export default function MainCalendar({ navigation }) {
                 }).then((res) => {
                       return res.json();
                 }).then((resJSON) => {
-                    console.log('Post Success');
+                    // console.log('Post Success');
                 }).catch((err) => {
                     console.log(err);
                 });
@@ -366,13 +381,13 @@ export default function MainCalendar({ navigation }) {
           <TouchableOpacity>
             <Image style={styles.icon} source={Home} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('Chart',{allFeeds:{feedList}})}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds:{feedList}})}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{uid: {uid}, allFeeds:{feedList}})}}>
+          <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{uid: {uid}})}}>
             <Image style={styles.icon} source={Setting} />
           </TouchableOpacity>
         </View>
