@@ -10,6 +10,7 @@ import TutorialOne from './components/tutorial/Tutorial_1';
 import TutorialTwo from './components/tutorial/Tutorial_2';
 import TutorialThree from './components/tutorial/Tutorial_3';
 import MainCalendar from './components/Calendar';
+import Chart from './components/Chart';
 import FeedListAll from './components/FeedListAll';
 import FeedListSpecific from './components/FeedListSpecific';
 import Sidebar from './components/Settings';
@@ -71,6 +72,7 @@ export default function App(){
         <Stack.Screen name="TutorialTwo" component={TutorialTwo} />
         <Stack.Screen name="TutorialThree" component={TutorialThree} />
         <Stack.Screen name="MainCalendar" component={MainCalendar} />
+        <Stack.Screen name="Chart" component={Chart} />
         <Stack.Screen name="FeedListAll" component={FeedListAll} />
         {/* <Stack.Screen name="FeedListSpecific" component={FeedListSpecific} /> */}
         <Stack.Screen name="Settings" component={Sidebar} />

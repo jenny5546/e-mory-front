@@ -4,7 +4,7 @@ import { StyleSheet, Dimensions, View, Text, TextInput, Image, TouchableOpacity,
 import Logo from './../images/Logo.png';
 import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 
 export default function Login({ navigation }) {
 

@@ -37,7 +37,7 @@ const { height, width } = Dimensions.get("window");
 
 export default function FeedListAll({ route, navigation }) {
 
-    const {allFeeds} = route.params;
+    // const { allFeeds } = route.params;
     const [chart, openChartModal] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
     const [data, setData] =useState([]);
@@ -47,6 +47,7 @@ export default function FeedListAll({ route, navigation }) {
     const [emojiOption, setEmojiOption] = useState('All');
     const [uid, setUid] = useState('');
     const [nickname, setNickname] = useState('');
+    // const [routeFeed, setRouteFeed] = useState(allFeeds.feedList);
     // const [likeFeedID, setlikeFeedID] = useState(0);
 
     const _storeUid = async () =>{
@@ -55,12 +56,22 @@ export default function FeedListAll({ route, navigation }) {
             if (value !== null) {
             setUid(value);
             }
-        } catch (error) {
+        } catch (error) {               
           // Error retrieving data
             console.log(error)
         }
     }
-    console.log(allFeeds.feedList);
+    const _storeFeeds = async () =>{
+        try {
+            const value = await AsyncStorage.getItem('feedlist');
+            if (value !== null) {
+            setUid(value);
+            }
+        } catch (error) {               
+          // Error retrieving data
+            console.log(error)
+        }
+    }
 
     const _storeNickname = async () =>{
         try {
@@ -231,7 +242,7 @@ export default function FeedListAll({ route, navigation }) {
         _storeUid();
         _storeNickname();
     },[])
-    console.log(allFeeds);
+    // console.log(allFeeds);
 
 
     const _likeFeed = (id) => {
@@ -429,12 +440,12 @@ export default function FeedListAll({ route, navigation }) {
                 
 
             </View>
-            {chart &&
+            {/* {chart &&
                 <ChartComponent 
                     closeChart={() => openChartModal(false)}
                     allFeeds = {allFeeds.feedList}
                 />
-            }
+            } */}
             {openFilter &&
                     <View style={styles.filterWrapper}>
                         <TouchableOpacity onPress = {()=> {
@@ -542,14 +553,14 @@ export default function FeedListAll({ route, navigation }) {
                 <TouchableOpacity  onPress={()=>{navigation.push('MainCalendar')}}>
                     <Image style={styles.icon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={async()=>{openChartModal(true);}} >
+                <TouchableOpacity onPress={()=>{navigation.navigate('Chart')}}>
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
             
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds: allFeeds})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
                     <Image style={styles.icon} source={FeedFilled} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{allFeeds:allFeeds})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
                     <Image style={styles.icon} source={Setting}/>
                 </TouchableOpacity>
             </View>

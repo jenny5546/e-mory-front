@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
 import BackButton from './../images/BackIcon.png';
+import {AsyncStorage} from 'react-native';
 import ChartComponent from './Chart';
 import Home from './../images/HomeIconFilled.png';
 import Chart from './../images/ChartIcon.png';
@@ -23,10 +24,29 @@ class Notification {
 
 }
 export default function MyActivity({route, navigation}) {
-    const {uid} = route.params;
-    const {allFeeds} = route.params;
+
     const [notiList, setNotiList] = useState([]);
-    const [chart, openChartModal] = useState(false);
+    const [uid, setUid] = useState('');
+    const [loaded, setLoaded] = useState(false);
+    // const [chart, openChartModal] = useState(false);
+
+    const _storeUid = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('user');
+          if (value !== null) {
+            setUid(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+    setTimeout(() => {setLoaded(true)}, 1000)
+
+    useEffect(()=>{
+        
+    },[]);
+
 
     var timeSince = function(date) {
         if (typeof date !== 'object') {
@@ -71,9 +91,12 @@ export default function MyActivity({route, navigation}) {
         return interval + ' ' + intervalType;
     };
 
+    
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:8000/feeds/notification/${uid.uid}/`, {
+        _storeUid();
+        if (uid){
+            fetch(`http://127.0.0.1:8000/feeds/notification/${uid}/`, {
           method: 'GET',
           headers:{
               'Accept': 'application/json',
@@ -90,7 +113,9 @@ export default function MyActivity({route, navigation}) {
           }).catch((err) => {
             console.log(err);
           });  
-    },[]);
+        }
+        
+    },[loaded]);
 
     console.log(notiList);
     return (
@@ -102,12 +127,7 @@ export default function MyActivity({route, navigation}) {
                 <Text style={styles.headerContent}>나의 활동</Text>
                 <View></View>
             </View>
-            {chart &&
-                <ChartComponent 
-                    closeChart={() => openChartModal(false)}
-                    allFeeds = {allFeeds.feedList}
-                />
-            }
+
             <View style={styles.contentWrapper}>
                 <View style={styles.activityWrapper}>
                     {notiList.reverse().map((item)=>{
@@ -124,7 +144,7 @@ export default function MyActivity({route, navigation}) {
                         else{
                             let id = item.feed
                             return(
-                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: uid.uid})}}>
+                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}})}}>
                                         <View style={styles.flexbox}>
                                             <Text style={styles.feedWritter}>{item.from}</Text>
                                             <Text style={styles.feedContent}>{item.title} :</Text>
@@ -158,10 +178,10 @@ export default function MyActivity({route, navigation}) {
                 <TouchableOpacity onPress={async()=>{openChartModal(true);}}>
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll',{allFeeds: allFeeds})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('FeedListAll')}}>
                     <Image style={styles.icon} source={Feed} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate('Settings',{allFeeds:allFeeds})}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('Settings')}}>
                     <Image style={styles.icon} source={Setting} />
                 </TouchableOpacity>
             </View>
