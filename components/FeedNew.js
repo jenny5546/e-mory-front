@@ -34,7 +34,7 @@ export default function FeedNew(props) {
     let str = ""
     const pholder = () => {
 
-        for(let i=0; i<width/14+5; i++) {
+        for(let i=0; i<width/14; i++) {
             str += " "
         }
         str += "오늘의 감정일기 500자"

@@ -1,6 +1,6 @@
 // 회원가입 정보 기입 form
-import React, { useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button, TouchableWithoutFeedback, Keyboard, ScrollView, ActivityIndicator} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import BackButton from './../images/BackIcon.png';
@@ -9,7 +9,7 @@ import {AsyncStorage} from 'react-native';
 
 const { height, width } = Dimensions.get("window");
 
-export default function Signup({ navigation }) {
+export default function Waiting({ navigation }) {
 
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
@@ -22,22 +22,44 @@ export default function Signup({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     let today = new Date();
     const [pickedDate, setPickedDate] = useState(today);
+    const [uid, setUid] = useState('');
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
+    const _storeUid = async () =>{
 
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
+        try {
+          const value = await AsyncStorage.getItem('user');
+          if (value !== null){
+            setUid(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
 
-    const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date);
-        setPickedDate(date);
-        let pickedDate = formatDate(date);
-        setDate(pickedDate)
-        hideDatePicker();
-    };
+useEffect(() => {
+
+    _storeUid();
+
+    setTimeout(() => {
+        fetch(`http://127.0.0.1:8000/feeds/user/valid/${uid}/`, {
+        method: 'GET',
+        headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }}).then((res) => {
+            return res.json();
+        }).then(resJSON=> {
+            const {valid} = resJSON
+            if(valid) {
+                navigation.push('TutorialOne')
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, 1000)
+
+},[]);
 
     const formatDate = (date) => {
         let d = new Date(date),
@@ -199,7 +221,7 @@ export default function Signup({ navigation }) {
                         '축하드립니다!',
                         '회원가입이 완료되었습니다',
                         [
-                            {text: '이모리 시작하기', onPress: () => navigation.push('Waiting')},
+                            {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
                         ],
                         { cancelable: false }
                     )
@@ -212,119 +234,8 @@ export default function Signup({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header} >
-                <TouchableOpacity onPress={() => navigation.goBack()}>            
-                    <Image style={styles.backButton} source={BackButton}/>
-                </TouchableOpacity>
-            </View>
-            <ScrollView keyboardShouldPersistTaps='handled'>
-            <View>
-                <Text>이름</Text>
-                <TextInput 
-                        style={styles.input}
-                        placeholder={"이름을 입력해주세요"}
-                        value={name}
-                        onChange={(e)=>{setName(e.nativeEvent.text)}}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        autoFocus={true}
-                    />
-            </View>
-            <View>
-                <Text>이메일</Text>
-                <View style={styles.idContainer}>
-                    <TextInput 
-                        style={styles.emailInput}
-                        placeholder={"예: e-mory1@mory.com"}
-                        value={email}
-                        onChange={(e)=>{setEmail(e.nativeEvent.text)}}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                    />
-                    <View style={styles.nicknameCheckBtn}>
-                        <TouchableOpacity onPress={emailValidation}>
-                            <Text style={styles.checkText}>중복 확인</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-            <View>
-                <View style={{flexDirection: "row"}}>
-                    <Text>비밀번호</Text>
-                </View>
-                <TextInput 
-                    style={styles.input}
-                    placeholder={"영문, 숫자 조합 6자 이상을 만족시켜주세요"}
-                    value={password}
-                    onChange={(e)=>{setPassword(e.nativeEvent.text)}}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    secureTextEntry={true}
-                />
-            </View>
-            <View>
-                <Text>비밀번호 확인</Text>
-                <TextInput 
-                    style={styles.input}
-                    placeholder={"비밀번호를 한번 더 입력해주세요"}
-                    value={passwordCheck}
-                    onChange={(e)=>{setPasswordCheck(e.nativeEvent.text)}}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    secureTextEntry={true}
-                />
-            </View>
-            <View>
-                <Text>생년월일</Text>
-                {/* <DateTimePicker style={styles.dateTimePicker} mode="date" value={new Date()}/> */}
-                <TouchableOpacity onPress={showDatePicker}>
-                    <View style={styles.input}>
-                        <Text style={ date=='YYYY-MM-DD' ? styles.dateInit: styles.dateAfter}>{date}</Text>
-                    </View>
-                </TouchableOpacity>
-                <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-                    date={pickedDate}
-                    confirmTextIOS="선택"
-                    cancelTextIOS="취소"
-                    headerTextIOS="날짜 선택"
-                />
-            </View>
-            <View>
-                <Text>닉네임</Text>
-                <View style={styles.idContainer}>
-                    <TextInput 
-                        style={styles.nicknameInput}
-                        placeholder={"예: emory_mory"}
-                        value={nickname}
-                        onChange={(e)=>{setNickname(e.nativeEvent.text)}}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        locale="ko_KR"
-                    />
-                    <View style={styles.nicknameCheckBtn}>
-                        <TouchableOpacity onPress={nicknameValidation}>
-                            <Text style={styles.checkText}>중복확인</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-            <View style={{flexDirection: "row", alignSelf:"center"}}>
-                <Text style={styles.term}>회원가입 시 </Text>
-                <TouchableOpacity onPressIn={() =>{navigation.push('Terms')}}>
-                    <Text style={styles.termpage}>이용약관 및 개인정보 이용 방침</Text>
-                </TouchableOpacity>
-                <Text style={styles.term}>에 동의함을 인정합니다</Text>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={onSignup}>
-                    <AntDesign style={styles.belowBtn} name="checkcircleo" size={20}/>
-                </TouchableOpacity>
-            </View>
-            </ScrollView>
+            <Text style={{fontSize: 15, marginBottom: 10,}}>가입한 메일으로 발송된 메일을 통해서 인증을 완료해주세요</Text>
+            <ActivityIndicator style={styles.loadingbar}/>
         </View>
     );
 }
@@ -358,7 +269,7 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         backgroundColor: '#fff',
     },
     header: {

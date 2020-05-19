@@ -118,6 +118,7 @@ import FeedListSpecific from './components/FeedListSpecific';
 import Sidebar from './components/Settings';
 import Comment from './components/Comment';
 import MyActivity from './components/MyActivity';
+import Waiting from './components/Waiting';
 
 import ProfileSetting from './components/SidebarMenu/ProfileSetting';
 import AlarmSetting from './components/SidebarMenu/AlarmSetting';
@@ -204,7 +205,7 @@ export default function App(){
         <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
         <Stack.Screen name="AlarmSetting" component={AlarmSetting} />
         <Stack.Screen name="PasswordFind" component={PasswordFind} />
-
+        <Stack.Screen name="Waiting" component={Waiting} />
         {/* <Stack.Screen name="Chart" component={Chart} /> */}
       </Stack.Navigator>
     </NavigationContainer>
