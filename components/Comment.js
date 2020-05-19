@@ -68,7 +68,8 @@ export default function Comment({ route, navigation }) {
             let hours = today.getHours(); // 시
             let minutes = today.getMinutes();  // 분
             // console.log('Comment Success');
-            let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon'}]
+            console.log(uid.uid)
+            let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon', 'authorId': parseInt(uid.uid)}]
             setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
             setContent(null)
         }).catch((err) => {
@@ -340,6 +341,9 @@ export default function Comment({ route, navigation }) {
                                         id={item.id}
                                         authorId = {item.authorId}
                                     />
+                                ))}
+                                {comments.map((item)=>(
+                                    console.log(item)
                                 ))}
                             {/* </ScrollView> */}
                             <View style={{height:80}}></View>
