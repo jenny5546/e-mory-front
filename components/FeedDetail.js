@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, View, StatusBar, Image, Dimensions, TouchableOpacity, Keyboard, ScrollView, Alert } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import EditIcon from './../images/EditIcon.png';
 import DeleteIcon from './../images/DeleteIcon.png';
 import CloseIcon from './../images/CloseIconGray.png';
-import LockDisabled from './../images/LockIconGray.png';
+import LockDisabled from './../images/UnlockIcon.png';
 import LockEnabled from './../images/LockIcon.png';
 import Emoji from './../images/EmojiTemp.png';
+import { AntDesign } from '@expo/vector-icons';
 import FeedEmoji from './FeedEmoji';
 
 import HeartIconFilled from './../images/HeartIconBlack.png';
@@ -43,7 +44,7 @@ class Feed {
 }
 export default function FeedDetail(props) {
 
-    const [editMode, setEditMode] = useState(false);
+    const [editMode, setEditMode] = useState(true);
     const [emojiModal, openEmojiModal] = useState(false);
     const [editedTitle, setEditedTitle] = useState(props.matchingFeed.title);
     const [editedContent, setEditedContent] = useState(props.matchingFeed.content);
@@ -66,6 +67,16 @@ export default function FeedDetail(props) {
         }
     }
     _storeUid();
+
+    let str = ""
+    const pholder = () => {
+
+        for(let i=0; i<width/14; i++) {
+            str += " "
+        }
+        str += "오늘의 감정일기 500자"
+    }
+    pholder()
 
     const parseDate=(string)=>{
         let stringArray = string.split("-"); 
@@ -165,6 +176,50 @@ export default function FeedDetail(props) {
         }
     }
 
+    const _setPrivate = e => {
+        if(editedPrivacy == true) {
+            Alert.alert(
+                '알림',
+                '일기를 공개하시겠습니까?',
+                [
+                    {
+                    text: "네",
+                    onPress: () => {
+                        setEditedPrivacy(!editedPrivacy)
+                        Alert.alert(
+                            '일기가 공개되었습니다 :)'
+                        )
+                    },
+                    style: "cancel"
+                    },
+                    { text: "아니요",
+                    }
+                ],
+                { cancelable: false }
+            )
+        } else {
+            Alert.alert(
+                '알림',
+                '일기를 비공개하시겠습니까?',
+                [
+                    {
+                    text: "네",
+                    onPress: () => {
+                        setEditedPrivacy(!editedPrivacy)
+                        Alert.alert(
+                            '일기가 비공개되었습니다 :)'
+                        )
+                    },
+                    style: "cancel"
+                    },
+                    { text: "아니요",
+                    }
+                ],
+                { cancelable: false }
+            )
+        }
+    }
+
     const _delete = () =>{
         fetch(`http://127.0.0.1:8000/feeds/delete/${props.uid}/${props.matchingFeed.date}/`, {
         method: 'POST',
@@ -203,24 +258,34 @@ export default function FeedDetail(props) {
         });
     }
 
+    const _openEmojiModal = e => {
+        Keyboard.dismiss()
+        openEmojiModal(true)
+    }
+
     const navigation = props.navigation;
     // console.log(props.matchingFeed.content);
     return (
         <View style={styles.background}>
             {/* {feed===1 && */}
-            <View style={styles.container}>
+            <View  style={emojiModal ? styles.containerwithmodal : styles.container}>
                 <View style={styles.popup}>
+                <ScrollView keyboardShouldPersistTaps='handled'>
                     <View style={styles.header}>
-                        <Text style={styles.date}>{parseDate(props.pressedDate)}</Text>
-                        <View style={{flexDirection: "row", marginBottom: 10}}>
-                            {editMode && 
-                                <TouchableOpacity onPress={()=>{setEditedPrivacy(!editedPrivacy)}}>
-                                {editedPrivacy ? 
-                                    <Image style={styles.lockBtn} source={LockEnabled} />:
-                                    <Image style={styles.lockBtn} source={LockDisabled} />
-                                }
-                                </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{_setPrivate()} } style={{position: "relative", top: 20, left: 20, height: 50,}}>
+                            {editedPrivacy ? 
+                                <Image style={styles.lockBtn} source={LockEnabled} />:
+                                <Image style={styles.unlockBtn} source={LockDisabled} />
                             }
+                        </TouchableOpacity>
+                        <View style={{flexDirection: "row", marginBottom: 10, position: "relative", top: 20, right: 20 }}>
+                            <TouchableOpacity 
+                                    onPress={()=>{
+                                        _edit()
+                                    }}
+                            >
+                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#b5b5b5"/>
+                            </TouchableOpacity>
                             <TouchableOpacity onPress={()=>{props.closeFeedDetail()}}>
                                 <Image style={styles.closeBtn} source={CloseIcon} />
                             </TouchableOpacity>
@@ -230,33 +295,39 @@ export default function FeedDetail(props) {
                     {editMode ? 
                         <>
                             {/* 수정 모드 */}
-                            <Button
-                            onPress={()=>{openEmojiModal(true)}}
-                            title="오늘의 감정은?"
-                            color="#e5e5e5"
-                            backgroundColor="rgb(247, 247, 247)"
-                            accessibilityLabel="Learn more about this purple button"
-                            />
-                            {editedEmoji!==null &&
+                            <TouchableOpacity onPress={()=>{ _openEmojiModal() }} style={{position: "relative", top: 20,}}>
+                                <Text style={styles.emotionChoice}>오늘의 감정은?</Text>
+                                {/* {emoji == null &&
+                                <Image style={styles.circle} source={QuestionCircle} />
+                                } */}
+                                {editedEmoji!==null &&
+                                    <View style={styles.emojiContainer}>{renderEmoji(editedEmoji)}</View>
+                                }
+                            </TouchableOpacity>
+                            {/* {editedEmoji!==null &&
                                 <View style={styles.emojiContainer}>{renderEmoji(editedEmoji)}</View>
-                            }
+                            } */}
                             <TextInput
                                 style={styles.titleInput}
-                                placeholder="제목을 입력해주세요"
+                                placeholder="제목 작성하기"
                                 value = {editedTitle}
                                 placeholderTextColor={"#999"}
                                 returnKeyType={"done"}
                                 autoCorrect={false}
                                 onChangeText={text => setEditedTitle(text)}
+                                multiline={true}
+                                maxLength={20}
                             />
                             <TextInput
                                 style={styles.contentInput}
-                                placeholder="오늘의 감정일기 100자"
+                                placeholder={str}
                                 value = {editedContent}
                                 placeholderTextColor={"#999"}
                                 returnKeyType={"done"}
                                 autoCorrect={false}
                                 onChangeText={text => setEditedContent(text)}
+                                multiline={true}
+                                maxLength={500}
                             />
 
                             {emojiModal===true &&
@@ -276,7 +347,7 @@ export default function FeedDetail(props) {
 
                         </>
                     }
-                    <View style={styles.reactionWrapper}>
+                    {/* <View style={styles.reactionWrapper}>
                         <TouchableOpacity>
                             <Image style={styles.reactionBtn} source={HeartIconFilled} />
                         </TouchableOpacity>
@@ -285,27 +356,22 @@ export default function FeedDetail(props) {
                             <Image style={styles.reactionBtn} source={CommentIcon} />
                         </TouchableOpacity>
                         <Text style={styles.reactionNum}>{comments.length}</Text>
-                    </View>
+                    </View> */}
                     
                     <View style={styles.btnContainer}>
-                        {editMode && 
+                        {/* {editMode && 
                         <TouchableOpacity 
                         onPress={()=>{_edit()}}
                         style={styles.submitButton}
                         >
                             <Text style={styles.emojiText}>저장</Text>
                         </TouchableOpacity>
-                        }
-                        <TouchableOpacity onPress={()=>setEditMode(!editMode)}>
-                            <Image style={styles.editBtn} source={EditIcon} />
-                        </TouchableOpacity>
+                        } */}
                         <TouchableOpacity onPress={()=>_delete()}>
                             <Image style={styles.deleteBtn} source={DeleteIcon} />
                         </TouchableOpacity>
-                        
-                        
                     </View>
-                    
+                </ScrollView>
                 </View>
             </View>
 
@@ -318,21 +384,28 @@ const styles = StyleSheet.create({
         position: "absolute",
         height: height,
         zIndex: 2,
+        backgroundColor: "rgba(153, 153, 153, 0.4)",
     },
     container: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: "center",
         width: width,
-        paddingHorizontal: 10,
-        paddingTop: 60,
-        backgroundColor: "rgba(153, 153, 153, 0.5);",
+        // paddingHorizontal: 10,
+        backgroundColor: "#fff",
+    },
+    containerwithmodal: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: "center",
+        width: width,
+        height: height,
+        backgroundColor: "#cccccc",
     },
     popup: {
         backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 20,
-        height: "80%",
+        // padding: 20,
+        height: "92%",
     },
     header: {
         flexDirection: "row",
@@ -367,11 +440,20 @@ const styles = StyleSheet.create({
         marginTop: 1,
     },
     lockBtn: {
-        height: 20,
-        width: 20,
+        height: 25,
+        width: 25,
         marginTop: 1,
         marginRight: 10,
         position: "relative",
+        bottom: 1,
+    },
+    unlockBtn: {
+        height: 54,
+        width: 55,
+        marginTop: 1,
+        position: "absolute",
+        left: -10,
+        top: -12,
         bottom: 1,
     },
     editBtn: {
@@ -381,22 +463,33 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     deleteBtn:{
-        height: 20,
-        width: 20,
+        height: 25,
+        width: 25,
         marginTop: 1,
-        marginRight: 10,
+        marginRight: 20,
+        position: "absolute",
+        bottom: 30,
         // alignSelf: 'flex-end'
     },
     titleInput: {
         paddingTop: 20,
-        fontSize: 14,
-        marginTop: 20
-        // flexWrap: "wrap",
+        fontSize: 16,
+        fontWeight: "600",
+        marginTop: 20,
+        width: width,
+        textAlign: "center",
+        position: "relative",
+        top: 10,
+        left: 0,
     },
     contentInput: {
-        paddingTop: 20,
+        padding: 20,
         fontSize: 14,
-        marginTop: 20
+        marginTop: 20,
+        width: width*1.02,
+        // textAlign: "center",
+        // position: "relative",
+        // left: -30,
         // flexWrap: "wrap",
     },
     emojiContainer: {
@@ -411,6 +504,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 14,
         color: "#999999",
+        textAlign: "center",
     },
 
     // 완료 버튼 수정 부탁합니다 
@@ -421,8 +515,9 @@ const styles = StyleSheet.create({
     },
     reactionWrapper: {
         flexDirection: "row",
-        position: "relative",
-        top: 5,
+        position: "absolute",
+        bottom: 40,
+        left: 30,
     },
     reactionBtn: {
         height: 20,
@@ -435,5 +530,21 @@ const styles = StyleSheet.create({
         position: "relative",
         top: 2,
         marginRight: 6,
-    }
+    },
+    emotionChoice: {
+        textAlign: "center",
+        fontSize: 17,
+        color: "#5c5c5c",
+    },
+    SubmitBtn:{
+        position: "relative",
+        top: 1.5,
+        right: 5,
+    },
+    closeBtn: {
+        height: 25,
+        width: 25,
+        marginTop: 0.5,
+        marginLeft: 5,
+    },
 });

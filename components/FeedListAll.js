@@ -372,7 +372,7 @@ export default function FeedListAll({ route, navigation }) {
                         {/* <TouchableOpacity onPress={()=>{navigation.push('Comment')}}> */}
 
                         <TouchableOpacity onPress={()=>{navigation.navigate('Comment',{feed_id: {id}, uid: {uid}, commentNum: {commentNum}})}}>
-                            <Image style={styles.icon} source={CommentIcon} />
+                            <Image style={styles.commenticon} source={CommentIcon} />
 
                         </TouchableOpacity>
                         <Text style={styles.iconNum}>{commentNum}</Text>
@@ -763,5 +763,12 @@ const styles = StyleSheet.create({
         position: 'relative',
         top: -70,
         right: 10,
-    }
+    },
+    commenticon: {
+        height: 15,
+        width: 15,
+        position: "relative",
+        top: 11,
+        marginRight: 6,
+    },
 });

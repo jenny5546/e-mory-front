@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, Dimensions, TextInput, Text, Button, TouchableOpacity, Image, Alert, ScrollView, Keyboard } from 'react-native';
 import CloseIcon from './../images/CloseIconGray.png';
-import LockDisabled from './../images/LockIconGray.png';
+import LockDisabled from './../images/UnlockIcon.png';
 import LockEnabled from './../images/LockIcon.png';
 import FeedEmoji from './FeedEmoji';
 import { AntDesign } from '@expo/vector-icons';
@@ -18,7 +18,7 @@ import TiredIcon from './../images/TiredIcon.png';
 import DepressedIcon from './../images/DepressedIcon.png';
 import WorriedIcon from './../images/WorriedIcon.png';
 import AngryIcon from './../images/AngryIcon.png';
-
+import QuestionCircle from './../images/QuestionCircle.png';
 
 
 const { height, width } = Dimensions.get("window");
@@ -29,8 +29,17 @@ export default function FeedNew(props) {
     const [emoji, setEmoji] = useState(null);
     const [title, setTitle] = useState(null);
     const [content, setContent] = useState(null);
-    const [privacy, setPrivate] = useState(false);
+    const [privacy, setPrivate] = useState(true);
 
+    let str = ""
+    const pholder = () => {
+
+        for(let i=0; i<width/14+5; i++) {
+            str += " "
+        }
+        str += "오늘의 감정일기 500자"
+    }
+    pholder()
 
     const parseDate=(string)=>{
         let stringArray = string.split("-"); 
@@ -132,7 +141,6 @@ export default function FeedNew(props) {
     }
 
     const _setPrivate = e => {
-
         if(privacy == true) {
             Alert.alert(
                 '알림',
@@ -179,7 +187,7 @@ export default function FeedNew(props) {
     const _stopWrite = e => {
         Alert.alert(
             '알림',
-            '일기를 작성을 중단하시겠습니까?',
+            '일기 작성을 중단하시겠습니까?',
             [
                 {
                 text: "네",
@@ -203,18 +211,20 @@ export default function FeedNew(props) {
     return (
         <View style={styles.background}>
             {/* {feed===1 && */}
-            <View style={styles.container}>
+            <View 
+                style={emojiModal ? styles.containerwithmodal : styles.container}
+            >
                 <View style={styles.popup}>
-                <ScrollView keyboardShouldPersistTaps='handled'>
+                    <ScrollView keyboardShouldPersistTaps='handled'>
                     <View style={styles.header}>
                         {/* <Text style={styles.date}>{parseDate(props.pressedDate)}</Text> */}
-                        <TouchableOpacity onPress={() => {_setPrivate()}}>
+                        <TouchableOpacity onPress={() => {_setPrivate()}} style={{position: "relative", top: 20, left: 20,}}>
                             {privacy ? 
                                 <Image style={styles.lockBtn} source={LockEnabled} />:
-                                <Image style={styles.lockBtn} source={LockDisabled} />
+                                <Image style={styles.unlockBtn} source={LockDisabled} />
                             }
                         </TouchableOpacity>
-                        <View style={{flexDirection: "row", marginBottom: 10}}>
+                        <View style={{flexDirection: "row", marginBottom: 10, position: "relative", top: 20, right: 20 }}>
                             <TouchableOpacity 
                                 style={styles.submitButton}
                                 onPress={()=>{
@@ -222,43 +232,44 @@ export default function FeedNew(props) {
                                     props.submitNewFeed(title,content,emoji,privacy);
                                 }}
                             >
-                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={19} color="#b5b5b5"/>
+                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#b5b5b5"/>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>{_stopWrite()}}>
                                     <Image style={styles.closeBtn} source={CloseIcon} />
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Button
-                    // onPress={onPressLearnMore}
-                    onPress={()=>{ _openEmojiModal() }}
-                    title="오늘의 감정은?"
-                    color="#5c5c5c"
-                    backgroundColor="rgb(247, 247, 247)"
-                    accessibilityLabel="Learn more about this purple button"
-                    />
-                    {emoji!==null &&
+                    <TouchableOpacity onPress={()=>{ _openEmojiModal() }} style={{position: "relative", top: 20,}}>
+                        <Text style={styles.emotionChoice}>오늘의 감정은?</Text>
+                        {emoji == null &&
+                        <Image style={styles.circle} source={QuestionCircle} />
+                        }
+                        {emoji!==null &&
                         <View style={styles.emojiContainer}>{renderEmoji(emoji)}</View>
-                    }
+                        }
+                    </TouchableOpacity>
                     <TextInput
                         style={styles.titleInput}
-                        placeholder="제목을 입력해주세요"
+                        placeholder="제목 작성하기"
                         placeholderTextColor={"#999"}
+                        // placeholderStyle={{fontSize: 20,}}
                         returnKeyType={"done"}
                         autoCorrect={false}
                         autoCapitalize="none"
                         onChangeText={text => setTitle(text)}
                         multiline={true}
+                        maxLength={20}
                     />
                     <TextInput
                         style={styles.contentInput}
-                        placeholder="오늘의 감정일기 100자"
+                        placeholder={str}
                         placeholderTextColor={"#999"}
                         returnKeyType={"done"}
                         autoCapitalize="none"
                         autoCorrect={false}
                         onChangeText={text => setContent(text)}
                         multiline={true}
+                        maxLength={500}
                     />
                     {emojiModal===true &&
                         <FeedEmoji 
@@ -279,20 +290,27 @@ const styles = StyleSheet.create({
         position: "absolute",
         height: height,
         zIndex: 2,
+        backgroundColor: "rgba(153, 153, 153, 0.4)",
     },
     container: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: "center",
         width: width,
-        paddingHorizontal: 10,
-        paddingTop: 60,
-        backgroundColor: "rgba(153, 153, 153, 0.5);",
+        // paddingHorizontal: 10,
+        backgroundColor: "#fff",
+    },
+    containerwithmodal: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: "center",
+        width: width,
+        height: height,
+        backgroundColor: "#cccccc",
     },
     popup: {
         backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 20,
+        // padding: 20,
         height: "92%",
     },
     header: {
@@ -305,29 +323,48 @@ const styles = StyleSheet.create({
     },
     titleInput: {
         paddingTop: 20,
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: "600",
         marginTop: 20,
-        width: width
+        width: width,
+        textAlign: "center",
+        position: "relative",
+        top: 10,
+        left: 0,
         // flexWrap: "wrap",
     },
     contentInput: {
-        paddingTop: 20,
+        padding: 20,
         fontSize: 14,
         marginTop: 20,
-        width: width,
+        width: width*0.85,
+        // textAlign: "center",
+        // position: "relative",
+        // left: -30,
         // flexWrap: "wrap",
     },
     closeBtn: {
-        height: 20,
-        width: 20,
-        marginTop: 1,
+        height: 25,
+        width: 25,
+        marginTop: 0.5,
+        marginLeft: 5,
     },
     lockBtn: {
-        height: 20,
-        width: 20,
+        height: 25,
+        width: 25,
         marginTop: 1,
         marginRight: 10,
         position: "relative",
+        bottom: 1,
+    },
+    unlockBtn: {
+        height: 50,
+        width: 45,
+        marginTop: 1,
+        marginRight: 10,
+        position: "relative",
+        left: -10,
+        top: -12,
         bottom: 1,
     },
     emojiContainer: {
@@ -347,11 +384,17 @@ const styles = StyleSheet.create({
         position: "relative",
         top: 1.5,
         right: 5,
-    }
-    // 완료 버튼 수정 부탁합니다 
-    // submitButton:{
-    //     position: 'absolute',
-    //     bottom: 25,
-    //     left: width*0.43
-    // }
+    },
+    circle: {
+        width: 200,
+        height: 110,
+        alignSelf: "center",
+        position: "relative",
+        // top: 15,
+    },
+    emotionChoice: {
+        textAlign: "center",
+        fontSize: 17,
+        color: "#5c5c5c",
+    },
 });
