@@ -305,7 +305,7 @@ export default function Comment({ route, navigation }) {
         <View style={styles.container}>
             <StatusBar barStyle="dark-content"/>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
                 <Text style={styles.headerContent}>댓글</Text>
