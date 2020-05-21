@@ -32,7 +32,6 @@ export default function Signup({ navigation }) {
     };
 
     const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date);
         setPickedDate(date);
         let pickedDate = formatDate(date);
         setDate(pickedDate)
@@ -137,13 +136,9 @@ export default function Signup({ navigation }) {
     };
 
     const _storeName = async (nickname) => {
-        // let user_object = {
-        //     'uid': uid
-        // };
         try {
             await AsyncStorage.setItem('name', String(nickname));
         } catch (error) {
-          // Error saving data
             console.log(error);
         }
     };
@@ -276,7 +271,6 @@ export default function Signup({ navigation }) {
             </View>
             <View>
                 <Text>생년월일</Text>
-                {/* <DateTimePicker style={styles.dateTimePicker} mode="date" value={new Date()}/> */}
                 <TouchableOpacity onPress={showDatePicker}>
                     <View style={styles.input}>
                         <Text style={ date=='YYYY-MM-DD' ? styles.dateInit: styles.dateAfter}>{date}</Text>
