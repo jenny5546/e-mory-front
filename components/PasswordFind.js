@@ -43,7 +43,7 @@ export default function PasswordFind({ navigation }) {
 
     const emailValidation = () => {
 
-        fetch(`http://127.0.0.1:8000/accounts/password/temp/${uid}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/accounts/password/temp/${uid}/`, {
             method: 'POST',
             body: JSON.stringify({email: email}),
             headers:{

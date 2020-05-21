@@ -101,7 +101,7 @@ export default function MyActivity({route, navigation}) {
     useEffect(() => {
         _storeUid();
         if (uid){
-            fetch(`http://127.0.0.1:8000/feeds/notification/${uid}/`, {
+            fetch(`https://young-dusk-44488.herokuapp.com/feeds/notification/${uid}/`, {
           method: 'GET',
           headers:{
               'Accept': 'application/json',
@@ -142,7 +142,7 @@ export default function MyActivity({route, navigation}) {
                         if (item.type==='like'){
                             let id = item.feed
                             return(
-                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: uid.uid})}}>
+                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: uid})}}>
                                         <Text style={styles.feedWritter}>{item.from}</Text>
                                         <Text style={styles.feedContent}>{item.title}</Text>
                                         {timeSince(item.timelapse) == 'date' ?

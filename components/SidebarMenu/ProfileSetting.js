@@ -46,7 +46,7 @@ export default function ProfileSetting({route, navigation}) {
     }
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:8000/feeds/profile/${uid}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/profile/${uid}/`, {
             method: 'GET',
             headers:{
                 'Accept': 'application/json',
@@ -89,7 +89,7 @@ export default function ProfileSetting({route, navigation}) {
 
         const editedProfile = new Profile(name, email, password, birthday, nickname, newPassword);
 
-        fetch(`http://127.0.0.1:8000/feeds/profile/${uid}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/profile/${uid}/`, {
             method: 'POST',
             body: JSON.stringify(editedProfile),
             headers:{

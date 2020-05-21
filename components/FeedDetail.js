@@ -71,7 +71,7 @@ export default function FeedDetail(props) {
     let str = ""
     const pholder = () => {
 
-        for(let i=0; i<width/14; i++) {
+        for(let i=0; i<width/14+2; i++) {
             str += " "
         }
         str += "오늘의 감정일기 500자"
@@ -221,7 +221,7 @@ export default function FeedDetail(props) {
     }
 
     const _delete = () =>{
-        fetch(`http://127.0.0.1:8000/feeds/delete/${props.uid}/${props.matchingFeed.date}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/delete/${props.uid}/${props.matchingFeed.date}/`, {
         method: 'POST',
         headers:{
             // 'Accept': 'application/json',
@@ -240,7 +240,7 @@ export default function FeedDetail(props) {
     const _edit = () => {
 
         const editedFeed= new Feed(editedEmoji, editedTitle, editedContent, props.pressedDate, editedPrivacy);
-        fetch(`http://127.0.0.1:8000/feeds/edit/${props.uid}/${props.matchingFeed.date}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/edit/${props.uid}/${props.matchingFeed.date}/`, {
         method: 'POST',
         body: JSON.stringify(editedFeed),
         headers:{
@@ -284,7 +284,7 @@ export default function FeedDetail(props) {
                                         _edit()
                                     }}
                             >
-                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#b5b5b5"/>
+                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#828282"/>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>{props.closeFeedDetail()}}>
                                 <Image style={styles.closeBtn} source={CloseIcon} />

@@ -1,77 +1,22 @@
 // 회원가입 정보 기입 form
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button, TouchableWithoutFeedback, Keyboard, ScrollView, ActivityIndicator} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import React, { useState } from 'react';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native';
 import BackButton from './../images/BackIcon.png';
-import { AntDesign } from '@expo/vector-icons';
-import {AsyncStorage} from 'react-native';
 
 const { height, width } = Dimensions.get("window");
 
-export default function Waiting({ navigation }) {
-
-    const [name, setName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
-    const [passwordCheck, setPasswordCheck] = useState(null);
-    const [date, setDate] = useState('YYYY-MM-DD');
-    const [nickname, setNickname] = useState(null);
-    const [validEmail, setValidEmail] = useState(false);
-    const [validNickname, setValidNickname] = useState(false);
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    let today = new Date();
-    const [pickedDate, setPickedDate] = useState(today);
-    const [uid, setUid] = useState('');
-
-    const _storeUid = async () =>{
-
-        try {
-          const value = await AsyncStorage.getItem('user');
-          if (value !== null){
-            setUid(value);
-          }
-        } catch (error) {
-          // Error retrieving data
-          console.log(error)
-        }
-    }
-
-useEffect(() => {
-    _storeUid();
-},[]);
-
-const _checkValidUser = userid => {
-    console.log(uid)
-    const check = setInterval(() => {
-        console.log(uid)
-        if(uid > 0) {
-            fetch(`https://young-dusk-44488.herokuapp.com/feeds/user/valid/${uid}/`, {
-                method: 'GET',
-                headers:{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }}).then((res) => {
-                    return res.json();
-                }).then(resJSON=> {
-                    const {valid} = resJSON
-                    console.log(valid)
-                    if(valid) {
-                        navigation.push('TutorialOne')
-                        clearInterval(check)
-                    }
-                }).catch((err) => {
-                    console.log(err);
-                })
-        }
-    }, 1000)
-}
-_checkValidUser();
+export default function AppInfo({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Text style={{fontSize: 15, marginBottom: 10,}}>가입한 메일으로 발송된 메일을 통해서 인증을 완료해주세요</Text>
-            <ActivityIndicator style={styles.loadingbar}/>
+            <View style={styles.header} >
+                <TouchableOpacity onPress={() => navigation.goBack()}>            
+                    <Image style={styles.backButton} source={BackButton}/>
+                </TouchableOpacity>
+            </View>
+            <Text style={styles.introduction}>
+            이모리 버전 v 0.0.1
+            </Text>
         </View>
     );
 }
@@ -105,8 +50,20 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         backgroundColor: '#fff',
+    },
+    introduction: {
+        width: width*0.9,
+        fontSize: 14,
+        fontWeight: "500",
+        marginVertical: 20,
+    },
+    terms: {
+        width: width*0.9,
+        // height: height* 0.6,
+        fontSize: 13,
+        padding: 5,
     },
     header: {
         // flexDirection: "row",
@@ -201,13 +158,6 @@ const styles = StyleSheet.create({
         fontSize: 10,
         textAlign: "center",
         color: "#5a5a5a",
-        position: "relative",
-        top: 30,
-    },
-    termpage: {
-        fontSize: 10,
-        textAlign: "center",
-        color: "#0066cc",
         position: "relative",
         top: 30,
     }

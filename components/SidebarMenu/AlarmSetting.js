@@ -4,14 +4,15 @@ import { View, StyleSheet, Dimensions, Text, Switch, TouchableOpacity, Image, Al
 import BackButton from './../../images/BackIcon.png';
 import {AsyncStorage} from 'react-native';
 
-
 const { height, width } = Dimensions.get("window");
 
 export default function AlarmSetting({navigation}) {
 
     // const [value, setValue] = useState(false);
     const [uid, setUid] = useState('');
-    const [alarm, setAlarm] = useState(false);
+
+    // const [alarm, setAlarm] = useState(Boolean(AsyncStorage.getItem('alarm')));
+    // console.log(Boolean(AsyncStorage.getItem('alarm')))
 
     const _storeUid = async () =>{
         try {
@@ -24,28 +25,58 @@ export default function AlarmSetting({navigation}) {
           console.log(error)
         }
     }
+
     const _getAlarmState = async () =>{
         try {
           const value = await AsyncStorage.getItem('alarm');
-          if (value !== null) {
-            setAlarm(value);
-          }
+          const item = JSON.parse(value);
+          console.log(item)
+          setAlarm(item)
+        //   return (
+        //     //   <View>
+        //     //     <Switch
+        //     //         value={item}
+        //     //         onValueChange={v => {
+        //     //         _setAlarm(v);
+        //     //         }}
+        //     //         style={styles.switch}
+        //     //     /> 
+        //     //   </View>
+        //   );
         } catch (error) {
           // Error retrieving data
           console.log(error)
         }
     }
+
+    const temp = () => {
+        console.log(alarm)
+        _setAlarmState();
+    }
+
+    const _setAlarmState = async () =>{
+        try {
+          await AsyncStorage.setItem('alarm', String(!alarm));
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+    // const bool = _getAlarmState()
+    const [alarm, setAlarm] = useState(true);
     
     useEffect(()=>{
         _storeUid();
         _getAlarmState();
-
     },[]);
 
-    console.log(uid)
 
     const _setAlarm = () => {
         // console.log(id, uid)
+        // console.log('setalarm')
+        // const alarmstate = _getAlarmState();
+        // console.log(alarmstate);
+
         Alert.alert(
         '푸쉬 알람 설정',
         '푸쉬 알람을 다시 설정하시겠습니까?',
@@ -53,12 +84,15 @@ export default function AlarmSetting({navigation}) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/pushalarm/${uid}/${alarm}`, {
-                    method: 'GET',
+                fetch(`https://young-dusk-44488.herokuapp.com/feeds/pushalarm/post/${uid}/${alarm}/`, {
+                    method: 'POST',
+                    body: JSON.stringify("1"),
                     headers:{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }}).then((res) => {
+                        setAlarm(!alarm);
+                        temp()
                         return res.text()
                     }).catch((err) => {
                     console.log(err);
@@ -86,14 +120,37 @@ export default function AlarmSetting({navigation}) {
                 <View style={styles.lineStyle}></View>
                 <View style={styles.pushContainer}>
                     <Text style={styles.title}>푸쉬 알림</Text>
-                    <Switch
+                    {/* {alarm !== null && */}
+                    {/* {alarm === true && */}
+                        <Switch
                         value={alarm}
                         onValueChange={v => {
-                        // setValue(v);
                         _setAlarm(v);
                         }}
                         style={styles.switch}
-                    /> 
+                        /> 
+                        {
+                            // _getAlarmState()
+                        }
+                    {/* } */}
+                    {/* {alarm !== true &&
+                        <Switch
+                        value={_getAlarmState()}
+                        onValueChange={v => {
+                        _setAlarm(v);
+                        }}
+                        style={styles.switch}
+                        /> 
+                    } */}
+                    {/* <Switch
+                    value={alarm}
+                    onValueChange={v => {
+                    _setAlarm(v);
+                    }}
+                    style={styles.switch}
+                />  */}
+                    {/* } */}
+                    
                 </View>
                 <View style={styles.lineStyle}></View>
                 <Text style={styles.explanation}>이모리 앱에서 보내는 알림을 받을 수 있습니다.</Text> 
@@ -161,6 +218,8 @@ const styles = StyleSheet.create({
         height: height - 180,
         justifyContent: "flex-start",
         alignItems: "flex-start",
+        position: "relative",
+        top: -60,
     },
     headerContent: {
         fontSize: 18,

@@ -107,11 +107,11 @@ export default function Settings({route, navigation}) {
                     <Image style={styles.menuIcon} source={Mail} />
                     <Text style={styles.itemTitle}>고객센터</Text>
                 </TouchableOpacity>  
-                <TouchableOpacity style={styles.sidebarItem}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.push('Terms')}}>
                     <Image style={styles.menuIcon} source={Document} />
                     <Text style={styles.itemTitle}>이용약관</Text>
                 </TouchableOpacity> 
-                <TouchableOpacity style={styles.sidebarItem}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={()=>{navigation.push('AppInfo')}}>
                     <Image style={styles.menuIcon} source={Info} />
                     <Text style={styles.itemTitle}>앱정보</Text>
                 </TouchableOpacity> 

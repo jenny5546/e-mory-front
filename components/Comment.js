@@ -1,6 +1,6 @@
 //댓글 창 - //////////////////////
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
+import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import ReportIcon from './../images/ReportIcon.png';
@@ -34,6 +34,7 @@ export default function Comment({ route, navigation }) {
     const [date, setDate] = useState('');
     const [emoji, setEmoji] = useState('');
     const [comments, setComments] = useState([]);
+    const [loadingFinished, setLoadingFinished] = useState(false);
     // const [commentMode, setCommentMode] = useState(false);
     const _storeNickname = async () =>{
         try {
@@ -50,9 +51,7 @@ export default function Comment({ route, navigation }) {
 
 
     const _createComment= () =>{
-
-
-        fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(content),
             headers: {
@@ -69,9 +68,10 @@ export default function Comment({ route, navigation }) {
             let minutes = today.getMinutes();  // 분
             // console.log('Comment Success');
             console.log(uid.uid)
-            let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon', 'authorId': parseInt(uid.uid)}]
+            let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon', 'authorId': uid.uid}]
             setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
-            setContent(null)
+            setContent('');
+            
         }).catch((err) => {
                 console.log(err);
         });
@@ -222,7 +222,7 @@ export default function Comment({ route, navigation }) {
     };
 
     useEffect(() =>{
-        fetch(`http://127.0.0.1:8000/feeds/load/${feed_id.id}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/load/${feed_id.id}/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -238,6 +238,7 @@ export default function Comment({ route, navigation }) {
             setDate(date);
             setEmoji(emoji);
             setComments(comments);
+            setLoadingFinished(true);
         }).catch((err) => {
                 console.log(err);
         });
@@ -252,7 +253,7 @@ export default function Comment({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/comment/report/${id}/${uid.uid}/`, {
+                fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/report/${id}/${uid.uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
@@ -293,7 +294,7 @@ export default function Comment({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/comment/delete/${id}/${uid.uid}/`, {
+                fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/delete/${id}/${uid.uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
@@ -324,12 +325,15 @@ export default function Comment({ route, navigation }) {
     const Comment=({id, title, content, emoji, date, likes, comments, author, liked, authorId})=>{
 
         return (
+            
             <View style={styles.comment}>
-                <View style={styles.commentContent}>
-                    <Text style={styles.commentAuthor}>{author}</Text>
-                    <Text style={styles.feedContent}>{content}</Text>
-                </View>
-                <View style={{flexDirection: "row", width: width}}>
+                {/* {loadingFinished ?  */}
+                    {/* <> */}
+                    <View style={styles.commentContent}>
+                        <Text style={styles.commentAuthor}>{author}</Text>
+                        <Text style={styles.feedContent}>{content}</Text>
+                    </View>
+                    <View style={{flexDirection: "row", width: width}}>
                     {/* <Text style={styles.date}>{parseDate(date)}</Text> */}
                     {
                     date == 'soon' ? 
@@ -345,11 +349,17 @@ export default function Comment({ route, navigation }) {
                         <Image style={styles.deleteBtn} source={DeleteIcon} />
                     </TouchableOpacity>
                     }
-                </View>
-                <TouchableOpacity onPress={()=>{_reportComment(id)}}>
+                    </View>
+                    <TouchableOpacity onPress={()=>{_reportComment(id)}}>
                         <Image style={styles.reportBtn} source={ReportIcon} />
-                </TouchableOpacity>
-                </View>
+                    </TouchableOpacity>
+                    {/* </> */}
+                    {/* : */}
+                    {/* <ActivityIndicator style={styles.loadingbar}/> */}
+            
+                {/* } */}
+                
+            </View>
         )
     }
 
@@ -370,7 +380,9 @@ export default function Comment({ route, navigation }) {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                     <ScrollView>
+                    {loadingFinished ? 
                     <View style={styles.contentWrapper}>
+                        
                         <View style={styles.feed}>
                             <View>
                                 {renderEmoji(emoji)}
@@ -382,6 +394,7 @@ export default function Comment({ route, navigation }) {
                                 <Text style={styles.feedContent}>{feedContent}</Text>
                             </View>
                         </View>
+                        
                         <View style={styles.commentWrapper}>
                             {/* <ScrollView> */}
                                 {comments.map((item)=>(
@@ -400,6 +413,11 @@ export default function Comment({ route, navigation }) {
                             <View style={{height:80}}></View>
                         </View>
                     </View>
+                :
+                <View style={styles.contentWrapper}>
+                <ActivityIndicator style={styles.loadingbar}/>    
+                </View>             
+                }
                 </ScrollView>
                     <View style={styles.inputWrapper}>
                         <TextInput
@@ -620,6 +638,16 @@ const styles = StyleSheet.create({
         position: "relative",
         backgroundColor: '#FFF',
         paddingTop: 25,
+        minHeight: height + 550,
         // marginTop: '10%'
-    }
+    },
+    loadingbar: {
+        position: 'absolute',
+        top: height*0.36,
+        alignSelf: "center"
+    },
+    commentWrapper: {
+        height: "auto",
+        marginBottom: 50,
+    },
 });
