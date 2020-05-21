@@ -54,6 +54,9 @@ export default function Login({ navigation }) {
                         '아이디와 비밀번호가 일치하지 않습니다',
                     )
                 } else {
+                    _storeData(uid);
+                    _storeName(nickname);
+                    navigation.push('MainCalendar');
                     Alert.alert(
                         '이메일 인증을 먼저 완료해주세요',
                     )
