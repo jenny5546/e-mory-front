@@ -139,10 +139,40 @@ export default function MainCalendar({ navigation }) {
       </View>
     );
   }
+
+  const _storeToken = async () => {
+    try {
+          await AsyncStorage.setItem('token', String(tokenValue));
+          console.log('token set complete')
+          console.log(tokenValue);
+
+    } catch (error) {
+        console.log(error);
+    }
+  };
+
   useEffect(() => {
     getPushNotificationPermissions();
-    // _storeToken();
+    _storeToken();
+    // if (tokenValue && uid){
+    //   fetch(`http://127.0.0.1:8000/feeds/settoken/${uid}/`, {
+    //     method: 'POST',
+    //     body: JSON.stringify(tokenValue),
+    //     headers: {
+    //         // 'Accept': 'application/json',
+    //         'Content-type': 'applications/json'
+    //     }}).then((res) => {
+    //         return res.json();
+    //     }).then(resJSON=> {
+    //       console.log('sent token')
+
+    //     }).catch((err) => {
+    //       console.log(err);
+    //     })
+    // }
+    
   });
+
   
   const _storeUid = async () =>{
 

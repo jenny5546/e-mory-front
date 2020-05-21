@@ -285,6 +285,8 @@ export default function Signup({ navigation }) {
                     confirmTextIOS="선택"
                     cancelTextIOS="취소"
                     headerTextIOS="날짜 선택"
+                    locale={'ko'}
+                    format="YYYY-MM-DD"
                 />
             </View>
             <View>

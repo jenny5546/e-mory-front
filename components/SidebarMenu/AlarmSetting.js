@@ -1,14 +1,7 @@
 //알람 온오프 가능한 페이지
-import React, {useState, version, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, StyleSheet, Dimensions, Text, Switch, TouchableOpacity, Image, Alert } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 import BackButton from './../../images/BackIcon.png';
-import Logo from './../../images/SmallLogo.png';
-import Home from './../../images/HomeIcon.png';
-import Chart from './../../images/ChartIcon.png';
-import Menu from './../../images/MenuIcon.png';
-import Feed from './../../images/FeedIcon.png';
-import Setting from './../../images/SettingIconFilled.png'
 import {AsyncStorage} from 'react-native';
 
 
@@ -16,8 +9,9 @@ const { height, width } = Dimensions.get("window");
 
 export default function AlarmSetting({navigation}) {
 
-    const [value, setValue] = useState(false);
+    // const [value, setValue] = useState(false);
     const [uid, setUid] = useState('');
+    const [alarm, setAlarm] = useState(false);
 
     const _storeUid = async () =>{
         try {
@@ -30,19 +24,22 @@ export default function AlarmSetting({navigation}) {
           console.log(error)
         }
     }
-
-    const _storeToken = async () => {
+    const _getAlarmState = async () =>{
         try {
-              await AsyncStorage.setItem('token', String(tokenValue));
-              console.log('token set complete')
-    
+          const value = await AsyncStorage.getItem('alarm');
+          if (value !== null) {
+            setAlarm(value);
+          }
         } catch (error) {
-            console.log(error);
+          // Error retrieving data
+          console.log(error)
         }
-    };
+    }
     
     useEffect(()=>{
         _storeUid();
+        _getAlarmState();
+
     },[]);
 
     console.log(uid)
@@ -56,13 +53,12 @@ export default function AlarmSetting({navigation}) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/pushalarm/${uid}/`, {
+                fetch(`http://127.0.0.1:8000/feeds/pushalarm/${uid}/${alarm}`, {
                     method: 'GET',
                     headers:{
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }}).then((res) => {
-                        
                         return res.text()
                     }).catch((err) => {
                     console.log(err);
@@ -91,10 +87,10 @@ export default function AlarmSetting({navigation}) {
                 <View style={styles.pushContainer}>
                     <Text style={styles.title}>푸쉬 알림</Text>
                     <Switch
-                        value={value}
+                        value={alarm}
                         onValueChange={v => {
                         // setValue(v);
-                        _setAlarm();
+                        _setAlarm(v);
                         }}
                         style={styles.switch}
                     /> 
@@ -102,20 +98,6 @@ export default function AlarmSetting({navigation}) {
                 <View style={styles.lineStyle}></View>
                 <Text style={styles.explanation}>이모리 앱에서 보내는 알림을 받을 수 있습니다.</Text> 
             </View>
-            {/* <View style={styles.navigationbar}>
-                <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}}>
-                    <Image style={styles.menuIcon} source={Home} />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image style={styles.menuIcon} source={Chart} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
-                    <Image style={styles.menuIcon} source={Feed} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
-                    <Image style={styles.menuIcon} source={Setting} />
-                </TouchableOpacity>
-            </View> */}
         </View>
     );
 }
@@ -174,17 +156,6 @@ const styles = StyleSheet.create({
     menuIcon: {
         height: 20,
         width: 20,
-    },
-    navigationbar: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: 30,
-        marginBottom: 20,
-        paddingTop: 10,
-        paddingHorizontal: width*0.04,
-        borderTopColor: "#fafafa",
-        borderTopWidth: 2,
-        width: width,
     },
     contentWrapper: {
         height: height - 180,

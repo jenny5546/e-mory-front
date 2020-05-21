@@ -31,8 +31,8 @@ import {AsyncStorage} from 'react-native';
 import Signup from './components/Signup';
 import Statistics from './components/Statistics';
 
-import { Notifications } from 'expo';
-import * as Permissions from 'expo-permissions';
+// import { Notifications } from 'expo';
+// import * as Permissions from 'expo-permissions';
 
 const { height, width } = Dimensions.get("window");
 
@@ -44,52 +44,52 @@ const Stack = createStackNavigator();
 export default function App(){
   //3 초 뒤에 사라지는 cover page state 관리
   const [cover, setCover] = useState(true);
-  const [tokenValue, setTokenValue] = useState('none');
+  // const [tokenValue, setTokenValue] = useState('none');
 
-  const getPushNotificationPermissions = async () => {
+  // const getPushNotificationPermissions = async () => {
 
-    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    let finalStatus = existingStatus;
+  //   const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  //   let finalStatus = existingStatus;
 
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt the user a second time.
-    if (existingStatus !== 'granted') {
-      // Android remote notification permissions are granted during the app
-      // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
-    // Stop here if the user did not grant permissions
-    if (finalStatus !== 'granted') {
-      return;
-    }
-    console.log(finalStatus)
-    // Get the token that uniquely identifies this device'
-    const token = await Notifications.getExpoPushTokenAsync()
-    console.log("Notification Token: ", token);
-    setTokenValue(token);
+  //   // only ask if permissions have not already been determined, because
+  //   // iOS won't necessarily prompt the user a second time.
+  //   if (existingStatus !== 'granted') {
+  //     // Android remote notification permissions are granted during the app
+  //     // install, so this will only ask on iOS
+  //     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  //     finalStatus = status;
+  //   }
+  //   // Stop here if the user did not grant permissions
+  //   if (finalStatus !== 'granted') {
+  //     return;
+  //   }
+  //   console.log(finalStatus)
+  //   // Get the token that uniquely identifies this device'
+  //   const token = await Notifications.getExpoPushTokenAsync()
+  //   console.log("Notification Token: ", token);
+  //   setTokenValue(token);
 
-    return (
-      <View style={styles.container}>
-        <Text>...</Text>
-      </View>
-    );
-  }
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text>...</Text>
+  //     </View>
+  //   );
+  // }
 
-  const _storeToken = async () => {
-    try {
-          await AsyncStorage.setItem('token', String(tokenValue));
-          console.log('token set complete')
+  // const _storeToken = async () => {
+  //   try {
+  //         await AsyncStorage.setItem('token', String(tokenValue));
+  //         console.log('token set complete')
 
-    } catch (error) {
-        console.log(error);
-    }
-  };
+  //   } catch (error) {
+  //       console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getPushNotificationPermissions();
-    _storeToken();
-  });
+  // useEffect(() => {
+  //   getPushNotificationPermissions();
+  //   _storeToken();
+  // });
 
   useEffect(() => {
     const timer = setTimeout(() => setCover(false), 300);
