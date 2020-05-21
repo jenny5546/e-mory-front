@@ -139,10 +139,10 @@ export default function MyActivity({route, navigation}) {
                     <View style={styles.activityWrapper}>
                     <ScrollView>
                     {notiList.reverse().map((item)=>{
-                        if (item.type==='like'){
+                        if (item.type==='like'){  //{feed_id: {id}, uid: {uid}, commentNum: {commentNum}}
                             let id = item.feed
                             return(
-                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: uid})}}>
+                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: {uid}})}}>
                                         <Text style={styles.feedWritter}>{item.from}</Text>
                                         <Text style={styles.feedContent}>{item.title}</Text>
                                         {timeSince(item.timelapse) == 'date' ?
@@ -157,7 +157,7 @@ export default function MyActivity({route, navigation}) {
                         else{
                             let id = item.feed
                             return(
-                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.push('Comment',{feed_id: {id}, uid: {uid}})}}>
+                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: {uid}})}}>
                                         <View style={styles.flexbox}>
                                             <Text style={styles.feedWritter}>{item.from}</Text>
                                             <Text style={styles.feedContent}>{item.title} :</Text>
@@ -189,7 +189,9 @@ export default function MyActivity({route, navigation}) {
                     </ScrollView>
                 </View>
                 :
-                <ActivityIndicator style={styles.loadingbar}/>
+                <View style={styles.contentWrapper}>
+                    <ActivityIndicator style={styles.loadingbar}/>
+                </View>
             
                 }
                 
