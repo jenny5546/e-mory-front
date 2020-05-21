@@ -38,199 +38,35 @@ export default function Waiting({ navigation }) {
     }
 
 useEffect(() => {
-
     _storeUid();
-
-    setTimeout(() => {
-        fetch(`http://127.0.0.1:8000/feeds/user/valid/${uid}/`, {
-        method: 'GET',
-        headers:{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }}).then((res) => {
-            return res.json();
-        }).then(resJSON=> {
-            const {valid} = resJSON
-            if(valid) {
-                navigation.push('TutorialOne')
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
-    }, 1000)
-
 },[]);
 
-    const formatDate = (date) => {
-        let d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-    
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-    
-        return [year, month, day].join('-');
-    }
-
-    const emailValidation = (e) => {
-
-        fetch(`http://127.0.0.1:8000/accounts/email/valid/`, {
-            method: 'POST',
-            body: JSON.stringify({email:email}),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'applications/json'
-            }
-            }).then((res) => {
-                return res.json();
-            }).then((resJSON) => {
-                const { valid } = resJSON;
-                if(valid) {
-                    Alert.alert(
-                        '사용 가능한 이메일입니다'
-                    )
-                } else {
-                    Alert.alert(
-                        '이미 사용중인 이메일입니다',
-                    )
-                }
-            }).catch((err) => {
-                console.log(err);
-            })
-        setValidEmail(true);
-    }
-
-    const nicknameValidation = (e) => {
-        const check_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-        if(check_kor.test(nickname)) {
-            Alert.alert(
-                '형식 오류',
-                '닉네임은 영어, 숫자, 특수문자만 사용가능합니다'
-            )
-            return;
+const _checkValidUser = userid => {
+    console.log(uid)
+    const check = setInterval(() => {
+        console.log(uid)
+        if(uid > 0) {
+            fetch(`http://127.0.0.1:8000/feeds/user/valid/${uid}/`, {
+                method: 'GET',
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }}).then((res) => {
+                    return res.json();
+                }).then(resJSON=> {
+                    const {valid} = resJSON
+                    console.log(valid)
+                    if(valid) {
+                        navigation.push('TutorialOne')
+                        clearInterval(check)
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
         }
-    
-        fetch(`http://127.0.0.1:8000/accounts/nickname/valid/`, {
-            method: 'POST',
-            body: JSON.stringify({nickname:nickname}),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'applications/json'
-            }
-            }).then((res) => {
-                return res.json();
-            }).then((resJSON) => {
-                const { valid } = resJSON;
-                if(valid) {
-                    Alert.alert(
-                        '사용 가능한 닉네임입니다',
-                    )
-                    setValidNickname(true);
-                } else {
-                    Alert.alert(
-                        '이미 사용중인 닉네임입니다',
-                    )
-                }
-            }).catch((err) => {
-                console.log(err);
-            })
-
-    }
-
-    const pwdValidCheck = (pwd) => {
-        const regPwd = /^[A-Za-z0-9]{6,12}$/;
-        if(!regPwd.test(pwd)) {
-            return false;
-        }else{
-            return true;
-        }
-    }
-
-    const _storeData = async (uid) => {
-        try {
-            await AsyncStorage.setItem('user', String(uid));
-        } catch (error) {
-          // Error saving data
-            console.log(error);
-        }
-    };
-
-    const _storeName = async (nickname) => {
-        // let user_object = {
-        //     'uid': uid
-        // };
-        try {
-            await AsyncStorage.setItem('name', String(nickname));
-        } catch (error) {
-          // Error saving data
-            console.log(error);
-        }
-    };
-
-    const onSignup = e => {
-        if(validEmail === false) {
-            return (
-                Alert.alert(
-                    '이메일 인증',
-                    '이메일 인증을 완료해주세요'
-                )
-            );
-        }
-        if(password !== passwordCheck) {
-            return (
-                Alert.alert(
-                    '입력오류',
-                    '비밀번호가 일치하지 않습니다'
-                )
-            );
-        }
-        if(pwdValidCheck(password) === false) {
-            return (
-                Alert.alert(
-                    '비밀번호는 숫자, 영문 포함 6자 이상'
-                )
-            );
-        }
-
-        if(validNickname === false) {
-            return (
-                Alert.alert(
-                    '닉네임',
-                    '중복되지 않는 닉네임을 사용해주세요'
-                )
-            );
-        }
-        fetch(`http://127.0.0.1:8000/accounts/signup/`, {
-            method: 'POST',
-            body: JSON.stringify({name:name, email: email, password: password, date: date, nickname:nickname }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'applications/json'
-            }
-            }).then((res) => {
-                return res.json();
-            }).then((resJSON) => {
-                const { uid , nickname } = resJSON;
-                if(uid > 0) {
-                    _storeData(uid);
-                    _storeName(nickname);
-                    Alert.alert(
-                        '축하드립니다!',
-                        '회원가입이 완료되었습니다',
-                        [
-                            {text: '이모리 시작하기', onPress: () => navigation.push('TutorialOne')},
-                        ],
-                        { cancelable: false }
-                    )
-                }
-            }).catch((err) => {
-                console.log(err);
-            })
-    }
-
+    }, 1000)
+}
+_checkValidUser();
 
     return (
         <View style={styles.container}>
