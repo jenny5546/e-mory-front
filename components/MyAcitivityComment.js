@@ -73,7 +73,7 @@ export default function MyActivityComment({ route, navigation }) {
             let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon', 'authorId': parseInt(uid.uid)}]
             setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
             setContent(null)
-            setLoadingFinished(true);
+
         }).catch((err) => {
                 console.log(err);
         });
@@ -170,16 +170,55 @@ export default function MyActivityComment({ route, navigation }) {
         }
     }
 
-    const parseDate=(string)=>{
-        if(string=='soon') {
-            return '방금 전';
-        }
-        let stringArray = string.split("-"); 
-        let year = stringArray[0];
-        let month = stringArray[1];
-        let day = stringArray[2];
-        return year+'년 '+month + '월 '+ day + '일';
-    }
+    const parseDate=(string)=>{	
+        let stringArray = string.substring(0,10).split("-"); 	
+        let year = stringArray[0];	
+        let month = stringArray[1];	
+        let day = stringArray[2];	
+        return year+'년 '+month + '월 '+ day + '일';	
+    }	
+    	
+    var timeSince = function(date) {	
+        if (typeof date !== 'object') {	
+          date = new Date(date);	
+        }	
+      	
+        var seconds = Math.floor((new Date() - date) / 1000);	
+        var intervalType;	
+      	
+        var interval = Math.floor(seconds / 31536000);	
+        if (interval >= 1) {	
+        //   intervalType = '년';	
+          return 'date';	
+        } else {	
+          interval = Math.floor(seconds / 2592000);	
+          if (interval >= 1) {	
+            // intervalType = '개월 ';	
+            return 'date';	
+          } else {	
+            interval = Math.floor(seconds / 86400);	
+            if (interval >= 1) {	
+            //   intervalType = '일 ';	
+            return 'date';	
+            } else {	
+              interval = Math.floor(seconds / 3600);	
+              if (interval >= 1) {	
+                intervalType = "시간 ";	
+              } else {	
+                interval = Math.floor(seconds / 60);	
+                if (interval >= 1) {	
+                  intervalType = "분 ";	
+                } else {	
+                  interval = seconds;	
+                  intervalType = "초 ";	
+                }	
+              }	
+            }	
+          }	
+        }	
+      	
+        return interval + ' ' + intervalType;	
+    };
 
     useEffect(() =>{
         fetch(`https://young-dusk-44488.herokuapp.com/feeds/load/${feed_id.id}/`, {
@@ -284,14 +323,26 @@ export default function MyActivityComment({ route, navigation }) {
 
     const Comment=({id, title, content, emoji, date, likes, comments, author, liked, authorId})=>{
 
-        return (
-            <View style={styles.comment}>
-                <View style={styles.commentContent}>
-                    <Text style={styles.commentAuthor}>{author}</Text>
-                    <Text style={styles.feedContent}>{content}</Text>
-                </View>
-                <View style={{flexDirection: "row", width: width}}>
-                    <Text style={styles.date}>{parseDate(date)}</Text>
+        return (	
+            	
+            <View style={styles.comment}>	
+                {/* {loadingFinished ?  */}	
+                    {/* <> */}	
+                    <View style={styles.commentContent}>	
+                        <Text style={styles.commentAuthor}>{author}</Text>	
+                        <Text style={styles.feedContent}>{content}</Text>	
+                    </View>	
+                    <View style={{flexDirection: "row", width: width}}>	
+                    {/* <Text style={styles.date}>{parseDate(date)}</Text> */}	
+                    {	
+                    date == 'soon' ? 	
+                    <Text style={styles.date}>방금 전</Text>	
+                    :	
+                    timeSince(date) == 'date' ?	
+                    <Text style={styles.date}>{parseDate(date)}</Text>	
+                    :	
+                    <Text style={styles.date}>{timeSince(date)}전</Text>	
+                    }
                     {(authorId) === parseInt(uid.uid) && 
                     <TouchableOpacity onPress={()=>{_deleteComment(id)}}>
                         <Image style={styles.deleteBtn} source={DeleteIcon} />
@@ -354,7 +405,9 @@ export default function MyActivityComment({ route, navigation }) {
                         </View>
                     </View>
                 :
-                <ActivityIndicator style={styles.loadingbar}/>                 
+                <View style={styles.contentWrapper}>	
+                    <ActivityIndicator style={styles.loadingbar}/>    	
+                </View>                 
                 }
                 </ScrollView>
                     <View style={styles.inputWrapper}>
@@ -576,11 +629,16 @@ const styles = StyleSheet.create({
         position: "relative",
         backgroundColor: '#FFF',
         paddingTop: 25,
+        minHeight: height + 550,
         // marginTop: '10%'
     },
     loadingbar: {
         position: 'absolute',
         top: height*0.36,
         alignSelf: "center"
-    }
+    },
+    commentWrapper: {	
+        height: "auto",	
+        marginBottom: 50,	
+    },
 });

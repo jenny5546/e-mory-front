@@ -420,6 +420,7 @@ export default function FeedListAll({ route, navigation }) {
                         }
                     }}
                     scrollEventThrottle = {1}
+                    style={{marginBottom: 150}}
                 >
                     {/* <Text style={{fontSize: 50}}>Hoi</Text> */}
                     {data.map((item)=>(
@@ -622,7 +623,7 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     feedWrapper: {
-        height: height+50,
+        height: height,
         backgroundColor: 'white',
         // height: height,
         justifyContent: "flex-start",
