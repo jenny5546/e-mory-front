@@ -15,6 +15,7 @@ import FeedListAll from './components/FeedListAll';
 import FeedListSpecific from './components/FeedListSpecific';
 import Sidebar from './components/Settings';
 import Comment from './components/Comment';
+import MyActivityComment from './components/MyAcitivityComment';
 import MyActivity from './components/MyActivity';
 import Waiting from './components/Waiting';
 
@@ -22,6 +23,7 @@ import ProfileSetting from './components/SidebarMenu/ProfileSetting';
 import AlarmSetting from './components/SidebarMenu/AlarmSetting';
 import PasswordFind from './components/PasswordFind';
 import Terms from './components/Terms';
+import AppInfo from './components/AppInfo';
 import UserFeedback from './components/SidebarMenu/UserFeedback';
 import ServiceTerm from './components/SidebarMenu/ServiceTerm';
 import {AsyncStorage} from 'react-native';
@@ -118,8 +120,9 @@ export default function App(){
         <Stack.Screen name="Settings" component={Sidebar} />
         <Stack.Screen name="Comment" component={Comment} />
         <Stack.Screen name="MyActivity" component={MyActivity} />
+        <Stack.Screen name="AppInfo" component={AppInfo} />
         <Stack.Screen name="ProfileSetting" component={ProfileSetting} />
-
+        <Stack.Screen name="MyActivityComment" component={MyActivityComment} />
         <Stack.Screen name="PasswordFind" component={PasswordFind} />
         <Stack.Screen name="Waiting" component={Waiting} />
         {/* <Stack.Screen name="Chart" component={Chart} /> */}

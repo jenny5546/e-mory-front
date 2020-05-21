@@ -55,7 +55,7 @@ export default function Signup({ navigation }) {
 
     const emailValidation = (e) => {
 
-        fetch(`http://127.0.0.1:8000/accounts/email/valid/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/accounts/email/valid/`, {
             method: 'POST',
             body: JSON.stringify({email:email}),
             headers: {
@@ -91,7 +91,7 @@ export default function Signup({ navigation }) {
             return;
         }
     
-        fetch(`http://127.0.0.1:8000/accounts/nickname/valid/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/accounts/nickname/valid/`, {
             method: 'POST',
             body: JSON.stringify({nickname:nickname}),
             headers: {
@@ -181,7 +181,7 @@ export default function Signup({ navigation }) {
                 )
             );
         }
-        fetch(`http://127.0.0.1:8000/accounts/signup/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/accounts/signup/`, {
             method: 'POST',
             body: JSON.stringify({name:name, email: email, password: password, date: date, nickname:nickname }),
             headers: {

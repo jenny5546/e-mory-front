@@ -154,22 +154,20 @@ export default function MainCalendar({ navigation }) {
   useEffect(() => {
     getPushNotificationPermissions();
     _storeToken();
-    // if (tokenValue && uid){
-    //   fetch(`http://127.0.0.1:8000/feeds/settoken/${uid}/`, {
-    //     method: 'POST',
-    //     body: JSON.stringify(tokenValue),
-    //     headers: {
-    //         // 'Accept': 'application/json',
-    //         'Content-type': 'applications/json'
-    //     }}).then((res) => {
-    //         return res.json();
-    //     }).then(resJSON=> {
-    //       console.log('sent token')
-
-    //     }).catch((err) => {
-    //       console.log(err);
-    //     })
-    // }
+    if (tokenValue && uid){
+      fetch(`https://young-dusk-44488.herokuapp.com/feeds/settoken/${uid}/`, {
+        method: 'POST',
+        body: JSON.stringify(tokenValue),
+        headers: {
+            // 'Accept': 'application/json',
+            'Content-type': 'applications/json'
+        }}).then((res) => {
+          console.log('sent token')
+            return res.json();
+        }).catch((err) => {
+          console.log(err);
+        })
+    }
     
   });
 
@@ -191,24 +189,35 @@ export default function MainCalendar({ navigation }) {
   const _storeFeeds = async () => {
     try {
           await AsyncStorage.setItem('feedlist', JSON.stringify(feedList));
-          console.log('complete')
+          // console.log('complete')
 
     } catch (error) {
         console.log(error);
     }
   };
 
-  // const _getToken = async () => {
-  //   try {
-  //         const value =await AsyncStorage.getItem('token');
-  //         console.log(value)
+  const _storeAlarmState =  async () => {
+    let alarmState = null;
+    try {
+      await fetch(`https://young-dusk-44488.herokuapp.com/feeds/pushalarm/${uid}/true`, {
+        method: 'GET',
+        headers:{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }}).then((res) => {
+            return res.json()
+        }).then((resJSON) => {
+            const {alarm} = resJSON
+            alarmState = alarm;
+            AsyncStorage.setItem('alarm',  JSON.stringify(alarmState));
+        }).catch((err) => {
+        console.log(err);
+        });
 
-  //   } catch (error) {
-  //       console.log(error);
-  //   }
-  // };
-
-  // _getToken();
+    } catch (error) {
+        console.log(error);
+    }
+  };
 
   // calendar에 mark하기 위해서 일기 쓴 날짜를 object: customStyle로 만드는 method
   const markedFeeds = () =>{
@@ -247,7 +256,8 @@ export default function MainCalendar({ navigation }) {
 
   setTimeout(() => {
     setLoaded(true);
-    _storeFeeds(); 
+    _storeFeeds();
+    _storeAlarmState(); 
   }, 1000)
 
 
@@ -256,7 +266,7 @@ export default function MainCalendar({ navigation }) {
     _storeUid();
 
     if (uid){
-      fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
+      fetch(`https://young-dusk-44488.herokuapp.com/feeds/${uid}/`, {
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -314,7 +324,7 @@ export default function MainCalendar({ navigation }) {
                 // console.log(newFeed);
                 
                 /* 이 부분에 Post를 넣읍시다*/
-                fetch(`http://127.0.0.1:8000/feeds/${uid}/`, {
+                fetch(`https://young-dusk-44488.herokuapp.com/feeds/${uid}/`, {
                   method: 'POST',
                   body: JSON.stringify(newFeed),
                   headers: {
@@ -363,6 +373,11 @@ export default function MainCalendar({ navigation }) {
             mode="date"
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
+            locale={'ko'}
+            format="YYYY-MM-DD"
+            confirmTextIOS="선택"
+            cancelTextIOS="취소"
+            headerTextIOS="날짜 선택"
           />
           <CalendarList
             // onVisibleMonthsChange = {(months)=>console.log(months)}

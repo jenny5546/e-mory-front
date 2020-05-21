@@ -34,7 +34,7 @@ export default function FeedNew(props) {
     let str = ""
     const pholder = () => {
 
-        for(let i=0; i<width/14; i++) {
+        for(let i=0; i<width/14+2; i++) {
             str += " "
         }
         str += "오늘의 감정일기 500자"
@@ -232,7 +232,7 @@ export default function FeedNew(props) {
                                     props.submitNewFeed(title,content,emoji,privacy);
                                 }}
                             >
-                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#b5b5b5"/>
+                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#828282"/>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>{_stopWrite()}}>
                                     <Image style={styles.closeBtn} source={CloseIcon} />

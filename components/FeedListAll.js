@@ -206,7 +206,7 @@ export default function FeedListAll({ route, navigation }) {
         // console.log(emojiOption);
         setLoadingFinished(true);
         if (totalPage===0 || totalPage > page-1){
-            fetch(`http://127.0.0.1:8000/feeds/${emojiOption}/${page}/`, {
+            fetch(`https://young-dusk-44488.herokuapp.com/feeds/${emojiOption}/${page}/`, {
             method: 'GET',
             headers:{
                 'Accept': 'application/json',
@@ -251,7 +251,7 @@ export default function FeedListAll({ route, navigation }) {
 
     const _likeFeed = (id) => {
 
-        fetch(`http://127.0.0.1:8000/feeds/like/${id}/${uid}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/like/${id}/${uid}/`, {
             method: 'GET',
             // body: JSON.stringify(newFeed),
             headers: {
@@ -280,7 +280,7 @@ export default function FeedListAll({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/report/${id}/${uid}/`, {
+                fetch(`https://young-dusk-44488.herokuapp.com/feeds/report/${id}/${uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
         fontWeight: "400",
     },
     feedWrapper: {
-        height: height,
+        height: height+50,
         backgroundColor: 'white',
         // height: height,
         justifyContent: "flex-start",

@@ -1,6 +1,6 @@
 //댓글 창 - //////////////////////
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard  } from 'react-native';
+import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ActivityIndicator   } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import ReportIcon from './../images/ReportIcon.png';
@@ -34,6 +34,7 @@ export default function MyActivityComment({ route, navigation }) {
     const [date, setDate] = useState('');
     const [emoji, setEmoji] = useState('');
     const [comments, setComments] = useState([]);
+    const [loadingFinished, setLoadingFinished] = useState(false);
     // const [commentMode, setCommentMode] = useState(false);
     const _storeNickname = async () =>{
         try {
@@ -52,7 +53,7 @@ export default function MyActivityComment({ route, navigation }) {
     const _createComment= () =>{
 
 
-        fetch(`http://127.0.0.1:8000/feeds/comment/${feed_id.id}/${uid.uid}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(content),
             headers: {
@@ -72,6 +73,7 @@ export default function MyActivityComment({ route, navigation }) {
             let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon', 'authorId': parseInt(uid.uid)}]
             setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
             setContent(null)
+            setLoadingFinished(true);
         }).catch((err) => {
                 console.log(err);
         });
@@ -180,7 +182,7 @@ export default function MyActivityComment({ route, navigation }) {
     }
 
     useEffect(() =>{
-        fetch(`http://127.0.0.1:8000/feeds/load/${feed_id.id}/`, {
+        fetch(`https://young-dusk-44488.herokuapp.com/feeds/load/${feed_id.id}/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -196,6 +198,7 @@ export default function MyActivityComment({ route, navigation }) {
             setDate(date);
             setEmoji(emoji);
             setComments(comments);
+            setLoadingFinished(true);
         }).catch((err) => {
                 console.log(err);
         });
@@ -210,7 +213,7 @@ export default function MyActivityComment({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/comment/report/${id}/${uid.uid}/`, {
+                fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/report/${id}/${uid.uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
@@ -251,7 +254,7 @@ export default function MyActivityComment({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`http://127.0.0.1:8000/feeds/comment/delete/${id}/${uid.uid}/`, {
+                fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/delete/${id}/${uid.uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
@@ -319,6 +322,7 @@ export default function MyActivityComment({ route, navigation }) {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                     <ScrollView>
+                    {loadingFinished ? 
                     <View style={styles.contentWrapper}>
                         <View style={styles.feed}>
                             <View>
@@ -349,6 +353,9 @@ export default function MyActivityComment({ route, navigation }) {
                             <View style={{height:80}}></View>
                         </View>
                     </View>
+                :
+                <ActivityIndicator style={styles.loadingbar}/>                 
+                }
                 </ScrollView>
                     <View style={styles.inputWrapper}>
                         <TextInput
@@ -570,5 +577,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         paddingTop: 25,
         // marginTop: '10%'
+    },
+    loadingbar: {
+        position: 'absolute',
+        top: height*0.36,
+        alignSelf: "center"
     }
 });
