@@ -485,16 +485,16 @@ export default function MainCalendar({ navigation }) {
         
         
         <View style={styles.navigationbar}>
-          <TouchableOpacity style={{paddingHorizontal: 30}} >
+          <TouchableOpacity style={{paddingHorizontal: 30}} hitSlop={{top: 20, bottom: 20, left: 50, right: 40}}  >
             <Image style={styles.homeIcon} source={Home} />
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingHorizontal: 30}} onPress={()=>{navigation.push('Chart')}}>
+          <TouchableOpacity style={{paddingHorizontal: 30}} onPress={()=>{navigation.push('Chart')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('FeedListAll')}}>
+          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('FeedListAll')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('Settings',{uid: {uid}})}}>
+          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('Settings',{uid: {uid}})}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
             <Image style={styles.icon} source={Setting} />
           </TouchableOpacity>
         </View>

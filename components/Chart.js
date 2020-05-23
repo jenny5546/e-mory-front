@@ -284,16 +284,16 @@ export default function Chart({navigation}) {
 
             </View>
             <View style={styles.navigationbar}>
-                <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.navicon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.navicon} source={ChartIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.navicon} source={FeedIcon} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.navicon} source={Setting} />
                 </TouchableOpacity>
             </View>
