@@ -76,7 +76,7 @@ export default function Settings({route, navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>            
+                <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>            
                     <Image style={styles.menuIcon} source={BackButton}/>
                 </TouchableOpacity>
                 <Image style={styles.logo} source={Logo}/>
@@ -121,16 +121,16 @@ export default function Settings({route, navigation}) {
                 </TouchableOpacity>
             </View>
             <View style={styles.navigationbar}>
-                <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.menuIcon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Chart')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.menuIcon} source={Chart} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.menuIcon} source={Feed} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.menuIcon} source={Setting} />
                 </TouchableOpacity>
             </View>

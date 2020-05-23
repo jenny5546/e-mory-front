@@ -399,12 +399,12 @@ export default function FeedListAll({ route, navigation }) {
         <TouchableWithoutFeedback onPress={()=>{setOpenFilter(false)}}>
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>navigation.goBack()}>
+                <TouchableOpacity onPress={()=>navigation.goBack()} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
                 <Image style={styles.logo} source={Logo}/>
                 <View>
-                    <TouchableOpacity onPress={()=>setOpenFilter(!openFilter)}>
+                    <TouchableOpacity onPress={()=>setOpenFilter(!openFilter)} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                         <Image style={styles.backButton} source={Down}/>
                     </TouchableOpacity>
                 </View>
@@ -555,17 +555,17 @@ export default function FeedListAll({ route, navigation }) {
                     }
 
             <View style={styles.navigationbar}>
-                <TouchableOpacity  onPress={()=>{navigation.push('MainCalendar')}}>
+                <TouchableOpacity  onPress={()=>{navigation.push('MainCalendar')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.icon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Chart')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
             
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.icon} source={FeedFilled} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.push('Settings')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Settings')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.icon} source={Setting}/>
                 </TouchableOpacity>
             </View>
