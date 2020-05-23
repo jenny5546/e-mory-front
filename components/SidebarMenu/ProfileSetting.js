@@ -122,7 +122,7 @@ export default function ProfileSetting({route, navigation}) {
                 </TouchableOpacity>
             </View>
             <View>
-                <Text>이름</Text>
+                <Text style={{position: "relative", bottom: -5,}}>이름</Text>
                 <TextInput 
                     style={styles.input}
                     placeholder={"이름을 입력해주세요"}
@@ -131,7 +131,7 @@ export default function ProfileSetting({route, navigation}) {
                 />
             </View>
             <View>
-                <Text>이메일</Text>
+                <Text style={{position: "relative", bottom: -5,}}>이메일</Text>
                 <View style={styles.idContainer}>
                     <TextInput 
                         style={styles.emailInput}
@@ -147,7 +147,7 @@ export default function ProfileSetting({route, navigation}) {
                 </View>
             </View>
             <View>
-                <Text>기존 비밀번호</Text>
+                <Text style={{position: "relative", bottom: -5,}}>기존 비밀번호</Text>
                 <TextInput 
                     style={styles.input}
                     placeholder={"기존 비밀번호를 입력해주세요"}
@@ -156,7 +156,7 @@ export default function ProfileSetting({route, navigation}) {
                 />
             </View>
             <View>
-                <Text>새 비밀번호</Text>
+                <Text style={{position: "relative", bottom: -5,}}>새 비밀번호</Text>
                 <TextInput 
                     style={styles.input}
                     placeholder={"새로 사용할 비밀번호를 입력해주세요"}
@@ -165,7 +165,7 @@ export default function ProfileSetting({route, navigation}) {
                 />
             </View>
             <View>
-                <Text>새 비밀번호 확인</Text>
+                <Text style={{position: "relative", bottom: -5,}}>새 비밀번호 확인</Text>
                 <TextInput 
                     style={styles.input}
                     placeholder={"새 비밀번호를 한번 더 입력해주세요"}
@@ -174,7 +174,7 @@ export default function ProfileSetting({route, navigation}) {
                 />
             </View>
             <View>
-                <Text>생년월일</Text>
+                <Text style={{position: "relative", bottom: -4,}}>생년월일</Text>
                 <TextInput 
                     style={styles.input}
                     // placeholder={"YYYY/MM/DD"}
@@ -183,7 +183,7 @@ export default function ProfileSetting({route, navigation}) {
                 />
             </View>
             <View>
-                <Text>닉네임</Text>
+                <Text style={{position: "relative", bottom: -5,}}>닉네임</Text>
                 <View style={styles.idContainer}>
                     <TextInput 
                         style={styles.nicknameInput}
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     },
     emailInput: {
         ...inputStyle.inputContainer,
-        width: width*0.70,
+        width: width*0.695,
     },
     nicknameInput:{
         ...inputStyle.inputContainer,

@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState}  from 'react';
-import { StyleSheet, Dimensions, View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Dimensions, View, Text, TextInput, Image, TouchableOpacity, Alert, ScrollView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Logo from './../images/Logo.png';
 import Copy from './../images/Copy1.png';
 const { height, width } = Dimensions.get("window");
@@ -70,53 +70,51 @@ export default function Login({ navigation }) {
 
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Image style={styles.logo} source={Logo} />
                 <Image style={styles.copy} source={Copy} />
             </View>
-            <TextInput
-                style={styles.input}
-                placeholder={"닉네임을 입력해주세요"}
-                value={email}
-                onChange={(e)=>{setEmail(e.nativeEvent.text)}}
-                autoCapitalize="none"
-                autoCorrect={false}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder={"비밀번호를 입력해주세요"}
-                value={password}
-                onChange={(e)=>{setPassword(e.nativeEvent.text)}}
-                autoCapitalize="none"
-                autoCorrect={false}
-                secureTextEntry={true}
-            />
-            <View style={styles.loginButtonWrapper}>
-                <TouchableOpacity onPress={onLogin}>
-                    <Text style={styles.loginButton}>로그인</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.loginHelpWrapper}>
-                <TouchableOpacity onPress={()=>{navigation.push('PasswordFind')}}>
-                    <Text style={styles.loginHelpButton}>아이디 | 비밀번호 찾기</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.signupButtonWrapper}>
-                <TouchableOpacity onPress={() => navigation.push('SignUp')}>
-                    <Text style={styles.signupButton}>회원가입</Text>
-                </TouchableOpacity>
-            </View>
-            {/* <View style={styles.kakaoButtonWrapper}>
-                <Button title={"카카오톡으로 시작하기"} color="#000"/>
-            </View>
-            <View style={styles.naverButtonWrapper}>
-                <Button title={"네이버로 시작하기"} color="#fff"/>
-            </View>
-            <View style={styles.facebookButtonWrapper}>
-                <Button title={"페이스북으로 시작하기"} color= "white"/>
-            </View> */}
+
+                <View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={"닉네임을 입력해주세요"}
+                    value={email}
+                    onChange={(e)=>{setEmail(e.nativeEvent.text)}}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder={"비밀번호를 입력해주세요"}
+                    value={password}
+                    onChange={(e)=>{setPassword(e.nativeEvent.text)}}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
+                />
+                <View style={styles.loginButtonWrapper}>
+                    <TouchableOpacity onPress={onLogin}>
+                        <Text style={styles.loginButton}>로그인</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.loginHelpWrapper}>
+                    <TouchableOpacity onPress={()=>{navigation.push('PasswordFind')}}>
+                        <Text style={styles.loginHelpButton}>아이디 | 비밀번호 찾기</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.signupButtonWrapper}>
+                    <TouchableOpacity onPress={() => navigation.push('SignUp')}>
+                        <Text style={styles.signupButton}>회원가입</Text>
+                    </TouchableOpacity>
+                </View>
+                </View>
+                
+
         </View>
+        </TouchableWithoutFeedback>
     );
 }
 const buttonWrapper = StyleSheet.create({
@@ -146,6 +144,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#ffffff',
+        position: "relative",
+        top: -40,
+        // paddingTop: height*0.01,
     },
     headerContainer: {
         marginBottom: 30,

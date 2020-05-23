@@ -1,6 +1,6 @@
 // 개인 정보 ~ 알림 설정 등이 들어갈 사이드 바
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, Button, View, Image, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, Button, View, Image, Dimensions, Alert, Linking } from 'react-native';
 import 'react-native-gesture-handler';
 import Filter from './../images/FilterIcon.png';
 import ChartComponent from './Chart';
@@ -103,7 +103,7 @@ export default function Settings({route, navigation}) {
                     <Image style={styles.menuIcon} source={Write} />
                     <Text style={styles.itemTitle}>리뷰쓰기</Text>
                 </TouchableOpacity> 
-                <TouchableOpacity style={styles.sidebarItem}>
+                <TouchableOpacity style={styles.sidebarItem} onPress={() => Linking.openURL('mailto:info.e.mory1@gmail.com') }>
                     <Image style={styles.menuIcon} source={Mail} />
                     <Text style={styles.itemTitle}>고객센터</Text>
                 </TouchableOpacity>  
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     header:{
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: '10%',
+        marginTop: '11%',
         // marginBottom: 5,
         // paddingTop: 10,
         backgroundColor: '#FEFAE4',
@@ -200,4 +200,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         backgroundColor: '#FEFAE4',
     },
+    logo: {
+        position: "relative",
+        left: -8,
+    }
 });

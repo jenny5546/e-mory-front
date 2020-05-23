@@ -184,7 +184,10 @@ export default function Chart({navigation}) {
                 <TouchableOpacity onPress={()=>navigation.goBack()}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
-                <Image style={styles.logo} source={Logo}/>
+                <View style={{position: "relative"}}>
+                    <Image style={styles.logo} source={Logo}/>
+                </View>
+
                 <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}}>
                     <Image style={styles.backButton} source={Alarm}/>
                 </TouchableOpacity>
@@ -305,7 +308,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: '10%',
+        marginTop: '11%',
         // marginBottom: 5,
         // paddingTop: 10,
         backgroundColor: '#FEFAE4',
@@ -364,9 +367,8 @@ const styles = StyleSheet.create({
     },
     logo: {
         position: "relative",
-        left: 10,
+        left: 0,
     },
-
     date: {
         color: "#999999",
         fontSize: 15,

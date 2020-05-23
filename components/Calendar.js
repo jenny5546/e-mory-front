@@ -304,7 +304,7 @@ export default function MainCalendar({ navigation }) {
         <View style={styles.header}>
           <View></View>
           <Image style={styles.logo} source={Logo}/>
-          <TouchableOpacity onPress={()=>{navigation.push('MyActivity',{uid: {uid}, allFeeds:{feedList}})}}>
+          <TouchableOpacity style={{paddingHorizontal: 30, position: "relative", right: -30,}} onPress={()=>{navigation.push('MyActivity',{uid: {uid}, allFeeds:{feedList}})}}>
             <Image style={styles.backButton} source={Alarm}/>
           </TouchableOpacity>
         </View>
@@ -485,16 +485,16 @@ export default function MainCalendar({ navigation }) {
         
         
         <View style={styles.navigationbar}>
-          <TouchableOpacity>
-            <Image style={styles.icon} source={Home} />
+          <TouchableOpacity style={{paddingHorizontal: 30}} >
+            <Image style={styles.homeIcon} source={Home} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
+          <TouchableOpacity style={{paddingHorizontal: 30}} onPress={()=>{navigation.push('Chart')}}>
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
+          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('FeedListAll')}}>
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{navigation.push('Settings',{uid: {uid}})}}>
+          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('Settings',{uid: {uid}})}}>
             <Image style={styles.icon} source={Setting} />
           </TouchableOpacity>
         </View>
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
     header: {
       flexDirection: "row",
       justifyContent: "space-between",
-      marginTop: '10%',
+      marginTop: '11%',
       // marginBottom: 5,
       // paddingTop: 10,
       backgroundColor: '#FEFAE4',
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
       marginTop: 30,
       // marginBottom: 20,
       paddingTop: 20,
-      paddingHorizontal: width*0.1,
+      paddingHorizontal: width*0.05,
       borderTopColor: "#fafafa",
       borderTopWidth: 2,
       width: width,
@@ -597,6 +597,12 @@ const styles = StyleSheet.create({
       height: 20,
       width: 20,
     },
+    homeIcon: {
+      height: 20,
+      width: 20,
+      position: "relative",
+      bottom: -3,
+    },
     dayContainer: {
       flexDirection: 'column'
     },
@@ -622,7 +628,8 @@ const styles = StyleSheet.create({
     },
     logo: {
       position: "relative",
-      left: 10,
+      left: 40,
+      // right: -20,
     },
     openDateTimeWrapper : {
       width: width,

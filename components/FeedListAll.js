@@ -1,6 +1,6 @@
 //남의 글 전부 다 실시간으로 보이는 곳 ///////////
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator, Image, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ActivityIndicator, Image, Dimensions, Alert, TouchableWithoutFeedback } from 'react-native';
 // import ListView from "deprecated-react-native-listview";
 import {AsyncStorage} from 'react-native';
 import ChartComponent from './Chart';
@@ -396,6 +396,7 @@ export default function FeedListAll({ route, navigation }) {
     }
 
     return (
+        <TouchableWithoutFeedback onPress={()=>{setOpenFilter(false)}}>
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={()=>navigation.goBack()}>
@@ -569,6 +570,7 @@ export default function FeedListAll({ route, navigation }) {
                 </TouchableOpacity>
             </View>
         </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -583,7 +585,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: '12%',
+        marginTop: '11%',
         // marginBottom: 5,
         // paddingTop: 10,
         backgroundColor: '#FEFAE4',

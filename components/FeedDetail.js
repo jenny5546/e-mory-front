@@ -284,7 +284,7 @@ export default function FeedDetail(props) {
                                         _edit()
                                     }}
                             >
-                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#828282"/>
+                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={23.5} color="#828282"/>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>{props.closeFeedDetail()}}>
                                 <Image style={styles.closeBtn} source={CloseIcon} />
@@ -445,16 +445,20 @@ const styles = StyleSheet.create({
         marginTop: 1,
         marginRight: 10,
         position: "relative",
+        left: 8,
         bottom: 1,
+        opacity: 0.5
     },
     unlockBtn: {
-        height: 54,
-        width: 55,
+        height: 40,
+        width: 30,
         marginTop: 1,
-        position: "absolute",
-        left: -10,
-        top: -12,
+        marginRight: 10,
+        position: "relative",
+        left: 1,
+        top: -7,
         bottom: 1,
+        opacity: 0.5
     },
     editBtn: {
         height: 20,

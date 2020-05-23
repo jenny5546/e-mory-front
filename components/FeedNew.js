@@ -34,10 +34,10 @@ export default function FeedNew(props) {
     let str = ""
     const pholder = () => {
 
-        for(let i=0; i<width/14+2; i++) {
+        for(let i=0; i<width/14-4; i++) {
             str += " "
         }
-        str += "오늘의 감정일기 500자"
+        str += "오늘의 감정일기 500자 이내"
     }
     pholder()
 
@@ -232,7 +232,7 @@ export default function FeedNew(props) {
                                     props.submitNewFeed(title,content,emoji,privacy);
                                 }}
                             >
-                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={24} color="#828282"/>
+                                <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={23.5} color="#828282"/>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={()=>{_stopWrite()}}>
                                     <Image style={styles.closeBtn} source={CloseIcon} />
@@ -355,17 +355,20 @@ const styles = StyleSheet.create({
         marginTop: 1,
         marginRight: 10,
         position: "relative",
+        left: 8,
         bottom: 1,
+        opacity: 0.5
     },
     unlockBtn: {
-        height: 50,
-        width: 45,
+        height: 40,
+        width: 30,
         marginTop: 1,
         marginRight: 10,
         position: "relative",
-        left: -10,
-        top: -12,
+        left: 1,
+        top: -7,
         bottom: 1,
+        opacity: 0.5
     },
     emojiContainer: {
         marginTop: 20,
