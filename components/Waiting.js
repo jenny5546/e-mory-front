@@ -46,7 +46,7 @@ const _checkValidUser = userid => {
     const check = setInterval(() => {
         console.log(uid)
         if(uid > 0) {
-            fetch(`https://young-dusk-44488.herokuapp.com/feeds/user/valid/${uid}/`, {
+            fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/user/valid/${uid}/`, {
                 method: 'GET',
                 headers:{
                     'Accept': 'application/json',

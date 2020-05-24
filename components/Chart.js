@@ -188,7 +188,7 @@ export default function Chart({navigation}) {
                     <Image style={styles.logo} source={Logo}/>
                 </View>
 
-                <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}}>
+                <TouchableOpacity onPress={()=>{navigation.push('MyActivity')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.backButton} source={Alarm}/>
                 </TouchableOpacity>
             </View>

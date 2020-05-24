@@ -231,10 +231,11 @@ export default function FeedNew(props) {
                                     // props.closeNewFeed(); 
                                     props.submitNewFeed(title,content,emoji,privacy);
                                 }}
+                                hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
                             >
                                 <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={23.5} color="#828282"/>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>{_stopWrite()}}>
+                            <TouchableOpacity onPress={()=>{_stopWrite()}} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
                                     <Image style={styles.closeBtn} source={CloseIcon} />
                             </TouchableOpacity>
                         </View>

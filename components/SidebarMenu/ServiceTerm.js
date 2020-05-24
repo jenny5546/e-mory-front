@@ -8,7 +8,7 @@ export default function ServiceTerm() {
     return (
         <>
             <View style={styles.container}>
-                <TouchableOpacity style={styles.backBtn}>
+                <TouchableOpacity style={styles.backBtn} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <AntDesign name="back" size={20}/>
                 </TouchableOpacity> 
                 <Text>이용약관 어쩌고저쩌고</Text>

@@ -125,7 +125,7 @@ export default function firstTutorial({ navigation }) {
           <Image style={styles.feedArrow} source={ShortArrow} />
         </View>
         <View style={styles.square}></View>
-        <TouchableOpacity onPressIn={()=>{navigation.push('TutorialTwo')}}>
+        <TouchableOpacity onPressIn={()=>{navigation.push('TutorialTwo')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
           <Image style={styles.next} source={Next} />
         </TouchableOpacity>
         <View style={styles.pseudoNavigationBar}>

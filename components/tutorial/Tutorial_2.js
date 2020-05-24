@@ -50,10 +50,10 @@ export default function secondTutorial({ navigation }) {
           <Text style={styles.description}>버튼 눌러서 그 날의 이모티콘 선택하기</Text>
           <Image style={styles.lockArrow} source={ShortArrow} />
           <Text style={styles.lockDescription}>공개 여부 선택하기</Text>
-          <TouchableOpacity onPressIn={()=>{navigation.push('MainCalendar')}}>
+          <TouchableOpacity onPressIn={()=>{navigation.push('MainCalendar')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
             <Image style={styles.next} source={Next} />
           </TouchableOpacity>
-          <TouchableOpacity onPressIn={()=>{navigation.goBack()}}>
+          <TouchableOpacity onPressIn={()=>{navigation.goBack()}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
             <Image style={styles.back} source={Back} />
           </TouchableOpacity>
         </View>

@@ -54,7 +54,7 @@ export default function Signup({ navigation }) {
 
     const emailValidation = (e) => {
 
-        fetch(`https://young-dusk-44488.herokuapp.com/accounts/email/valid/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/accounts/email/valid/`, {
             method: 'POST',
             body: JSON.stringify({email:email}),
             headers: {
@@ -90,7 +90,7 @@ export default function Signup({ navigation }) {
             return;
         }
     
-        fetch(`https://young-dusk-44488.herokuapp.com/accounts/nickname/valid/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/accounts/nickname/valid/`, {
             method: 'POST',
             body: JSON.stringify({nickname:nickname}),
             headers: {
@@ -176,7 +176,7 @@ export default function Signup({ navigation }) {
                 )
             );
         }
-        fetch(`https://young-dusk-44488.herokuapp.com/accounts/signup/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/accounts/signup/`, {
             method: 'POST',
             body: JSON.stringify({name:name, email: email, password: password, date: date, nickname:nickname }),
             headers: {

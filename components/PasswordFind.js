@@ -43,7 +43,7 @@ export default function PasswordFind({ navigation }) {
 
     const emailValidation = () => {
 
-        fetch(`https://young-dusk-44488.herokuapp.com/accounts/password/temp/${uid}/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/accounts/password/temp/${uid}/`, {
             method: 'POST',
             body: JSON.stringify({email: email}),
             headers:{

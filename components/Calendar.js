@@ -155,7 +155,7 @@ export default function MainCalendar({ navigation }) {
     getPushNotificationPermissions();
     _storeToken();
     if (tokenValue && uid){
-      fetch(`https://young-dusk-44488.herokuapp.com/feeds/settoken/${uid}/`, {
+      fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/settoken/${uid}/`, {
         method: 'POST',
         body: JSON.stringify(tokenValue),
         headers: {
@@ -199,7 +199,7 @@ export default function MainCalendar({ navigation }) {
   const _storeAlarmState =  async () => {
     let alarmState = null;
     try {
-      await fetch(`https://young-dusk-44488.herokuapp.com/feeds/pushalarm/${uid}/true`, {
+      await fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/pushalarm/${uid}/true`, {
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -266,7 +266,7 @@ export default function MainCalendar({ navigation }) {
     _storeUid();
 
     if (uid){
-      fetch(`https://young-dusk-44488.herokuapp.com/feeds/${uid}/`, {
+      fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/${uid}/`, {
         method: 'GET',
         headers:{
             'Accept': 'application/json',
@@ -304,7 +304,7 @@ export default function MainCalendar({ navigation }) {
         <View style={styles.header}>
           <View></View>
           <Image style={styles.logo} source={Logo}/>
-          <TouchableOpacity style={{paddingHorizontal: 30, position: "relative", right: -30,}} onPress={()=>{navigation.push('MyActivity',{uid: {uid}, allFeeds:{feedList}})}}>
+          <TouchableOpacity style={{paddingHorizontal: 30, position: "relative", right: -30,}} onPress={()=>{navigation.push('MyActivity',{uid: {uid}, allFeeds:{feedList}})}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
             <Image style={styles.backButton} source={Alarm}/>
           </TouchableOpacity>
         </View>
@@ -324,7 +324,7 @@ export default function MainCalendar({ navigation }) {
                 // console.log(newFeed);
                 
                 /* 이 부분에 Post를 넣읍시다*/
-                fetch(`https://young-dusk-44488.herokuapp.com/feeds/${uid}/`, {
+                fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/${uid}/`, {
                   method: 'POST',
                   body: JSON.stringify(newFeed),
                   headers: {
@@ -365,7 +365,7 @@ export default function MainCalendar({ navigation }) {
         <View style={styles.calendarWrapper}>
           {loadingFinished ? 
           <>
-          <TouchableOpacity style={styles.openDateTimeWrapper} onPress={()=>setDatePickerVisibility(!isDatePickerVisible)}>
+          <TouchableOpacity style={styles.openDateTimeWrapper} onPress={()=>setDatePickerVisibility(!isDatePickerVisible)} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
             <Image style={styles.downbtn} source={Down}/>
           </TouchableOpacity>
           <DateTimePickerModal
@@ -485,16 +485,16 @@ export default function MainCalendar({ navigation }) {
         
         
         <View style={styles.navigationbar}>
-          <TouchableOpacity style={{paddingHorizontal: 30}} hitSlop={{top: 20, bottom: 20, left: 50, right: 40}}  >
+          <TouchableOpacity hitSlop={{top: 20, bottom: 20, left: 50, right: 40}}  >
             <Image style={styles.homeIcon} source={Home} />
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingHorizontal: 30}} onPress={()=>{navigation.push('Chart')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
+          <TouchableOpacity  onPress={()=>{navigation.push('Chart')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
             <Image style={styles.icon} source={Chart} />
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('FeedListAll')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
+          <TouchableOpacity  onPress={()=>{navigation.push('FeedListAll')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
             <Image style={styles.icon} source={FeedIcon} />
           </TouchableOpacity>
-          <TouchableOpacity style={{paddingHorizontal: 30}}  onPress={()=>{navigation.push('Settings',{uid: {uid}})}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
+          <TouchableOpacity onPress={()=>{navigation.push('Settings',{uid: {uid}})}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
             <Image style={styles.icon} source={Setting} />
           </TouchableOpacity>
         </View>
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
       marginTop: 30,
       // marginBottom: 20,
       paddingTop: 20,
-      paddingHorizontal: width*0.05,
+      paddingHorizontal: width*0.1,
       borderTopColor: "#fafafa",
       borderTopWidth: 2,
       width: width,

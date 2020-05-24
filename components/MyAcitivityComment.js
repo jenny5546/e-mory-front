@@ -53,7 +53,7 @@ export default function MyActivityComment({ route, navigation }) {
     const _createComment= () =>{
 
 
-        fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/${feed_id.id}/${uid.uid}/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/comment/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(content),
             headers: {
@@ -221,7 +221,7 @@ export default function MyActivityComment({ route, navigation }) {
     };
 
     useEffect(() =>{
-        fetch(`https://young-dusk-44488.herokuapp.com/feeds/load/${feed_id.id}/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/load/${feed_id.id}/`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -252,7 +252,7 @@ export default function MyActivityComment({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/report/${id}/${uid.uid}/`, {
+                fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/comment/report/${id}/${uid.uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
@@ -293,7 +293,7 @@ export default function MyActivityComment({ route, navigation }) {
             {
             text: "네",
             onPress: () => {
-                fetch(`https://young-dusk-44488.herokuapp.com/feeds/comment/delete/${id}/${uid.uid}/`, {
+                fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/comment/delete/${id}/${uid.uid}/`, {
                     method: 'POST',
                     headers:{
                         'Accept': 'application/json',
