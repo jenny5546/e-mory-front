@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
     },
     filterWrapper: {
         position:"absolute",
-        top: 60,
+        top: 64,
         right: 10,
         width: 80,
         backgroundColor: "#fff",
