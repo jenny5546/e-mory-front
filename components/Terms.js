@@ -1,4 +1,4 @@
-// 회원가입 정보 기입 form
+// 회원가입 정보 기입 form hi
 import React, { useState } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, Button, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native';
 import BackButton from './../images/BackIcon.png';
