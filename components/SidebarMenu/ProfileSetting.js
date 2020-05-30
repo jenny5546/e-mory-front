@@ -46,7 +46,7 @@ export default function ProfileSetting({route, navigation}) {
     }
 
     useEffect(() => {
-        fetch(`https://young-dusk-44488.herokuapp.com/feeds/profile/${uid}/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/profile/${uid}/`, {
             method: 'GET',
             headers:{
                 'Accept': 'application/json',
@@ -89,7 +89,7 @@ export default function ProfileSetting({route, navigation}) {
 
         const editedProfile = new Profile(name, email, password, birthday, nickname, newPassword);
 
-        fetch(`https://young-dusk-44488.herokuapp.com/feeds/profile/${uid}/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/profile/${uid}/`, {
             method: 'POST',
             body: JSON.stringify(editedProfile),
             headers:{
@@ -117,7 +117,7 @@ export default function ProfileSetting({route, navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header} >
-                <TouchableOpacity onPress={() => navigation.goBack()}>            
+                <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>            
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
             </View>

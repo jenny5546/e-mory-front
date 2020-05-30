@@ -33,7 +33,7 @@ export default function Login({ navigation }) {
 
     const onLogin = e => {
         // navigation.push('MainCalendar'); //for android test(android fetch doesn't work)
-        fetch(`https://young-dusk-44488.herokuapp.com/accounts/login/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/accounts/login/`, {
             method: 'POST',
             body: JSON.stringify({email: email, password: password}),
             headers: {

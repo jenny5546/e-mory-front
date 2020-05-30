@@ -221,7 +221,7 @@ export default function FeedDetail(props) {
     }
 
     const _delete = () =>{
-        fetch(`https://young-dusk-44488.herokuapp.com/feeds/delete/${props.uid}/${props.matchingFeed.date}/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/delete/${props.uid}/${props.matchingFeed.date}/`, {
         method: 'POST',
         headers:{
             // 'Accept': 'application/json',
@@ -240,7 +240,7 @@ export default function FeedDetail(props) {
     const _edit = () => {
 
         const editedFeed= new Feed(editedEmoji, editedTitle, editedContent, props.pressedDate, editedPrivacy);
-        fetch(`https://young-dusk-44488.herokuapp.com/feeds/edit/${props.uid}/${props.matchingFeed.date}/`, {
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/edit/${props.uid}/${props.matchingFeed.date}/`, {
         method: 'POST',
         body: JSON.stringify(editedFeed),
         headers:{
@@ -272,7 +272,7 @@ export default function FeedDetail(props) {
                 <View style={styles.popup}>
                 <ScrollView keyboardShouldPersistTaps='handled'>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={()=>{_setPrivate()} } style={{position: "relative", top: 20, left: 20, height: 50,}}>
+                        <TouchableOpacity onPress={()=>{_setPrivate()} } style={{position: "relative", top: 20, left: 20, height: 50,}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                             {editedPrivacy ? 
                                 <Image style={styles.lockBtn} source={LockEnabled} />:
                                 <Image style={styles.unlockBtn} source={LockDisabled} />
@@ -283,10 +283,11 @@ export default function FeedDetail(props) {
                                     onPress={()=>{
                                         _edit()
                                     }}
+                                    hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                             >
                                 <AntDesign style={styles.SubmitBtn} name="checkcircleo" size={23.5} color="#828282"/>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>{props.closeFeedDetail()}}>
+                            <TouchableOpacity onPress={()=>{props.closeFeedDetail()}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                                 <Image style={styles.closeBtn} source={CloseIcon} />
                             </TouchableOpacity>
                         </View>

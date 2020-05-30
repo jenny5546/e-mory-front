@@ -4,62 +4,62 @@ import { View, StyleSheet, Dimensions, Text, ScrollView, Image } from 'react-nat
 const { height, width } = Dimensions.get("window");
 
 export default function Statistics() {
-    return (
-        <>
-            <ScrollView style={styles.container}>
-                <Text style={styles.title}>2020년 4월</Text>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-                <View style={styles.items}>
-                    <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
-                    <View style = {styles.lineStyle}/>
-                </View>
-            </ScrollView>
+    // return (
+        // <>
+        //     <ScrollView style={styles.container}>
+        //         <Text style={styles.title}>2020년 4월</Text>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //         <View style={styles.items}>
+        //             <Image style={styles.imageStyle} source={require('../assets/testimg.png')}></Image>
+        //             <View style = {styles.lineStyle}/>
+        //         </View>
+        //     </ScrollView>
             
-        </>
-    );
+        // </>
+    // );
 }
 const styles = StyleSheet.create({
     container:{

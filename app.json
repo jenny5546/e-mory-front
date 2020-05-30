@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "e-mory",
-    "slug": "e-mory",
+    "name": "E-mory",
+    "slug": "E-mory",
     "platforms": [
       "ios",
       "android",
@@ -22,7 +22,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.emory.emory"
+    },
+    "android": {
+      "package": "com.emory.emory"
     }
   }
 }

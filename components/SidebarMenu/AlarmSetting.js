@@ -84,7 +84,7 @@ export default function AlarmSetting({navigation}) {
             {
             text: "네",
             onPress: () => {
-                fetch(`https://young-dusk-44488.herokuapp.com/feeds/pushalarm/post/${uid}/${alarm}/`, {
+                fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/pushalarm/post/${uid}/${alarm}/`, {
                     method: 'POST',
                     body: JSON.stringify("1"),
                     headers:{
@@ -110,7 +110,7 @@ export default function AlarmSetting({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() =>{navigation.goBack()}}>
+                <TouchableOpacity onPress={() =>{navigation.goBack()}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.menuIcon} source={BackButton}/>
                 </TouchableOpacity>
                 <Text style={styles.headerContent}>알림 설정</Text>

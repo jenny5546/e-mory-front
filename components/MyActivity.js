@@ -101,7 +101,7 @@ export default function MyActivity({route, navigation}) {
     useEffect(() => {
         _storeUid();
         if (uid){
-            fetch(`https://young-dusk-44488.herokuapp.com/feeds/notification/${uid}/`, {
+            fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/notification/${uid}/`, {
           method: 'GET',
           headers:{
               'Accept': 'application/json',
