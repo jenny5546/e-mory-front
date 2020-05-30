@@ -125,7 +125,7 @@ export default function firstTutorial({ navigation }) {
           <Image style={styles.feedArrow} source={ShortArrow} />
         </View>
         <View style={styles.square}></View>
-        <TouchableOpacity onPressIn={()=>{navigation.push('TutorialTwo')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+        <TouchableOpacity onPressIn={()=>{navigation.push('TutorialTwo')}} hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}>
           <Image style={styles.next} source={Next} />
         </TouchableOpacity>
         <View style={styles.pseudoNavigationBar}>
@@ -284,9 +284,13 @@ const styles = StyleSheet.create({
       alignSelf: "flex-end",
       height: 60,
       width: 60,
-      position:"absolute",
-      right: 10,
-      top: height * 0.29,
+      marginTop: height * 0.25,
+      // position: "relative",
+      // top: height * 0.25,
+      // position:"relative",
+      // right: 10,
+      // top: height * 0.29,
+      padding: 10,
     },
     slideHeader: {
       alignSelf: "center",
