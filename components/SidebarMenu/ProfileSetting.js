@@ -1,6 +1,6 @@
 // 개인정보 설정 가능 한 페이지
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image, ScrollView } from 'react-native';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 import { Entypo, AntDesign } from '@expo/vector-icons';
 import BackButton from './../../images/BackIcon.png';
@@ -115,7 +115,9 @@ export default function ProfileSetting({route, navigation}) {
     }
 
     return (
+        
         <View style={styles.container}>
+            <ScrollView style={styles.scrollcontainer}>
             <View style={styles.header} >
                 <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>            
                     <Image style={styles.backButton} source={BackButton}/>
@@ -203,7 +205,12 @@ export default function ProfileSetting({route, navigation}) {
                     <AntDesign name="checkcircleo" size={20}/>
                 </TouchableOpacity>
             </View>
+                    
+            </ScrollView>
+            
         </View>
+
+
     );
 }
 const inputStyle = StyleSheet.create({
@@ -213,8 +220,8 @@ const inputStyle = StyleSheet.create({
         borderWidth: 1,
         fontSize: 14,
         borderRadius: 3,
-        marginBottom: 10,
-        marginTop: 10,
+        marginBottom: 15,
+        marginTop: 15,
         height: 40,
     }
 })
@@ -234,16 +241,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: width,
-        height: height,
+        height: height-30,
         alignItems: 'center',
         justifyContent: 'flex-start',
         backgroundColor: '#fff',
     },
+    scrollcontainer: {
+        height: height+100,
+        marginLeft: 20,
+    },
     header: {
         flexDirection: "row",
         justifyContent: "flex-start",
-        marginTop: 30,
-        marginBottom: 20,
+        marginTop: 10,
+        marginBottom: 10,
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -254,6 +265,9 @@ const styles = StyleSheet.create({
         height: 20,
         width: 20,
         alignItems: "flex-start",
+        position: "relative",
+        left: -20,
+        marginTop: 10,
     },
     input:{
         ...inputStyle.inputContainer,
@@ -290,5 +304,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         marginTop: 30,
+        marginLeft: '40%',
+        marginBottom: 30
     }
 });

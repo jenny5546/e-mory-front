@@ -32,10 +32,10 @@ export default function Signup({ navigation }) {
     };
 
     const handleConfirm = (date) => {
+        hideDatePicker();
         setPickedDate(date);
         let pickedDate = formatDate(date);
         setDate(pickedDate)
-        hideDatePicker();
     };
 
     const formatDate = (date) => {
@@ -208,7 +208,7 @@ export default function Signup({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.header} >
-                <TouchableOpacity onPress={() => navigation.goBack()}>            
+                <TouchableOpacity hitSlop={{top: 30, bottom: 30, left: 30, right: 30}} onPress={() => navigation.goBack()}>            
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
             </View>
@@ -357,6 +357,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         backgroundColor: '#fff',
+        // marginTop: 10,
     },
     header: {
         // flexDirection: "row",
@@ -370,8 +371,8 @@ const styles = StyleSheet.create({
         // width: width,
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: '10%',
-        // marginBottom: 5,
+        marginTop: '5%',
+        marginBottom: 15,
         // paddingTop: 10,
         // backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
