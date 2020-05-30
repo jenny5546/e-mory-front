@@ -228,15 +228,15 @@ const styles = StyleSheet.create({
       alignSelf: "flex-end",
       height: 60,
       width: 60,
-      position:"absolute",
-      right: 10,
-      top: height * 0.45,
+      marginTop: height*0.4,
+      // position:"absolute",
+      // right: 10,
+      // top: height * 0.45,
     },
     back: {
       height: 50,
       width: 50,
-      position:"absolute",
-      left: 10,
-      top: height * 0.46,
+      position: "relative",
+      top: -50,
     }
 });
