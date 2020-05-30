@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
         zIndex: 3,
-
     },
     container: {
         flex: 1,
@@ -162,8 +161,8 @@ const styles = StyleSheet.create({
         height: height*0.8,
     },
     closeBtn: {
-        height: 30,
-        width: 30,
+        height: 25,
+        width: 25,
         position: "relative",
     },
     icon: {
@@ -182,9 +181,9 @@ const styles = StyleSheet.create({
     emojiWrapper: {
         flexDirection: "row",
         justifyContent: "space-around",
-        marginBottom: 10,
+        marginBottom: 5,
         position: "relative",
-        paddingBottom: 25,
+        paddingBottom: 15,
         top: 5,
     },
     emotion: {

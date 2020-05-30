@@ -24,6 +24,7 @@ import DepressedIcon from './../images/DepressedIcon.png';
 import WorriedIcon from './../images/WorriedIcon.png';
 import AngryIcon from './../images/AngryIcon.png';
 import styled from 'styled-components/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const { height, width } = Dimensions.get("window");
 
@@ -209,6 +210,7 @@ export default function Chart({navigation}) {
                         />
                     </View>
                     { loadingFinished ? 
+                    <ScrollView>
                     <View style={styles.monthStatistics}>
                         <View style={styles.emojiRow}>
                             <Image style={styles.icon} source={HappyIcon} />
@@ -275,6 +277,7 @@ export default function Chart({navigation}) {
                             
                         </View>
                     </View>
+                    </ScrollView>
                     :
                     <ActivityIndicator style={styles.loadingbar}/>
                     }
@@ -384,7 +387,7 @@ const styles = StyleSheet.create({
     },
     monthStatistics: {
         paddingLeft: 20,
-        // marginTop: height*0.01,
+        height: height * 1.2,
     },
     input: {
         paddingTop: 20,
