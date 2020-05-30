@@ -261,6 +261,7 @@ export default function FeedNew(props) {
                         multiline={true}
                         maxLength={20}
                     />
+                    <View style={{height: height*0.60}}>
                     <TextInput
                         style={styles.contentInput}
                         placeholder={str}
@@ -272,6 +273,7 @@ export default function FeedNew(props) {
                         multiline={true}
                         maxLength={500}
                     />
+                    </View>
                     {emojiModal===true &&
                         <FeedEmoji 
                             closeEmojiModal={() => openEmojiModal(false)}
@@ -339,6 +341,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 20,
         width: width*1.02,
+        // paddingBottom: height*0.5,
+        // height: height * 0.55,
+        // position: "relative",
+        // top: height * -0.25,
         // textAlign: "center",
         // position: "relative",
         // left: -30,

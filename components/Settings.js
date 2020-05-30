@@ -183,7 +183,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "400",
         marginLeft: 10,
-        
+        position: "relative",
+        bottom: 3,
     },
     navigationbar: {
         flexDirection: "row",

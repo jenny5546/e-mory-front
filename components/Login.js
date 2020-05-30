@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#ffffff',
         position: "relative",
-        top: -40,
+        // top: -40,
         // paddingTop: height*0.01,
     },
     headerContainer: {

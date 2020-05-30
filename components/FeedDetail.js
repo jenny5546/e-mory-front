@@ -319,6 +319,7 @@ export default function FeedDetail(props) {
                                 multiline={true}
                                 maxLength={20}
                             />
+                            <View style={{height: height*0.6}}>
                             <TextInput
                                 style={styles.contentInput}
                                 placeholder={str}
@@ -330,6 +331,7 @@ export default function FeedDetail(props) {
                                 multiline={true}
                                 maxLength={500}
                             />
+                            </View>
 
                             {emojiModal===true &&
                             <FeedEmoji 
