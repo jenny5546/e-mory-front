@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: width*0.04,
       width: width,
       position: "absolute",
-      bottom: -10,
+      bottom: 5,
       left: -6,
     },
     square: {
@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
       borderWidth: 3,
       borderColor: "#fff",
       position: "absolute",
-      top: height*0.405,
+      top: height*0.46,
       alignSelf: "center",
     },
     description: {

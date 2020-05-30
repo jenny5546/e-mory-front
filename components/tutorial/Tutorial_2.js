@@ -50,12 +50,15 @@ export default function secondTutorial({ navigation }) {
           <Text style={styles.description}>버튼 눌러서 그 날의 이모티콘 선택하기</Text>
           <Image style={styles.lockArrow} source={ShortArrow} />
           <Text style={styles.lockDescription}>공개 여부 선택하기</Text>
-          <TouchableOpacity onPressIn={()=>{navigation.push('MainCalendar')}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
-            <Image style={styles.next} source={Next} />
-          </TouchableOpacity>
-          <TouchableOpacity onPressIn={()=>{navigation.goBack()}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
-            <Image style={styles.back} source={Back} />
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={()=>{navigation.push('TutorialOne')}} hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
+              <Image style={styles.back} source={Back} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}} hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
+              <Image style={styles.next} source={Next} />
+            </TouchableOpacity>
+          </View>
+          
         </View>
         <View style={styles.navigationbar}>
           <TouchableOpacity>
@@ -225,18 +228,17 @@ const styles = StyleSheet.create({
       textAlign: "center",
     },
     next: {
-      alignSelf: "flex-end",
-      height: 60,
-      width: 60,
-      marginTop: height*0.4,
-      // position:"absolute",
-      // right: 10,
-      // top: height * 0.45,
+      maxHeight: 60,
+      maxWidth: 60,
     },
     back: {
-      height: 50,
-      width: 50,
-      position: "relative",
-      top: -50,
+      maxHeight: 50,
+      maxWidth: 50,
+    },
+    buttonContainer:{
+      marginTop: height*0.4,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
     }
 });
