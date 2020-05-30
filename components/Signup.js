@@ -287,6 +287,7 @@ export default function Signup({ navigation }) {
                     headerTextIOS="날짜 선택"
                     locale={'ko'}
                     format="YYYY-MM-DD"
+                    display="spinner"
                 />
             </View>
             <View>

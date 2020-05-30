@@ -378,6 +378,7 @@ export default function MainCalendar({ navigation }) {
             confirmTextIOS="선택"
             cancelTextIOS="취소"
             headerTextIOS="날짜 선택"
+            display="spinner"
           />
           <CalendarList
             // onVisibleMonthsChange = {(months)=>console.log(months)}
