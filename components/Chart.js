@@ -182,7 +182,7 @@ export default function Chart({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>navigation.goBack()}>
+                <TouchableOpacity onPress={()=>navigation.goBack()} hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
                 <View style={{position: "relative"}}>

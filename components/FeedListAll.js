@@ -16,6 +16,7 @@ import HeartIcon from './../images/HeartIconBlack.png';
 import HeartIconFilled from './../images/HeartIconFilled.png';
 import CommentIcon from './../images/CommentIcon.png';
 import BackButton from './../images/BackIcon.png';
+import { AntDesign } from '@expo/vector-icons';
 
 // Emoji Icons 
 import HappyIcon from './../images/HappyIcon.png';
@@ -405,7 +406,7 @@ export default function FeedListAll({ route, navigation }) {
                 <Image style={styles.logo} source={Logo}/>
                 <View>
                     <TouchableOpacity onPress={()=>setOpenFilter(!openFilter)} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
-                        <Image style={styles.backButton} source={Down}/>
+                        <AntDesign style={styles.belowBtn} name="down" size={20} color="grey"/>
                     </TouchableOpacity>
                 </View>
             </View>

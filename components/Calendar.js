@@ -15,6 +15,7 @@ import Down from './../images/DownIcon.png';
 import ChartComponent from './Chart';
 import FeedNew from './FeedNew';
 import FeedDetail from './FeedDetail';
+import { AntDesign } from '@expo/vector-icons';
 const { height, width } = Dimensions.get("window");
 import {AsyncStorage} from 'react-native';
 import { isSunday, getWeeksInMonth } from "date-fns";
@@ -98,11 +99,10 @@ export default function MainCalendar({ navigation }) {
 
   
   const handleConfirm = (date) => {
-      // console.warn("A date has been picked: ", date);
-      // console.log(date);
+      hideDatePicker();
       let pickedDate = formatDate(date);
       setPickedDate(pickedDate)
-      hideDatePicker();
+      
   };
   // console.log(pickedDate);
   // feeds는 back에서 GET한 것들로, setFeedList
@@ -366,8 +366,10 @@ export default function MainCalendar({ navigation }) {
           {loadingFinished ? 
           <>
           <TouchableOpacity style={styles.openDateTimeWrapper} onPress={()=>setDatePickerVisibility(!isDatePickerVisible)} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
-            <Image style={styles.downbtn} source={Down}/>
+            {/* <Image style={styles.downbtn} source={Down}/> */}
+            <AntDesign style={styles.belowBtn} name="down" size={15} color="grey"/>
           </TouchableOpacity>
+          
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
@@ -459,8 +461,8 @@ export default function MainCalendar({ navigation }) {
                       width: 32, 
                       // height: height*0.1, 
                       height: getWeeksInMonth(Date.parse(date.dateString))==4 ? 
-                        height*0.14: 
-                        getWeeksInMonth(Date.parse(date.dateString))==5 ? height*0.125 : height*0.1,
+                        height*0.12: 
+                        getWeeksInMonth(Date.parse(date.dateString))==5 ? height*0.097 : height*0.085,
                       alignItems: 'center', 
                       textAlign: 'center',
                       fontSize: 13,
@@ -650,5 +652,12 @@ const styles = StyleSheet.create({
       position: 'relative',
       top: '7%',
       left: '8%',
-    }
+    },
+    belowBtn:{
+      marginTop: 15,
+      marginLeft: 60,
+      alignSelf: "center",
+      height: 25,
+      width: 25,
+  },
 });
