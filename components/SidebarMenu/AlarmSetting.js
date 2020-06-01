@@ -110,7 +110,7 @@ export default function AlarmSetting({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() =>{navigation.goBack()}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+                <TouchableOpacity onPress={() =>{navigation.goBack()}} hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}>
                     <Image style={styles.menuIcon} source={BackButton}/>
                 </TouchableOpacity>
                 <Text style={styles.headerContent}>알림 설정</Text>

@@ -10,7 +10,7 @@ export default function AppInfo({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.header} >
-                <TouchableOpacity onPress={() => navigation.goBack()}>            
+                <TouchableOpacity onPress={() => navigation.push('Settings')} hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}>            
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
             </View>
