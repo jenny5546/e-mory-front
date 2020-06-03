@@ -51,10 +51,10 @@ export default function secondTutorial({ navigation }) {
           <Image style={styles.lockArrow} source={ShortArrow} />
           <Text style={styles.lockDescription}>공개 여부 선택하기</Text>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={()=>{navigation.push('TutorialOne')}} hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
+            <TouchableOpacity onPress={()=>{navigation.push('TutorialOne')}} style={{position: "relative", top: 30,}}  hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
               <Image style={styles.back} source={Back} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}} hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
+            <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}} style={{position: "relative", top: 30,}}  hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
               <Image style={styles.next} source={Next} />
             </TouchableOpacity>
           </View>

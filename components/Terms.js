@@ -10,7 +10,7 @@ export default function Terms({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.header} >
-                <TouchableOpacity onPress={() => navigation.goBack()}>            
+                <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>            
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
             </View>
