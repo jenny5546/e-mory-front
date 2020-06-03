@@ -124,8 +124,7 @@ export default function firstTutorial({ navigation }) {
           <Text style={styles.feedDescription}>날짜 선택하여 그날의 감정일기 작성하기</Text>
           <Image style={styles.feedArrow} source={ShortArrow} />
         </View>
-        {/* <View style={styles.square}></View> */}
-        <TouchableOpacity onPressIn={()=>{navigation.push('TutorialTwo')}} hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}>
+        <TouchableOpacity onPressIn={()=>{navigation.push('TutorialTwo')}} style={{position: "relative", top: 30,}} hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}>
           <Image style={styles.next} source={Next} />
         </TouchableOpacity>
         <View style={styles.pseudoNavigationBar}>
@@ -370,8 +369,8 @@ const styles = StyleSheet.create({
       width: 90,
       textAlign: "center",
       position: "absolute",
-      top: height*0.245,
-      left: width*0.1,
+      top: height*0.235,
+      left: width*0.13,
     },
     feedsDescription: {
       color: "#25a7f0",

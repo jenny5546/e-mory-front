@@ -45,6 +45,43 @@ export default function ProfileSetting({route, navigation}) {
         )
     }
 
+    const nicknameValidation = (e) => {
+        const check_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+        if(check_kor.test(nickname)) {
+            Alert.alert(
+                '형식 오류',
+                '닉네임은 영어, 숫자, 특수문자만 사용가능합니다'
+            )
+            return;
+        }
+    
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/accounts/nickname/valid/`, {
+            method: 'POST',
+            body: JSON.stringify({nickname:nickname}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'applications/json'
+            }
+            }).then((res) => {
+                return res.json();
+            }).then((resJSON) => {
+                const { valid } = resJSON;
+                if(valid) {
+                    Alert.alert(
+                        '사용 가능한 닉네임입니다',
+                    )
+                    setValidNickname(true);
+                } else {
+                    Alert.alert(
+                        '이미 사용중인 닉네임입니다',
+                    )
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+
+    }
+
     useEffect(() => {
         fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/profile/${uid}/`, {
             method: 'GET',
@@ -130,22 +167,24 @@ export default function ProfileSetting({route, navigation}) {
                     placeholder={"이름을 입력해주세요"}
                     value = {name}
                     onChangeText={text => setName(text)}
+                    editable = {false}
                 />
             </View>
             <View>
                 <Text style={{position: "relative", bottom: -5,}}>이메일</Text>
                 <View style={styles.idContainer}>
                     <TextInput 
-                        style={styles.emailInput}
+                        style={styles.input}
                         // placeholder={"예: e-mory1@mory.com"}
                         value = {email}
                         onChangeText={text => setEmail(text)}
+                        editable = {false}
                     />
-                    <View style={styles.emailCheckBtn}>
+                    {/* <View style={styles.emailCheckBtn}>
                         <TouchableOpacity>
                             <Text style={styles.checkText}>이메일 인증</Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>
             </View>
             <View>
@@ -155,6 +194,9 @@ export default function ProfileSetting({route, navigation}) {
                     placeholder={"기존 비밀번호를 입력해주세요"}
                     value = {password}
                     onChangeText={text => setPassword(text)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
                 />
             </View>
             <View>
@@ -164,6 +206,9 @@ export default function ProfileSetting({route, navigation}) {
                     placeholder={"새로 사용할 비밀번호를 입력해주세요"}
                     value = {newPassword}
                     onChangeText={text => setNewPassword(text)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
                 />
             </View>
             <View>
@@ -173,6 +218,9 @@ export default function ProfileSetting({route, navigation}) {
                     placeholder={"새 비밀번호를 한번 더 입력해주세요"}
                     value = {newCheckPassword}
                     onChangeText={text => setNewCheckPassword(text)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
                 />
             </View>
             <View>
@@ -182,6 +230,7 @@ export default function ProfileSetting({route, navigation}) {
                     // placeholder={"YYYY/MM/DD"}
                     value = {birthday}
                     onChangeText={text => setBirthday(text)}
+                    editable = {false}
                 />
             </View>
             <View>
@@ -189,12 +238,11 @@ export default function ProfileSetting({route, navigation}) {
                 <View style={styles.idContainer}>
                     <TextInput 
                         style={styles.nicknameInput}
-                        // placeholder={nickname}
                         value = {nickname}
                         onChangeText={text => setNickname(text)}
                     />
                     <View style={styles.nicknameCheckBtn}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={nicknameValidation}>
                             <Text style={styles.checkText}>중복확인</Text>
                         </TouchableOpacity>
                     </View>
@@ -291,6 +339,8 @@ const styles = StyleSheet.create({
     nicknameCheckBtn: {
         ...checkButton.checkBtn,
         marginLeft: width*0.02,
+        position: "relative",
+        top: 5,
     },
     checkText: {
         color: "#fff",

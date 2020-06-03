@@ -311,7 +311,7 @@ export default function Signup({ navigation }) {
             </View>
             <View style={{flexDirection: "row", alignSelf:"center"}}>
                 <Text style={styles.term}>회원가입 시 </Text>
-                <TouchableOpacity onPressIn={() =>{navigation.push('Terms')}}>
+                <TouchableOpacity onPressIn={() => {navigation.push('Terms')}} style={{position: "relative", top: 30}}>  
                     <Text style={styles.termpage}>이용약관 및 개인정보 이용 방침</Text>
                 </TouchableOpacity>
                 <Text style={styles.term}>에 동의함을 인정합니다</Text>
@@ -337,7 +337,7 @@ const inputStyle = StyleSheet.create({
         height: 40,
     }
 })
-
+// navigation.push('Terms')
 const checkButton = StyleSheet.create({
     checkBtn:{
         justifyContent: "center",
@@ -459,7 +459,5 @@ const styles = StyleSheet.create({
         fontSize: 10,
         textAlign: "center",
         color: "#0066cc",
-        position: "relative",
-        top: 30,
     }
 });
