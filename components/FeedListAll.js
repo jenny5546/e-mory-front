@@ -666,6 +666,7 @@ const styles = StyleSheet.create({
         fontWeight: "400",
         fontSize: 14,
         width: width*0.7,
+        maxHeight: 20,
     },
     feedicon:{
         height: 16,
