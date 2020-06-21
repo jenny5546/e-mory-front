@@ -383,9 +383,10 @@ export default function FeedListAll({ route, navigation }) {
                         <Text style={styles.iconNum}>{commentNum}</Text>
                         
                     </View>
-                    <TouchableOpacity style={styles.reportWrap} onPress={()=>{
+                    <TouchableOpacity style={styles.reportWrap} hitSlop={{top: 40, bottom: 40, left: 40, right: 40}} onPress={()=>{
                             // let bool = _reportFeed(id)
                             let bool = _reportFeed(id)
+                            
                             // console.log(bool)
                             // setIsReported(bool);
                             }}>
