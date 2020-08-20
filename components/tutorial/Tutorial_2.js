@@ -33,7 +33,9 @@ export default function secondTutorial({ navigation }) {
           <Image style={styles.logo} source={Logo}/>
           <Image style={styles.backButton} source={Alarm}/>
         </View>
-        <FeedNew />
+          <FeedNew 
+            pressedDate={"2020-05-05"}
+          />
         <Calendar
             theme={calendarTheme}
             style={styles.calendarStyle}
@@ -48,12 +50,15 @@ export default function secondTutorial({ navigation }) {
           <Text style={styles.description}>버튼 눌러서 그 날의 이모티콘 선택하기</Text>
           <Image style={styles.lockArrow} source={ShortArrow} />
           <Text style={styles.lockDescription}>공개 여부 선택하기</Text>
-          <TouchableOpacity onPressIn={()=>{navigation.push('MainCalendar')}}>
-            <Image style={styles.next} source={Next} />
-          </TouchableOpacity>
-          <TouchableOpacity onPressIn={()=>{navigation.goBack()}}>
-            <Image style={styles.back} source={Back} />
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={()=>{navigation.push('TutorialOne')}} style={{position: "relative", top: 30,}}  hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
+              <Image style={styles.back} source={Back} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{navigation.push('MainCalendar')}} style={{position: "relative", top: 30,}}  hitSlop={{top: 50, bottom: 50, left:50, right:50}}>
+              <Image style={styles.next} source={Next} />
+            </TouchableOpacity>
+          </View>
+          
         </View>
         <View style={styles.navigationbar}>
           <TouchableOpacity>
@@ -172,7 +177,7 @@ const styles = StyleSheet.create({
       alignSelf: "center",
       flexDirection: "row",
       position: "absolute",
-      top: 55,
+      top: 65,
     },
     circle: {
       width: 13,
@@ -191,16 +196,18 @@ const styles = StyleSheet.create({
     arrow: {
       height: 20,
       width: 6,
-      transform: [{ rotate: '-180deg' }],
+      transform: [{ rotate: '-225deg' }],
       position: "absolute",
       alignSelf: "center",
-      top: height*0.33,
+      top: height*0.25,
+      left: width * 0.575,
     },
     description: {
       color: "#25a7f0",
       position: "absolute",
       alignSelf: "center",
-      top: height*0.38,
+      top: height*0.27,
+      left: width * 0.62,
       width: 110,
       textAlign: "center",
     },
@@ -209,30 +216,29 @@ const styles = StyleSheet.create({
       width: 6,
       transform: [{ rotate: '-180deg' }],
       position: "absolute",
-      left: width*0.85,
-      top: height*0.24,
+      left: width*0.078,
+      top: height*0.116,
     },
     lockDescription: {
       color: "#25a7f0",
       position: "absolute",
-      left: width*0.78,
-      top: height*0.28,
+      left: width*0.02,
+      top: height*0.146,
       width: 60,
       textAlign: "center",
     },
     next: {
-      alignSelf: "flex-end",
-      height: 60,
-      width: 60,
-      position:"absolute",
-      right: 10,
-      top: height * 0.45,
+      maxHeight: 60,
+      maxWidth: 60,
     },
     back: {
-      height: 60,
-      width: 60,
-      position:"absolute",
-      left: 10,
-      top: height * 0.45,
+      maxHeight: 50,
+      maxWidth: 50,
+    },
+    buttonContainer:{
+      marginTop: height*0.4,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
     }
 });

@@ -1,6 +1,6 @@
 //댓글 창 - //////////////////////
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TextInput, Dimensions,TouchableOpacity, ScrollView, View, StatusBar, Image, Alert, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, ActivityIndicator   } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import ReportIcon from './../images/ReportIcon.png';
@@ -22,7 +22,7 @@ import AngryIcon from './../images/AngryIcon.png';
 
 const { height, width } = Dimensions.get("window");
 
-export default function Comment({ route, navigation }) {
+export default function MyActivityComment({ route, navigation }) {
     const {feed_id} = route.params;
     const {uid} = route.params;
     let {commentNum} = route.params;
@@ -51,6 +51,8 @@ export default function Comment({ route, navigation }) {
 
 
     const _createComment= () =>{
+
+
         fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/comment/${feed_id.id}/${uid.uid}/`, {
             method: 'POST',
             body: JSON.stringify(content),
@@ -68,10 +70,10 @@ export default function Comment({ route, navigation }) {
             let minutes = today.getMinutes();  // 분
             // console.log('Comment Success');
             console.log(uid.uid)
-            let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon', 'authorId': uid.uid}]
+            let updatedComments = [...comments,{ 'content': content, 'author':nickname, 'date': 'soon', 'authorId': parseInt(uid.uid)}]
             setComments(updatedComments); //원래는 <Comment ~넣어줘야하는데, 알아서 fetch해서 반영하는듯? />
-            setContent('');
-            
+            setContent(null)
+
         }).catch((err) => {
                 console.log(err);
         });
@@ -168,57 +170,54 @@ export default function Comment({ route, navigation }) {
         }
     }
 
-    const parseDate=(string)=>{
-        let stringArray = string.substring(0,10).split("-"); 
-        let year = stringArray[0];
-        let month = stringArray[1];
-        let day = stringArray[2];
-        return year+'년 '+month + '월 '+ day + '일';
-    }
-    
-
-    var timeSince = function(date) {
-
-        if (typeof date !== 'object') {
-          date = new Date(date);
-        }
-
-      
-        var seconds = Math.floor((new Date() - date) / 1000);
-        var intervalType;
-      
-        var interval = Math.floor(seconds / 31536000);
-        if (interval >= 1) {
-        //   intervalType = '년';
-          return 'date';
-        } else {
-          interval = Math.floor(seconds / 2592000);
-          if (interval >= 1) {
-            // intervalType = '개월 ';
-            return 'date';
-          } else {
-            interval = Math.floor(seconds / 86400);
-            if (interval >= 1) {
-            //   intervalType = '일 ';
-            return 'date';
-            } else {
-              interval = Math.floor(seconds / 3600);
-              if (interval >= 1) {
-                intervalType = "시간 ";
-              } else {
-                interval = Math.floor(seconds / 60);
-                if (interval >= 1) {
-                  intervalType = "분 ";
-                } else {
-                  interval = seconds;
-                  intervalType = "초 ";
-                }
-              }
-            }
-          }
-        }
-      
-        return interval + ' ' + intervalType;
+    const parseDate=(string)=>{	
+        let stringArray = string.substring(0,10).split("-"); 	
+        let year = stringArray[0];	
+        let month = stringArray[1];	
+        let day = stringArray[2];	
+        return year+'년 '+month + '월 '+ day + '일';	
+    }	
+    	
+    var timeSince = function(date) {	
+        if (typeof date !== 'object') {	
+          date = new Date(date);	
+        }	
+      	
+        var seconds = Math.floor((new Date() - date) / 1000);	
+        var intervalType;	
+      	
+        var interval = Math.floor(seconds / 31536000);	
+        if (interval >= 1) {	
+        //   intervalType = '년';	
+          return 'date';	
+        } else {	
+          interval = Math.floor(seconds / 2592000);	
+          if (interval >= 1) {	
+            // intervalType = '개월 ';	
+            return 'date';	
+          } else {	
+            interval = Math.floor(seconds / 86400);	
+            if (interval >= 1) {	
+            //   intervalType = '일 ';	
+            return 'date';	
+            } else {	
+              interval = Math.floor(seconds / 3600);	
+              if (interval >= 1) {	
+                intervalType = "시간 ";	
+              } else {	
+                interval = Math.floor(seconds / 60);	
+                if (interval >= 1) {	
+                  intervalType = "분 ";	
+                } else {	
+                  interval = seconds;	
+                  intervalType = "초 ";	
+                }	
+              }	
+            }	
+          }	
+        }	
+      	
+        return interval + ' ' + intervalType;	
     };
 
     useEffect(() =>{
@@ -324,42 +323,36 @@ export default function Comment({ route, navigation }) {
 
     const Comment=({id, title, content, emoji, date, likes, comments, author, liked, authorId})=>{
 
-        return (
-            
-            <View style={styles.comment}>
-                {/* {loadingFinished ?  */}
-                    {/* <> */}
-                    <View style={styles.commentContent}>
-                        <Text style={styles.commentAuthor}>{author}</Text>
-                        <Text style={styles.feedContent}>{content}</Text>
-                    </View>
-                    <View style={{flexDirection: "row", width: width}}>
-                    {/* <Text style={styles.date}>{parseDate(date)}</Text> */}
-                    {
-                    date == 'soon' ? 
-                    <Text style={styles.date}>방금 전</Text>
-                    :
-                    timeSince(date) == 'date' ?
-                    <Text style={styles.date}>{parseDate(date)}</Text>
-                    :
-                    <Text style={styles.date}>{timeSince(date)}전</Text>
+        return (	
+            	
+            <View style={styles.comment}>	
+                {/* {loadingFinished ?  */}	
+                    {/* <> */}	
+                    <View style={styles.commentContent}>	
+                        <Text style={styles.commentAuthor}>{author}</Text>	
+                        <Text style={styles.feedContent}>{content}</Text>	
+                    </View>	
+                    <View style={{flexDirection: "row", width: width}}>	
+                    {/* <Text style={styles.date}>{parseDate(date)}</Text> */}	
+                    {	
+                    date == 'soon' ? 	
+                    <Text style={styles.date}>방금 전</Text>	
+                    :	
+                    timeSince(date) == 'date' ?	
+                    <Text style={styles.date}>{parseDate(date)}</Text>	
+                    :	
+                    <Text style={styles.date}>{timeSince(date)}전</Text>	
                     }
                     {(authorId) === parseInt(uid.uid) && 
                     <TouchableOpacity onPress={()=>{_deleteComment(id)}}>
                         <Image style={styles.deleteBtn} source={DeleteIcon} />
                     </TouchableOpacity>
                     }
-                    </View>
-                    <TouchableOpacity onPress={()=>{_reportComment(id)}}>
+                </View>
+                <TouchableOpacity onPress={()=>{_reportComment(id)}}>
                         <Image style={styles.reportBtn} source={ReportIcon} />
-                    </TouchableOpacity>
-                    {/* </> */}
-                    {/* : */}
-                    {/* <ActivityIndicator style={styles.loadingbar}/> */}
-            
-                {/* } */}
-                
-            </View>
+                </TouchableOpacity>
+                </View>
         )
     }
 
@@ -367,7 +360,7 @@ export default function Comment({ route, navigation }) {
         <View style={styles.container}>
             <StatusBar barStyle="dark-content"/>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}} hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}>
+                <TouchableOpacity onPress={()=>{navigation.goBack()}} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
                 <Text style={styles.headerContent}>댓글</Text>
@@ -382,7 +375,6 @@ export default function Comment({ route, navigation }) {
                     <ScrollView>
                     {loadingFinished ? 
                     <View style={styles.contentWrapper}>
-                        
                         <View style={styles.feed}>
                             <View>
                                 {renderEmoji(emoji)}
@@ -394,7 +386,6 @@ export default function Comment({ route, navigation }) {
                                 <Text style={styles.feedContent}>{feedContent}</Text>
                             </View>
                         </View>
-                        
                         <View style={styles.commentWrapper}>
                             {/* <ScrollView> */}
                                 {comments.map((item)=>(
@@ -414,9 +405,9 @@ export default function Comment({ route, navigation }) {
                         </View>
                     </View>
                 :
-                <View style={styles.contentWrapper}>
-                <ActivityIndicator style={styles.loadingbar}/>    
-                </View>             
+                <View style={styles.contentWrapper}>	
+                    <ActivityIndicator style={styles.loadingbar}/>    	
+                </View>                 
                 }
                 </ScrollView>
                     <View style={styles.inputWrapper}>
@@ -646,8 +637,8 @@ const styles = StyleSheet.create({
         top: height*0.36,
         alignSelf: "center"
     },
-    commentWrapper: {
-        height: "auto",
-        marginBottom: 50,
+    commentWrapper: {	
+        height: "auto",	
+        marginBottom: 50,	
     },
 });

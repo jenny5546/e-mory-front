@@ -133,9 +133,10 @@ export default function FeedEmoji(props) {
 const styles = StyleSheet.create({
     background: {
         position: "absolute",
-        top: height * -0.1,
+        // top: height*-0.05,
+        // height: height,
+        width: width,
         height: height,
-        width: width*0.95,
         zIndex: 3,
     },
     container: {
@@ -143,21 +144,31 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         // paddingHorizontal: 10,
         paddingTop: 60,
+        flexDirection: 'column',
+        width: width,
+        paddingHorizontal: 10,
+        paddingTop: 60,
+        backgroundColor: "rgba(153, 153, 153, 0.5);",
+        // width: width,
+        // height: height,
+        // backgroundColor: "rgba(153, 153, 153, 0.2)",
+        // backgroundColor: "rgba(153, 153, 153, 0.5)",
     },
     popup: {
         backgroundColor: "#fff",
         padding: 20,
         borderRadius: 20,
-        height: height,
+        height: height*0.8,
     },
     closeBtn: {
-        height: 20,
-        width: 20,
+        height: 25,
+        width: 25,
+        position: "relative",
     },
     icon: {
         height: 60,
         width: 60,
-        marginTop: 30,
+        marginTop: height*0.025,
     },
     header: {
         flexDirection: "row",
@@ -170,7 +181,10 @@ const styles = StyleSheet.create({
     emojiWrapper: {
         flexDirection: "row",
         justifyContent: "space-around",
-        marginBottom: 10,
+        marginBottom: 5,
+        position: "relative",
+        paddingBottom: 15,
+        top: 5,
     },
     emotion: {
         textAlign: "center",

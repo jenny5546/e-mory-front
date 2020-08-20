@@ -1,12 +1,35 @@
 // 회원가입 정보 기입 form
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity, View, Text, TextInput, Alert, Image } from 'react-native';
 import BackButton from './../images/BackIcon.png';
 import { Entypo, AntDesign } from '@expo/vector-icons';
 import CompleteButton from './../images/CompleteButton.png';
+import {AsyncStorage} from 'react-native';
+
 const { height, width } = Dimensions.get("window");
 
 export default function PasswordFind({ navigation }) {
+
+    const [uid, setUid] = useState('');
+    const [email, setEmail] = useState('');
+
+    const _storeUid = async () =>{
+
+        try {
+          const value = await AsyncStorage.getItem('user');
+          if (value !== null){
+            setUid(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        _storeUid();
+    })
+
     const _showAlert = () => {
         Alert.alert(
         '축하드립니다!',
@@ -19,10 +42,22 @@ export default function PasswordFind({ navigation }) {
     }
 
     const emailValidation = () => {
-        Alert.alert(
-            '이메일이 발송되었습니다',
-            '임시 비밀번호를 확인해주세요'
-        )
+
+        fetch(`https://enigmatic-bastion-65203.herokuapp.com/accounts/password/temp/${uid}/`, {
+            method: 'POST',
+            body: JSON.stringify({email: email}),
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }}).then((res) => {
+                Alert.alert(
+                    '이메일이 발송되었습니다',
+                    '임시 비밀번호를 확인해주세요'
+                )
+                return res.json()
+            }).catch((err) => {
+            console.log(err);
+            });
     }
 
     return (
@@ -36,7 +71,11 @@ export default function PasswordFind({ navigation }) {
                 <Text style={{textAlign: "center", fontSize: 16, marginBottom: 15,}}>임시 비밀번호 발송</Text>
                 <TextInput 
                     style={styles.input}
+                    value={email}
+                    onChange={(e)=>{setEmail(e.nativeEvent.text)}}
                     placeholder={"가입했던 이메일 주소를 입력해주세요"}
+                    autoCorrect={false}
+                    autoCapitalize={false}
                 />
                     <View style={styles.emailCheckBtn}>
                         <TouchableOpacity onPress={emailValidation}>

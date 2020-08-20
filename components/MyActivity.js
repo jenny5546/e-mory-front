@@ -1,49 +1,208 @@
 //나의 활동
-import React, {useState} from 'react';
-import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Dimensions, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import BackButton from './../images/BackIcon.png';
+import Logo from './../images/SmallLogo.png';
+import {AsyncStorage} from 'react-native';
+import ChartComponent from './Chart';
 import Home from './../images/HomeIconFilled.png';
 import Chart from './../images/ChartIcon.png';
 import Menu from './../images/MenuIcon.png';
 import Feed from './../images/FeedIcon.png';
 import Setting from './../images/SettingIcon.png';
+import { ScrollView } from 'react-native-gesture-handler';
 const { height, width } = Dimensions.get("window");
 
-export default function MyActivity({navigation}) {
+class Notification {
+
+    constructor(title, content, from, type, timelapse, feed) {
+      this.title =title;
+      this.content= content;
+      this.from =from;
+      this.type= type;
+      this.timelapse= timelapse;
+      this.feed = feed;
+    }
+
+}
+export default function MyActivity({route, navigation}) {
+
+    const [notiList, setNotiList] = useState([]);
+    const [uid, setUid] = useState('');
+    const [loaded, setLoaded] = useState(false);
+    const [loadingFinished, setLoadingFinished] = useState(false);
+    // const [chart, openChartModal] = useState(false);
+
+    const _storeUid = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('user');
+          if (value !== null) {
+            setUid(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          console.log(error)
+        }
+    }
+    setTimeout(() => {setLoaded(true)}, 1000)
+
+    const parseDate=(string)=>{
+        let stringArray = string.substring(0,10).split("-"); 
+        let year = stringArray[0];
+        let month = stringArray[1];
+        let day = stringArray[2];
+        return year+'년 '+month + '월 '+ day + '일';
+    }
+    
+
+    var timeSince = function(date) {
+        if (typeof date !== 'object') {
+          date = new Date(date);
+        }
+      
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var intervalType;
+      
+        var interval = Math.floor(seconds / 31536000);
+        if (interval >= 1) {
+        //   intervalType = '년';
+          return 'date';
+        } else {
+          interval = Math.floor(seconds / 2592000);
+          if (interval >= 1) {
+            // intervalType = '개월 ';
+            return 'date';
+          } else {
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) {
+            //   intervalType = '일 ';
+            return 'date';
+            } else {
+              interval = Math.floor(seconds / 3600);
+              if (interval >= 1) {
+                intervalType = "시간 ";
+              } else {
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) {
+                  intervalType = "분 ";
+                } else {
+                  interval = seconds;
+                  intervalType = "초 ";
+                }
+              }
+            }
+          }
+        }
+      
+        return interval + ' ' + intervalType;
+    };
+
+
+    useEffect(() => {
+        _storeUid();
+        if (uid){
+            fetch(`https://enigmatic-bastion-65203.herokuapp.com/feeds/notification/${uid}/`, {
+          method: 'GET',
+          headers:{
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          }}).then((res) => {
+              return res.json();
+          }).then(context=> {
+                const notifications = JSON.parse(context.notifications);
+                console.log(notifications)
+                setNotiList(
+                    notifications.map((noti) => 
+                      new Notification(noti.fields.title, noti.fields.message, noti.fields.by, noti.fields.notiType, noti.fields.created_at, noti.fields.feed)),
+                )
+                setLoadingFinished(true);
+          }).catch((err) => {
+            console.log(err);
+          });  
+        }
+        
+    },[loaded]);
+
+    console.log(notiList);
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={()=>{navigation.goBack()}}>
+                <TouchableOpacity onPress={()=>navigation.goBack()} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
                     <Image style={styles.backButton} source={BackButton}/>
                 </TouchableOpacity>
-                <Text style={styles.headerContent}>나의 활동</Text>
+                <Image style={styles.logo} source={Logo}/>
                 <View></View>
             </View>
+
             <View style={styles.contentWrapper}>
-                <View style={styles.activityWrapper}>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>jenny_doobap</Text>
-                        <Text style={styles.feedContent}>님이 내 글에 답글을 달았습니다</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>suuuum36</Text>
-                        <Text style={styles.feedContent}>님의 글에 공감을 했습니다</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>snowman39</Text>
-                        <Text style={styles.feedContent}>님이 글을 작성했습니다</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.feedWritter}>suuuum36</Text>
-                        <Text style={styles.feedContent}>님이 댓글에 답장을 했습니다</Text>
-                    </View>
+                { loadingFinished ?
+                    <View style={styles.activityWrapper}>
+                    <ScrollView>
+                    {notiList.reverse().map((item)=>{
+                        if (item.type==='like'){  //{feed_id: {id}, uid: {uid}, commentNum: {commentNum}}
+                            let id = item.feed
+                            return(
+                                <TouchableOpacity style={styles.likeContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: {uid}})}}>
+                                        <Text style={styles.feedWritter}>{item.from}</Text>
+                                        <Text style={styles.feedContent}>{item.title}</Text>
+                                        {timeSince(item.timelapse) == 'date' ?
+                                            <Text style={styles.feedTime}>{parseDate(item.timelapse)}</Text>
+                                            :
+                                            <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
+                                        }
+                                        
+                                </TouchableOpacity>
+                            )
+                        }
+                        else{
+                            let id = item.feed
+                            return(
+                                <TouchableOpacity style={styles.commentContent} onPress={()=>{navigation.push('MyActivityComment',{feed_id: {id}, uid: {uid}})}}>
+                                        <View style={styles.flexbox}>
+                                            <Text style={styles.feedWritter}>{item.from}</Text>
+                                            <Text style={styles.feedContent}>{item.title} :</Text>
+                                            
+                                        </View>
+                                        <View style={styles.flexbox}>
+                                            {(String(item.content).length > 10) ? 
+                                                
+                                                <Text style={styles.feedComment}>
+                                                    {String(item.content).substring(0,10).concat('...')}
+                                                </Text>
+                                                :
+                                                <Text style={styles.feedComment}>
+                                                    {String(item.content)}
+                                                </Text>
+                                                
+                                            }
+                                            
+                                            {/* <Text style={styles.feedComment}> 긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글긴댓글ㅋㅋㅋㅋㅋㅋ</Text> */}
+                                            <Text style={styles.feedTime}>{timeSince(item.timelapse)}전</Text>
+
+                                        </View>
+
+                                </TouchableOpacity>
+                            )
+                        }
+                        
+                    })}
+                    </ScrollView>
                 </View>
+                :
+                <View style={styles.contentWrapper}>
+                    <ActivityIndicator style={styles.loadingbar}/>
+                </View>
+            
+                }
+                
             </View>
+
+
             <View style={styles.navigationbar}>
                 <TouchableOpacity>
                     <Image style={styles.icon} source={Home} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{setChart(1)}}>
+                <TouchableOpacity onPress={()=>{navigation.push('Chart')}}>
                     <Image style={styles.icon} source={Chart} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>{navigation.push('FeedListAll')}}>
@@ -58,7 +217,7 @@ export default function MyActivity({navigation}) {
 }
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#FEFAE4',
         flex: 1,
         width: width,
         height: height,
@@ -68,8 +227,10 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: 30,
-        marginBottom: 20,
+        marginTop: '10%',
+        // marginBottom: 5,
+        // paddingTop: 10,
+        backgroundColor: '#FEFAE4',
         paddingHorizontal: width*0.04,
         paddingBottom: 10,
         borderBottomColor: "#fafafa",
@@ -79,6 +240,7 @@ const styles = StyleSheet.create({
     backButton: {
         height: 20,
         width: 20,
+        marginLeft: 'auto'
     },
     headerContent: {
         fontSize: 18,
@@ -104,40 +266,88 @@ const styles = StyleSheet.create({
     },
     activityWrapper: {
         justifyContent: "flex-start",
+        height: height,
+        backgroundColor: 'white'
+        
+        
     },
     icon: {
         height: 20,
         width: 20,
+        // zIndex:99,
     },
     navigationbar: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 30,
-        marginBottom: 20,
-        paddingTop: 10,
-        paddingHorizontal: width*0.04,
+        // marginBottom: 20,
+        paddingTop: 20,
+        paddingHorizontal: width*0.1,
         borderTopColor: "#fafafa",
         borderTopWidth: 2,
         width: width,
+        height: 70,
+        position: 'absolute',
+        bottom: 0,
+        backgroundColor: '#FEFAE4',
     },
     contentWrapper: {
-        height: height - 180,
+        height: height,
+        width: width,
         justifyContent: "flex-start",
         alignItems: "flex-start",
+        backgroundColor: "white",
+        // zIndex: 5,
+
     },
-    content: {
+    likeContent: {
         flexDirection: "row",
-        marginHorizontal: 20,
+        // marginHorizontal: 20,
+        padding: 20,
+        borderBottomColor: "#fafafa", 
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        width: width,
+        height: 70,
+        alignItems: 'center'
+
+    },
+    flexbox: {
+        flexDirection: "row",
+        alignItems:'center',
+        width: width*0.9
+    },
+    feedComment:{
+        fontSize: 14,
+        fontWeight: "300",
+    },
+    commentContent: {
+        // marginHorizontal: 20,
+        padding: 20,
+        borderBottomColor: "#fafafa", 
+        borderBottomWidth: StyleSheet.hairlineWidth, 
+        width: width, 
+        height: 70,
+        justifyContent: 'center'
     },
     feedWritter: {
         fontSize: 14,
         fontWeight: "500",
         marginRight: 5,
-        marginBottom: 20,
+    },
+    feedTime: {
+        fontSize: 13,
+        fontWeight: "100",
+        marginLeft: 5,
     },
     headerContent: {
         fontSize: 18,
         position: "relative",
         left: -10,
     },
+    loadingbar:{
+        position: 'absolute',
+        top: height*0.36,
+        alignSelf: "center"
+      },
+
 });

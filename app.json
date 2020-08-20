@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "e-mory",
-    "slug": "e-mory",
+    "name": "E-mory",
+    "slug": "E-mory",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "scheme": "myapp",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.emory.emory"
+    },
+    "android": {
+      "package": "com.emory.emory",
+      "permissions": []
     }
   }
 }
