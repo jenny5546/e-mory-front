@@ -7,7 +7,8 @@
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "scheme": "myapp",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -25,7 +26,8 @@
       "bundleIdentifier": "com.emory.emory"
     },
     "android": {
-      "package": "com.emory.emory"
+      "package": "com.emory.emory",
+      "permissions": []
     }
   }
 }

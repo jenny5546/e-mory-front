@@ -100,7 +100,7 @@ export default function Settings({route, navigation}) {
                     <Text style={styles.itemTitle}>알림설정</Text>
                 </TouchableOpacity> 
                 <TouchableOpacity style={styles.sidebarItem}>
-                    <Image style={styles.menuIcon} source={Write} />
+                    <Image style={styles.menuIcon} source={Write} onPress={() => Linking.openURL("market://details?id=com.emory.emory") }/>
                     <Text style={styles.itemTitle}>리뷰쓰기</Text>
                 </TouchableOpacity> 
                 <TouchableOpacity style={styles.sidebarItem} onPress={() => Linking.openURL('mailto:info.e.mory1@gmail.com') }>
